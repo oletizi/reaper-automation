@@ -6,6 +6,15 @@
 # Cmd->Ctrl, Opt->Alt, LUNA's Mac Control->Super.
 # Super combos may be intercepted by GNOME before REAPER sees them.
 
+SCR 4 0 "76372f6ae70342495f98647bb34897d0" "Custom: LUNA: Extend Selection To Next Bar" luna/luna_extend_selection_to_next_bar.lua
+SCR 4 0 "705250128fa18c7721dc75648dd60f2f" "Custom: LUNA: Extend Selection To Previous Bar" luna/luna_extend_selection_to_previous_bar.lua
+SCR 4 0 "5085c418d287dcb2cc58fe46c2f425c0" "Custom: LUNA: Extend Selection To Next Clip Edge" luna/luna_extend_selection_to_next_clip_edge.lua
+SCR 4 0 "0dd389efcda65c35a1d4df9b10eaf6ab" "Custom: LUNA: Extend Selection To Previous Clip Edge" luna/luna_extend_selection_to_previous_clip_edge.lua
+SCR 4 0 "7eefa1b2d1c9d0e36ed7d320d2dfe767" "Custom: LUNA: Extend Selection To Previous Transient" luna/luna_extend_selection_to_previous_transient.lua
+SCR 4 0 "4ce00b027dbc682cfaf7c276a7cd257a" "Custom: LUNA: Extend Selection To Next Marker" luna/luna_extend_selection_to_next_marker.lua
+SCR 4 0 "917d902d9cdbb442c97270ea2e608ec5" "Custom: LUNA: Extend Selection To Previous Marker" luna/luna_extend_selection_to_previous_marker.lua
+SCR 4 0 "68bcd3fa5c9154134bd13b973796404a" "Custom: LUNA: Extend Selection To Session Start" luna/luna_extend_selection_to_session_start.lua
+SCR 4 0 "cf89bafa60a6940f74cdcea8fa2ba8f5" "Custom: LUNA: Extend Selection To Session End" luna/luna_extend_selection_to_session_end.lua
 ACT 0 0 "9457b692efcdc0fa6d1a838e640ccc96" "Custom: Increase all track heights" 40296 41325
 ACT 0 0 "47b77736c270eeece980170b5762be65" "Custom: Decrease all track heights" 40296 41326
 
@@ -88,6 +97,17 @@ KEY 49 222 40173 0	# Alt+Super+' : Move Selection To Next Marker -> Markers: Go 
 KEY 49 76 40172 0	# Alt+Super+L : Move Selection To Previous Marker -> Markers: Go to previous marker/project start
 KEY 5 9 40802 0	# Shift+Tab : Extend Selection To Next Transient -> Time selection: Extend time selection to next transient in items
 KEY 13 76 40622 0	# Ctrl+Shift+L : Loop Select -> Time selection: Move loop points to time selection
+KEY 5 221 _76372f6ae70342495f98647bb34897d0 0	# Shift+] : Extend Selection To Next Bar -> script luna_extend_selection_to_next_bar.lua  [extend selection via Move edit cursor forward one measure]
+KEY 5 98 _76372f6ae70342495f98647bb34897d0 0	# Shift+Num2 : Extend Selection To Next Bar (numpad) -> script luna_extend_selection_to_next_bar.lua  [extend selection via Move edit cursor forward one measure]
+KEY 5 219 _705250128fa18c7721dc75648dd60f2f 0	# Shift+[ : Extend Selection To Previous Bar -> script luna_extend_selection_to_previous_bar.lua  [extend selection via Move edit cursor back one measure]
+KEY 5 97 _705250128fa18c7721dc75648dd60f2f 0	# Shift+Num1 : Extend Selection To Previous Bar (numpad) -> script luna_extend_selection_to_previous_bar.lua  [extend selection via Move edit cursor back one measure]
+KEY 5 222 _5085c418d287dcb2cc58fe46c2f425c0 0	# Shift+' : Extend Selection To Next Clip Edge -> script luna_extend_selection_to_next_clip_edge.lua  [extend selection via Item navigation: Move cursor right to nearest item edge]
+KEY 5 76 _0dd389efcda65c35a1d4df9b10eaf6ab 0	# Shift+L : Extend Selection To Previous Clip Edge -> script luna_extend_selection_to_previous_clip_edge.lua  [extend selection via Item navigation: Move cursor left to nearest item edge]
+KEY 21 76 _7eefa1b2d1c9d0e36ed7d320d2dfe767 0	# Alt+Shift+L : Extend Selection To Previous Transient -> script luna_extend_selection_to_previous_transient.lua  [extend selection via Item navigation: Move cursor to previous transient in items]
+KEY 53 222 _4ce00b027dbc682cfaf7c276a7cd257a 0	# Alt+Super+Shift+' : Extend Selection To Next Marker -> script luna_extend_selection_to_next_marker.lua  [extend selection via Markers: Go to next marker/project end]
+KEY 53 76 _917d902d9cdbb442c97270ea2e608ec5 0	# Alt+Super+Shift+L : Extend Selection To Previous Marker -> script luna_extend_selection_to_previous_marker.lua  [extend selection via Markers: Go to previous marker/project start]
+KEY 5 13 _68bcd3fa5c9154134bd13b973796404a 0	# Shift+Return : Extend Selection To Session Start -> script luna_extend_selection_to_session_start.lua  [extend selection via Transport: Go to start of project]
+KEY 21 13 _cf89bafa60a6940f74cdcea8fa2ba8f5 0	# Alt+Shift+Return : Extend Selection To Session End -> script luna_extend_selection_to_session_end.lua  [extend selection via Transport: Go to end of project]
 KEY 1 188 40120 0	# , : Nudge Left -> Item edit: Move items/envelope points left
 KEY 1 190 40119 0	# . : Nudge Right -> Item edit: Move items/envelope points right
 KEY 1 77 40793 0	# M : Nudge Left Next Amount -> Item edit: Move items/envelope points left by grid size

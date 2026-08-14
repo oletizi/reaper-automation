@@ -489,12 +489,72 @@ key = "Ctrl+Shift+L"
 action = 40622
 comment = "Move loop points to time selection."
 
+# --- Extend Selection: LUNA's "hold Shift while moving the transport" ---------
+#
+# Each of these generates a small ReaScript that moves the edit cursor with the
+# given action, then stretches the time selection to follow it while keeping the
+# far edge anchored -- so repeated presses keep growing the selection.
+#
+# This cannot be a custom action. A macro would re-anchor on every press: from
+# bar 2, Shift+] twice would give you bar 3-4 instead of bar 2-4. Verified
+# against REAPER directly. The scripts need no extensions -- Lua ships with it.
+
 [[binding]]
-luna = "Extend Selection to Next/Previous Bar, Clip Edge, Marker"
+luna = "Extend Selection To Next Bar"
 key = "Shift+]"
-status = "unmapped"
-comment = """REAPER has no extend-time-selection-to-X family beyond transients \
-(40802). Needs custom actions built out of a move + set-end pair."""
+extend = 41042
+
+[[binding]]
+luna = "Extend Selection To Next Bar (numpad)"
+key = "Shift+Num2"
+extend = 41042
+
+[[binding]]
+luna = "Extend Selection To Previous Bar"
+key = "Shift+["
+extend = 41043
+
+[[binding]]
+luna = "Extend Selection To Previous Bar (numpad)"
+key = "Shift+Num1"
+extend = 41043
+
+[[binding]]
+luna = "Extend Selection To Next Clip Edge"
+key = "Shift+'"
+extend = 41168
+
+[[binding]]
+luna = "Extend Selection To Previous Clip Edge"
+key = "Shift+L"
+extend = 41167
+
+[[binding]]
+luna = "Extend Selection To Previous Transient"
+key = "Alt+Shift+L"
+extend = 40376
+comment = """LUNA also puts this on Alt+Shift+Tab, which GNOME intercepts. \
+Forward is Shift+Tab, which REAPER covers natively with 40802."""
+
+[[binding]]
+luna = "Extend Selection To Next Marker"
+key = "Super+Alt+Shift+'"
+extend = 40173
+
+[[binding]]
+luna = "Extend Selection To Previous Marker"
+key = "Super+Alt+Shift+L"
+extend = 40172
+
+[[binding]]
+luna = "Extend Selection To Session Start"
+key = "Shift+Return"
+extend = 40042
+
+[[binding]]
+luna = "Extend Selection To Session End"
+key = "Alt+Shift+Return"
+extend = 40043
 
 # ---------------------------------------------------------------------------
 # Nudge
