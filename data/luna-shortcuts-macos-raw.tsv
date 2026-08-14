@@ -1,0 +1,140 @@
+⌘ Cmd + =	Toggle Timeline/Mixer
+⌘ Cmd + `	Next Window
+⌘ Cmd + ↑ Shift + `	Previous Window
+↑ Shift + W	Sho w /Hide Floating Windows
+⌘ Cmd + W	Close Floating W indow
+⌥ Opt + ⌘ Cmd + N	N ew Window
+↑ Shift + ⌘ Cmd + =	New Alternate Window
+⌘ Cmd + ↑ Shift + F	Toggle F ull Screen
+↑ Shift + R	Spill Selected Bus
+Space	Toggle Playback
+⌘ Cmd + Space	Toggle Record
+or Num 3	
+Control + ⌥ Opt + ⌘ Cmd + Space	Restart Playback
+Control + L	L oop Playback
+or Num 4	
+⤶ Enter	Return To Zero
+⌘ Cmd + K	Toggle Pre/Post Roll
+K	Toggle Metronome
+or Num 7	
+↑ Shift + K	Toggle Count In
+or Num 8	
+⤶ Enter	Create Marker
+↑ Shift + A	A uto Scroll
+⌘ Cmd + ]	Zoom In
+or T	
+⌘ Cmd + [	Zoom Out
+or R	
+E	Fram e Selection
+Control + ↑	Increase Selected Track Heights
+Control + ↓	Decrease Selected Track Heights
+Control + ⌥ Opt + ↑	Increase All Track Heights
+Control + ⌥ Opt + ↓	Decrease All Track Heights
+⌥ Opt + ⌘ Cmd + ]	Zoom In Audio Waveforms
+⌥ Opt + ⌘ Cmd + [	Zoom Out Audio Waveforms
+Control + ⌥ Opt + ⌘ Cmd + [	Reset Audio Waveform Zoom
+↑ Shift + ←	Scroll To Left Selection
+or Q	
+↑ Shift + →	Scroll To Right Selection
+or W	
+← →	Scroll Mixer one track left or right
+⌘ Cmd + ← →	Scroll mixer one page left or right
+⌥ Opt + ⌘ Cmd + ← →	Scroll mixer to first or last track
+↑ ↓	Scroll mixer up or down
+↑ Shift + R	Toggle R ecord Arm
+↑ Shift + T	T oggle Input Enable
+⌥ Opt + K	Toggle Input Enable on all record-enabled trac k s
+↑ Shift + S	Toggle S olo
+↑ Shift + M	Toggle M ute
+⌘ Cmd + Space	Toggle Record
+or Num 3	
+↑ Shift + ⌘ Cmd + .	Discard Recording
+Del	Clear
+⌘ Cmd + Z	Undo
+⌘ Cmd + ↑ Shift + Z	Redo
+⌘ Cmd + X	Cut
+or X	
+⌘ Cmd + C	C opy
+or C	
+⌘ Cmd + V	Paste
+or V	
+⌘ Cmd + D	D uplicate selection
+↑ Shift + X	Shift Cut
+↑ Shift + V	Shift Paste
+↑ Shift + D	Shift D uplicate
+↑ Shift + I	Sh i ft Insert
+↑ Shift + Del	Shift Clear
+⌘ Cmd + M	M ute Selection
+⌘ Cmd + F	Create F ades
+D	Fa d e To Clip Start (Fade In)
+G	Fade To Clip Stop (Fade Out)
+A	Trim From Clip St a rt
+S	Trim From Clip End
+⌘ Cmd + T	T rim Clip to Selection
+⌘ Cmd + E	S e parate Selection
+or B	
+⌥ Opt + ↑ Shift + 3	Consolidate Selection
+⌘ Cmd + H	H eal Separation
+⌥ Opt + ⌘ Cmd + B	Export Mixdown
+⌘ Cmd + ↑ Shift + K	Export Clips
+Control + ⌥ Opt + ↑ Shift + 3	Generate Sinewave in Selection
+or Control + ⌥ Opt + ↑ Shift + #	
+⌘ Cmd + A	Select A ll
+↑ Shift + ⌘ Cmd + A	Select A ll Tracks
+↓	Set Selection Start (while stopped or playing back)
+↑	Set Selection End (while playing back)
+P	Move Selection U p
+;	Move Selection Down
+]	Move Selection to Next Bar
+or Num 2	
+[	Move Selection to Previous Bar
+or Num 1	
+Move	Selection To Next Clip Edge
+L	Move Se l ection To Previous Clip Edge
+Tab	Move Selection To Next Transient
+or ⌥ Opt + ‘	
+⌥ Opt + Tab	Move Selection To Previous Transient
+or ⌥ Opt + L	
+Control + ⌥ Opt + '	Move Selection To Next Marker
+Control + ⌥ Opt + L	Move Se l ection To Previous Marker
+⌘ Cmd + ↑ Shift + L	L oop Select
+↑ Shift + P	Extend Selection U p
+↑ Shift + ;	Extend Selection Down
+↑ Shift + ]	Extend Selection To Next Bar
+or ↑ Shift + Num 2	
+↑ Shift + [	Extend Selection to Previous Bar
+or ↑ Shift + Num 1	
+↑ Shift + '	Extend Selection To Next Clip Edge
+↑ Shift + L	Extend Se l ection To Previous Clip Edge
+↑ Shift + Tab	Extend Selection To Next Transient
+or ⌥ Opt + ↑ Shift + ‘	
+⌥ Opt + ↑ Shift + Tab	Extend Selection To Previous Transient
+or ⌥ Opt + ↑ Shift + L	
+↑ Shift + Control + ⌥ Opt + '	Extend Selection to Next Marker
+↑ Shift + Control + ⌥ Opt + L	Extend se l ection to Previous Marker
+↑ Shift + ⤶ Enter	Extend Selection To Session Start
+⌥ Opt + ↑ Shift + ⤶ Enter	Extend Selection To Session End
+,	Nudge Left
+M	Nudge Left Next A m ount
+.	Nudge Right
+/	Nudge Right Next Amount
+Control + ⌥ Opt + .	Nudge to Next Clip
+Control + ⌥ Opt + ,	Nudge to Previous Clip
+Control + ,	Nudge Content Left
+Control + M	Nudge Content Left Next A m ount
+Control + .	Nudge Content Right
+Control + /	Nudge Content Right Next Amount
+⌥ Opt + ⌘ Cmd + =	Increment Nudge Value
+⌥ Opt + ⌘ Cmd + -	Decrement Nudge Value
+⌘ Cmd + G	New Track G roup
+Control + G	To g gle Selection Grouping
+↑ Shift + ⌘ Cmd + G	Suspend G roups
+↑ Shift + ⌘ Cmd + N	N ew Tracks
+↑ Shift + ⌘ Cmd + I	New I nstrument Track (with Shape)
+↑ Shift + ⌘ Cmd + B	Create B us
+↑ Shift + ⌘ Cmd + Del	Delete Selected Tracks
+⌘ Cmd + I	I mport
+⌥ Opt + D	D uplicate
+↑ Shift + ⌥ Opt + D	D uplicate Without Content
+Control + ⌥ Opt + \	New Version On All Tracks
+Control + ⌥ Opt + ↑ Shift + |	New Version On Selected Tracks
