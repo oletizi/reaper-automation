@@ -293,7 +293,11 @@ action = 42398
 
 [[binding]]
 luna = "Clear"
-key = "Delete"
+# On macOS the main delete key is Backspace (VK 8); Forward Delete (fn+delete)
+# is a separate key. Pro Tools/LUNA "Clear" lives on the main delete key, so
+# the whole delete family binds to Backspace. This also overrides ReaTooled's
+# Backspace binding (its Smart Remove script), which is the key you actually press.
+key = "Backspace"
 area = 40006
 comment = "Delete-area: selectArea then Item: Remove items (clipboard untouched)."
 
@@ -304,7 +308,7 @@ action = 41295
 
 [[binding]]
 luna = "Shift Clear (ripple delete)"
-key = "Shift+Delete"
+key = "Shift+Backspace"
 action = 40201
 
 [[binding]]
@@ -621,7 +625,7 @@ action = 40001
 
 [[binding]]
 luna = "Delete Selected Tracks"
-key = "Cmd+Shift+Delete"
+key = "Cmd+Shift+Backspace"
 action = 40005
 
 [[binding]]

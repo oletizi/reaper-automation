@@ -76,9 +76,9 @@ KEY 9 67 41383 16	# Cmd+C : Copy -> Edit: Copy items/tracks/envelope points (dep
 KEY 1 67 41383 16	# C : Copy (Commands Focus) -> Edit: Copy items/tracks/envelope points (depending on focus) within time selection, if any (smart copy)
 KEY 9 86 42398 16	# Cmd+V : Paste -> Item: Paste items/tracks
 KEY 1 86 42398 16	# V : Paste (Commands Focus) -> Item: Paste items/tracks
-KEY 1 32814 _635119a49247912e4ac034046729f411 16	# Delete : Clear -> LUNA: Clear  [select area > Item: Remove items]
+KEY 1 8 _635119a49247912e4ac034046729f411 16	# Backspace : Clear -> LUNA: Clear  [select area > Item: Remove items]
 KEY 9 68 41295 16	# Cmd+D : Duplicate selection -> Item: Duplicate items
-KEY 5 32814 40201 16	# Shift+Delete : Shift Clear (ripple delete) -> Time selection: Remove contents of time selection (moving later items)
+KEY 5 8 40201 16	# Shift+Backspace : Shift Clear (ripple delete) -> Time selection: Remove contents of time selection (moving later items)
 KEY 9 77 40175 16	# Cmd+M : Mute Selection -> Item properties: Toggle mute
 KEY 9 70 40916 16	# Cmd+F : Create Fades -> Item: Crossfade items within time selection
 KEY 1 68 40509 16	# D : Fade To Clip Start (Fade In) -> Item: Fade items in to cursor
@@ -130,7 +130,7 @@ KEY 1 191 40794 16	# / : Nudge Right Next Amount -> Item edit: Move items/envelo
 KEY 33 188 40123 16	# Control+, : Nudge Content Left -> Item edit: Move contents of items left
 KEY 33 190 40124 16	# Control+. : Nudge Content Right -> Item edit: Move contents of items right
 KEY 13 78 40001 16	# Cmd+Shift+N : New Tracks -> Track: Insert new track
-KEY 13 32814 40005 16	# Cmd+Shift+Delete : Delete Selected Tracks -> Track: Remove tracks
+KEY 13 8 40005 16	# Cmd+Shift+Backspace : Delete Selected Tracks -> Track: Remove tracks
 KEY 17 68 40062 16	# Opt+D : Duplicate -> Track: Duplicate tracks
 KEY 9 73 40018 16	# Cmd+I : Import -> Insert/import media files...
 KEY 9 71 40772 16	# Cmd+G : New Track Group -> Track: Set track grouping parameters...
