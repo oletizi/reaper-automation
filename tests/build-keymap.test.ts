@@ -68,3 +68,63 @@ describe('area kind emission', () => {
     expect(r.keymapText).toMatch(/^ACT 0 0 "[0-9a-f]{32}" "Custom: LUNA: Del" _[0-9a-f]{32} 40006$/m)
   })
 })
+
+describe('razor_extend kind emission', () => {
+  it('emits one SCR per distinct move, deduped', () => {
+    const m = parseMapping(
+      '[meta]\nname="x"\n' +
+        '[[binding]]\nluna="Extend Next"\nkey="B"\nrazor_extend=41042\n' +
+        '[[binding]]\nluna="Extend Next Again"\nkey="C"\nrazor_extend=41042\n' +
+        '[[binding]]\nluna="Extend Prev"\nkey="D"\nrazor_extend=41043\n',
+    )
+    const r = buildKeymap(m, idx, 'macos')
+    const scr = r.keymapText.split('\n').filter((l) => l.startsWith('SCR '))
+    expect(scr).toHaveLength(2)
+    // B (66) and C (67) both bind to the same script id (deduped on move 41042)
+    const bLine = r.keymapText.split('\n').find((l) => /^KEY 1 66 /.test(l))
+    const cLine = r.keymapText.split('\n').find((l) => /^KEY 1 67 /.test(l))
+    expect(bLine).toBeDefined()
+    expect(cLine).toBeDefined()
+    const bCmd = bLine?.split(' ')[3]
+    const cCmd = cLine?.split(' ')[3]
+    expect(bCmd).toBe(cCmd)
+  })
+  it('throws when the move id does not exist', () => {
+    const m = parseMapping('[meta]\nname="x"\n[[binding]]\nluna="B"\nkey="A"\nrazor_extend=99999999\n')
+    expect(() => buildKeymap(m, idx, 'macos')).toThrow(/unknown/)
+  })
+})
+
+describe('razor_track kind emission', () => {
+  const m = parseMapping(
+    '[meta]\nname="x"\n' +
+      '[[binding]]\nluna="Track Up"\nkey="B"\nrazor_track=40286\n' +
+      '[[binding]]\nluna="Track Down"\nkey="C"\nrazor_track=40287\n',
+  )
+  const r = buildKeymap(m, idx, 'macos')
+  it('emits the shared repaint SCR exactly once', () => {
+    const scr = r.keymapText.split('\n').filter((l) => l.startsWith('SCR ') && l.includes('luna_razor_repaint.lua'))
+    expect(scr).toHaveLength(1)
+    expect(r.scripts.has('luna_razor_repaint.lua')).toBe(true)
+  })
+  it('emits an ACT [track, _repaint] per binding and binds the key to it', () => {
+    expect(r.keymapText).toMatch(/^ACT 0 0 "[0-9a-f]{32}" "Custom: LUNA: Track Up" 40286 _[0-9a-f]{32}$/m)
+    expect(r.keymapText).toMatch(/^ACT 0 0 "[0-9a-f]{32}" "Custom: LUNA: Track Down" 40287 _[0-9a-f]{32}$/m)
+  })
+  it('throws when the track action id does not exist', () => {
+    const bad = parseMapping('[meta]\nname="x"\n[[binding]]\nluna="B"\nkey="A"\nrazor_track=99999999\n')
+    expect(() => buildKeymap(bad, idx, 'macos')).toThrow(/unknown/)
+  })
+})
+
+describe('razor kind emission', () => {
+  it('emits ACT [42957, action] and binds the key to it', () => {
+    const m = parseMapping('[meta]\nname="x"\n[[binding]]\nluna="Del"\nkey="Delete"\nrazor=40006\n')
+    const r = buildKeymap(m, idx, 'macos')
+    expect(r.keymapText).toMatch(/^ACT 0 0 "[0-9a-f]{32}" "Custom: LUNA: Del" 42957 40006$/m)
+  })
+  it('throws when the action id does not exist', () => {
+    const m = parseMapping('[meta]\nname="x"\n[[binding]]\nluna="B"\nkey="A"\nrazor=99999999\n')
+    expect(() => buildKeymap(m, idx, 'macos')).toThrow(/unknown/)
+  })
+})

@@ -5,6 +5,10 @@ import type { ActionIndex } from '@/actions'
 import type { Mapping } from '@/mapping'
 import { renderExtendScript } from '@/extend-template'
 import { renderSelectAreaScript } from '@/select-area-template'
+import { renderRazorExtendScript } from '@/razor-extend-template'
+import { renderRazorRepaintScript } from '@/razor-repaint-template'
+
+const SELECT_RAZOR_ITEMS_ACTION = 42957
 
 const SCRIPT_DIR = 'luna'
 
@@ -31,8 +35,10 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
   const seenKeys = new Map<string, string>()
   const seenMacros = new Map<string, string>()
   const seenScripts = new Map<number, { fname: string; sid: string }>()
+  const seenRazorExtendScripts = new Map<number, { fname: string; sid: string }>()
   const scripts = new Map<string, string>()
   let selectAreaEntry: { fname: string; sid: string } | undefined
+  let razorRepaintEntry: { fname: string; sid: string } | undefined
 
   function ensureSelectArea(): { fname: string; sid: string } {
     if (!selectAreaEntry) {
@@ -44,6 +50,18 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
       selectAreaEntry = { fname, sid }
     }
     return selectAreaEntry
+  }
+
+  function ensureRazorRepaint(): { fname: string; sid: string } {
+    if (!razorRepaintEntry) {
+      const label = 'LUNA: Repaint Area'
+      const fname = 'luna_razor_repaint.lua'
+      const sid = stableId(label)
+      scripts.set(fname, renderRazorRepaintScript({ label, spec: mapping.meta.name }))
+      scrLines.push(`SCR 4 ${section} "${sid}" "Custom: ${label}" ${SCRIPT_DIR}/${fname}`)
+      razorRepaintEntry = { fname, sid }
+    }
+    return razorRepaintEntry
   }
 
   for (const b of mapping.bindings) {
@@ -119,6 +137,53 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
         desc = `${label}  [select area > ${opName}]`
         stats.macro++
       }
+    } else if (b.kind && 'razorExtend' in b.kind) {
+      const move = b.kind.razorExtend
+      const moveName = actions.byId(String(move))
+      if (moveName === undefined) { errors.push(`${luna}: razor_extend references unknown action ${move}`); continue }
+      let entry = seenRazorExtendScripts.get(move)
+      if (!entry) {
+        const base = b.label ?? luna.split(' (')[0]
+        const label = `LUNA: ${base}`
+        const fname = `luna_${slugify(base)}.lua`
+        const sid = stableId(label)
+        scripts.set(fname, renderRazorExtendScript({ label, spec: mapping.meta.name, move, moveName }))
+        scrLines.push(`SCR 4 ${section} "${sid}" "Custom: ${label}" ${SCRIPT_DIR}/${fname}`)
+        entry = { fname, sid }
+        seenRazorExtendScripts.set(move, entry)
+      }
+      command = '_' + entry.sid
+      desc = `script ${entry.fname}  [extend razor area via ${moveName}]`
+      stats.script++
+    } else if (b.kind && 'razorTrack' in b.kind) {
+      const trackActionId = String(b.kind.razorTrack)
+      const trackActionName = actions.byId(trackActionId)
+      if (trackActionName === undefined) { errors.push(`${luna}: razor_track references unknown action ${trackActionId}`); continue }
+      const repaint = ensureRazorRepaint()
+      const label = b.label ?? `LUNA: ${luna}`
+      let mid = seenMacros.get(label)
+      if (mid === undefined) {
+        mid = stableId(label)
+        seenMacros.set(label, mid)
+        actLines.push(`ACT 0 ${section} "${mid}" "Custom: ${label}" ${trackActionId} _${repaint.sid}`)
+      }
+      command = '_' + mid
+      desc = `${label}  [${trackActionName} > repaint area]`
+      stats.macro++
+    } else if (b.kind && 'razor' in b.kind) {
+      const opId = String(b.kind.razor)
+      const opName = actions.byId(opId)
+      if (opName === undefined) { errors.push(`${luna}: razor references unknown action ${opId}`); continue }
+      const label = b.label ?? `LUNA: ${luna}`
+      let mid = seenMacros.get(label)
+      if (mid === undefined) {
+        mid = stableId(label)
+        seenMacros.set(label, mid)
+        actLines.push(`ACT 0 ${section} "${mid}" "Custom: ${label}" ${SELECT_RAZOR_ITEMS_ACTION} ${opId}`)
+      }
+      command = '_' + mid
+      desc = `${label}  [select razor items > ${opName}]`
+      stats.macro++
     } else if (b.kind && 'macro' in b.kind) {
       const steps = b.kind.macro.map(String)
       const missing = steps.filter((s) => !actions.has(s))

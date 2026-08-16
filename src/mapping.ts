@@ -1,7 +1,15 @@
 import { parse as parseToml } from 'smol-toml'
 
 export type BindingStatus = 'ok' | 'unmapped' | 'disable'
-export type BindingKind = { action: number } | { macro: number[] } | { extend: number } | { area: number } | { area: true }
+export type BindingKind =
+  | { action: number }
+  | { macro: number[] }
+  | { extend: number }
+  | { area: number }
+  | { area: true }
+  | { razorExtend: number }
+  | { razorTrack: number }
+  | { razor: number }
 
 export interface Binding {
   luna: string
@@ -68,7 +76,15 @@ function validateBinding(raw: unknown, i: number): Binding {
   if (key === undefined) throw new MappingError(`${where}: missing key`)
 
   if (status === 'disable') {
-    if ('action' in raw || 'macro' in raw || 'extend' in raw || 'area' in raw) {
+    if (
+      'action' in raw ||
+      'macro' in raw ||
+      'extend' in raw ||
+      'area' in raw ||
+      'razor_extend' in raw ||
+      'razor_track' in raw ||
+      'razor' in raw
+    ) {
       throw new MappingError(`${where}: disable must not carry a kind key`)
     }
     return { luna, key, label, status }
@@ -85,8 +101,13 @@ function validateBinding(raw: unknown, i: number): Binding {
     if (raw.area === true) kinds.push({ area: true })
     else kinds.push({ area: asInt(raw.area, `${where}.area`) })
   }
+  if ('razor_extend' in raw) kinds.push({ razorExtend: asInt(raw.razor_extend, `${where}.razor_extend`) })
+  if ('razor_track' in raw) kinds.push({ razorTrack: asInt(raw.razor_track, `${where}.razor_track`) })
+  if ('razor' in raw) kinds.push({ razor: asInt(raw.razor, `${where}.razor`) })
   if (kinds.length !== 1) {
-    throw new MappingError(`${where}: expected exactly one of action/macro/extend/area, got ${kinds.length}`)
+    throw new MappingError(
+      `${where}: expected exactly one of action/macro/extend/area/razor_extend/razor_track/razor, got ${kinds.length}`,
+    )
   }
   return { luna, key, label, status, kind: kinds[0] }
 }
