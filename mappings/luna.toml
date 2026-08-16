@@ -56,7 +56,10 @@ action = 1068
 [[binding]]
 luna = "Return To Zero"
 key = "Return"
-action = 40042
+# Return to zero is a transport cursor move, so it collapses the edit area:
+# go to project start, clear the time selection, clear the item selection.
+# (Shift+Return keeps the extend variant: select from the cursor back to zero.)
+macro = [40042, 40635, 40289]
 
 [[binding]]
 luna = "Toggle Pre/Post Roll"
