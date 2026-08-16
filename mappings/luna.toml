@@ -259,12 +259,14 @@ action = 40030
 [[binding]]
 luna = "Cut"
 key = "Cmd+X"
-action = 41384
+area = 40699
+comment = "Cut-area: selectArea then Item: Cut items (clipboard set)."
 
 [[binding]]
 luna = "Cut (Commands Focus)"
 key = "X"
-action = 41384
+area = 40699
+comment = "Cut-area: selectArea then Item: Cut items (clipboard set)."
 
 [[binding]]
 luna = "Copy"
@@ -289,7 +291,8 @@ action = 42398
 [[binding]]
 luna = "Clear"
 key = "Delete"
-action = 40697
+area = 40006
+comment = "Delete-area: selectArea then Item: Remove items (clipboard untouched)."
 
 [[binding]]
 luna = "Duplicate selection"
@@ -339,12 +342,12 @@ action = 40508
 [[binding]]
 luna = "Separate Selection"
 key = "Cmd+E"
-action = 40061
+area = true
 
 [[binding]]
 luna = "Separate Selection (Commands Focus)"
 key = "B"
-action = 40061
+area = true
 
 [[binding]]
 luna = "Consolidate Selection"
@@ -417,63 +420,74 @@ action = 40287
 [[binding]]
 luna = "Move Selection to Next Bar"
 key = "]"
-action = 41042
+macro = [41042, 40635, 40289]
+comment = "Plain move collapses the area: move cursor, clear time selection, clear item selection."
 
 [[binding]]
 luna = "Move Selection to Next Bar (numpad)"
 key = "Num2"
-action = 41042
+macro = [41042, 40635, 40289]
+comment = "Plain move collapses the area: move cursor, clear time selection, clear item selection."
 
 [[binding]]
 luna = "Move Selection to Previous Bar"
 key = "["
-action = 41043
+macro = [41043, 40635, 40289]
+comment = "Plain move collapses the area: move cursor, clear time selection, clear item selection."
 
 [[binding]]
 luna = "Move Selection to Previous Bar (numpad)"
 key = "Num1"
-action = 41043
+macro = [41043, 40635, 40289]
+comment = "Plain move collapses the area: move cursor, clear time selection, clear item selection."
 
 [[binding]]
 luna = "Move Selection To Next Clip Edge"
 key = "'"
-action = 41168
+macro = [41168, 40635, 40289]
 comment = """Must be the "nearest item edge" pair (41167/41168), NOT "edge of item" \
 (40318/40319). The latter only walks the edges of *selected* items, so with a clip \
 selected it ping-pongs on that one clip and never crosses to the next -- verified \
 empirically. 41167/41168 ignore item selection and leave it untouched, which is what \
-Pro Tools tab-to-boundary does."""
+Pro Tools tab-to-boundary does. Plain move collapses the area: move cursor, clear \
+time selection, clear item selection."""
 
 [[binding]]
 luna = "Move Selection To Previous Clip Edge"
 key = "L"
-action = 41167
+macro = [41167, 40635, 40289]
+comment = "Plain move collapses the area: move cursor, clear time selection, clear item selection."
 
 [[binding]]
 luna = "Move Selection To Next Transient"
 key = "Tab"
-action = 40375
+macro = [40375, 40635, 40289]
+comment = "Plain move collapses the area: move cursor, clear time selection, clear item selection."
 
 [[binding]]
 luna = "Move Selection To Next Transient (alt)"
 key = "Opt+'"
-action = 40375
+macro = [40375, 40635, 40289]
+comment = "Plain move collapses the area: move cursor, clear time selection, clear item selection."
 
 [[binding]]
 luna = "Move Selection To Previous Transient"
 key = "Opt+L"
-action = 40376
-comment = "LUNA also puts this on Alt+Tab, which GNOME intercepts on Linux."
+macro = [40376, 40635, 40289]
+comment = """LUNA also puts this on Alt+Tab, which GNOME intercepts on Linux. Plain \
+move collapses the area: move cursor, clear time selection, clear item selection."""
 
 [[binding]]
 luna = "Move Selection To Next Marker"
 key = "Control+Opt+'"
-action = 40173
+macro = [40173, 40635, 40289]
+comment = "Plain move collapses the area: move cursor, clear time selection, clear item selection."
 
 [[binding]]
 luna = "Move Selection To Previous Marker"
 key = "Control+Opt+L"
-action = 40172
+macro = [40172, 40635, 40289]
+comment = "Plain move collapses the area: move cursor, clear time selection, clear item selection."
 
 [[binding]]
 luna = "Extend Selection To Next Transient"
