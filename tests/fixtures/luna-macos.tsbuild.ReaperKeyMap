@@ -21,6 +21,10 @@ ACT 0 0 "47b77736c270eeece980170b5762be65" "Custom: Decrease all track heights" 
 ACT 0 0 "13ebe12846cb16b90b1765a28fd0352c" "Custom: LUNA: Cut" _991739d9c9358c4418bce73744f68c2c 40699
 ACT 0 0 "3a01669b8c32a07aa6fc3f7dedf5c4d5" "Custom: LUNA: Cut (Commands Focus)" _991739d9c9358c4418bce73744f68c2c 40699
 ACT 0 0 "635119a49247912e4ac034046729f411" "Custom: LUNA: Clear" _991739d9c9358c4418bce73744f68c2c 40006
+ACT 0 0 "16511ebee7c0d18adf3226aec1a25f13" "Custom: LUNA: Move Selection Up" 40286 40289
+ACT 0 0 "db124048ca528a5b16643c07cac2feca" "Custom: LUNA: Move Selection Down" 40285 40289
+ACT 0 0 "287e23588c6028b0c8155c4e17e49c93" "Custom: LUNA: Extend Selection Up" 40288 40289
+ACT 0 0 "5cfc27c62334e911cff5ca915ce3580e" "Custom: LUNA: Extend Selection Down" 40287 40289
 ACT 0 0 "c98b9f631d4ff3a4a003d44d5001fcf1" "Custom: LUNA: Move Selection to Next Bar" 41042 40635 40289
 ACT 0 0 "a8f910f7310ec01051e2c5fd08d551c1" "Custom: LUNA: Move Selection to Next Bar (numpad)" 41042 40635 40289
 ACT 0 0 "32b85478739fc006704767be14e4b328" "Custom: LUNA: Move Selection to Previous Bar" 41043 40635 40289
@@ -95,10 +99,10 @@ KEY 9 65 40035 0	# Cmd+A : Select All -> Select all items/tracks/envelope points
 KEY 13 65 40296 0	# Cmd+Shift+A : Select All Tracks -> Track: Select all tracks
 KEY 1 32808 40625 0	# Down : Set Selection Start -> Time selection: Set start point
 KEY 1 32806 40626 0	# Up : Set Selection End -> Time selection: Set end point
-KEY 1 80 40286 0	# P : Move Selection Up -> Track: Go to previous track
-KEY 1 186 40285 0	# ; : Move Selection Down -> Track: Go to next track
-KEY 5 80 40288 0	# Shift+P : Extend Selection Up -> Track: Go to previous track (leaving other tracks selected)
-KEY 5 186 40287 0	# Shift+; : Extend Selection Down -> Track: Go to next track (leaving other tracks selected)
+KEY 1 80 _16511ebee7c0d18adf3226aec1a25f13 0	# P : Move Selection Up -> LUNA: Move Selection Up  [Track: Go to previous track > Item: Unselect (clear selection of) all items]
+KEY 1 186 _db124048ca528a5b16643c07cac2feca 0	# ; : Move Selection Down -> LUNA: Move Selection Down  [Track: Go to next track > Item: Unselect (clear selection of) all items]
+KEY 5 80 _287e23588c6028b0c8155c4e17e49c93 0	# Shift+P : Extend Selection Up -> LUNA: Extend Selection Up  [Track: Go to previous track (leaving other tracks selected) > Item: Unselect (clear selection of) all items]
+KEY 5 186 _5cfc27c62334e911cff5ca915ce3580e 0	# Shift+; : Extend Selection Down -> LUNA: Extend Selection Down  [Track: Go to next track (leaving other tracks selected) > Item: Unselect (clear selection of) all items]
 KEY 1 221 _c98b9f631d4ff3a4a003d44d5001fcf1 0	# ] : Move Selection to Next Bar -> LUNA: Move Selection to Next Bar  [Move edit cursor forward one measure > Time selection: Remove (unselect) time selection > Item: Unselect (clear selection of) all items]
 KEY 1 98 _a8f910f7310ec01051e2c5fd08d551c1 0	# Num2 : Move Selection to Next Bar (numpad) -> LUNA: Move Selection to Next Bar (numpad)  [Move edit cursor forward one measure > Time selection: Remove (unselect) time selection > Item: Unselect (clear selection of) all items]
 KEY 1 219 _32b85478739fc006704767be14e4b328 0	# [ : Move Selection to Previous Bar -> LUNA: Move Selection to Previous Bar  [Move edit cursor back one measure > Time selection: Remove (unselect) time selection > Item: Unselect (clear selection of) all items]

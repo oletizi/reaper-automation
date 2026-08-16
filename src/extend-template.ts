@@ -19,6 +19,10 @@ export function renderExtendScript(opts: { label: string; spec: string; move: nu
 local MOVE = ${move}
 
 local function extend()
+  -- Redefining the area clears any stale item selection, so operations act on
+  -- the area (via Separate / the area ops) rather than a previously-clicked clip.
+  reaper.SelectAllMediaItems(0, false)
+
   local sel_start, sel_end = reaper.GetSet_LoopTimeRange(false, false, 0, 0, false)
   local has_sel = sel_end > sel_start
   local origin = reaper.GetCursorPosition()
