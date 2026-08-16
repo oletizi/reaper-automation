@@ -1,15 +1,14 @@
 #
-# LUNA (Universal Audio) keyboard shortcuts -> REAPER, Linux target.
+# LUNA (Universal Audio) keyboard shortcuts -> REAPER, Mac-native.
 #
 # Source of the LUNA side: the published macOS default shortcut set. LUNA
 # inherits nearly all of it from Pro Tools, including the whole single-letter
 # "Commands Keyboard Focus" block (T/R zoom, A/S trim, D/G fades, Q/W scroll,
 # [/] bar nav, , . M / nudge, B separate, E frame).
 #
-# Modifier translation for a Linux target:
-#     Cmd     -> Ctrl
-#     Opt     -> Alt
-#     Control -> Super        (matches Pro Tools' own Windows convention)
+# Modifier tokens here are Mac-native and map 1:1 to LUNA's own modifiers --
+# no translation needed: Cmd, Opt, Control, Shift are each what LUNA and
+# REAPER on macOS already call them.
 #
 # Every `action` / `macro` command ID below is validated at build time against
 # the action list dumped straight out of REAPER 7.78, so nothing here is a guess
@@ -20,11 +19,9 @@
 
 [meta]
 name = "LUNA / Pro Tools keys for REAPER"
-target = "linux"
 reaper_version = "7.78"
 notes = [
-  "Cmd->Ctrl, Opt->Alt, LUNA's Mac Control->Super.",
-  "Super combos may be intercepted by GNOME before REAPER sees them.",
+  "Modifiers are Mac-native (Cmd/Opt/Control/Shift); no translation from LUNA's own keys.",
 ]
 
 # ---------------------------------------------------------------------------
@@ -38,7 +35,7 @@ action = 40044
 
 [[binding]]
 luna = "Toggle Record"
-key = "Ctrl+Space"
+key = "Cmd+Space"
 action = 1013
 
 [[binding]]
@@ -48,7 +45,7 @@ action = 1013
 
 [[binding]]
 luna = "Loop Playback"
-key = "Super+L"
+key = "Control+L"
 action = 1068
 
 [[binding]]
@@ -63,7 +60,7 @@ action = 40042
 
 [[binding]]
 luna = "Toggle Pre/Post Roll"
-key = "Ctrl+K"
+key = "Cmd+K"
 action = 41818
 comment = "REAPER splits pre-roll into play vs record; this is the play one."
 
@@ -103,7 +100,7 @@ Needs an empirical check on the actual keyboard before it can be mapped."""
 
 [[binding]]
 luna = "Restart Playback"
-key = "Super+Alt+Ctrl+Space"
+key = "Control+Opt+Cmd+Space"
 status = "unmapped"
 comment = "No single native REAPER equivalent worth guessing at."
 
@@ -113,7 +110,7 @@ comment = "No single native REAPER equivalent worth guessing at."
 
 [[binding]]
 luna = "Zoom In"
-key = "Ctrl+]"
+key = "Cmd+]"
 action = 1012
 
 [[binding]]
@@ -123,7 +120,7 @@ action = 1012
 
 [[binding]]
 luna = "Zoom Out"
-key = "Ctrl+["
+key = "Cmd+["
 action = 1011
 
 [[binding]]
@@ -138,41 +135,41 @@ action = 40031
 
 [[binding]]
 luna = "Increase Selected Track Heights"
-key = "Super+Up"
+key = "Control+Up"
 action = 41325
 
 [[binding]]
 luna = "Decrease Selected Track Heights"
-key = "Super+Down"
+key = "Control+Down"
 action = 41326
 
 [[binding]]
 luna = "Increase All Track Heights"
-key = "Super+Alt+Up"
+key = "Control+Opt+Up"
 macro = [40296, 41325]
 label = "Increase all track heights"
 comment = "No native all-tracks action; selects all tracks first (side effect)."
 
 [[binding]]
 luna = "Decrease All Track Heights"
-key = "Super+Alt+Down"
+key = "Control+Opt+Down"
 macro = [40296, 41326]
 label = "Decrease all track heights"
 comment = "No native all-tracks action; selects all tracks first (side effect)."
 
 [[binding]]
 luna = "Zoom In Audio Waveforms"
-key = "Alt+Ctrl+]"
+key = "Opt+Cmd+]"
 action = 40155
 
 [[binding]]
 luna = "Zoom Out Audio Waveforms"
-key = "Alt+Ctrl+["
+key = "Opt+Cmd+["
 action = 40156
 
 [[binding]]
 luna = "Reset Audio Waveform Zoom"
-key = "Super+Alt+Ctrl+["
+key = "Control+Opt+Cmd+["
 action = 42449
 
 [[binding]]
@@ -201,7 +198,7 @@ action = 40631
 
 [[binding]]
 luna = "Toggle Timeline/Mixer"
-key = "Ctrl+="
+key = "Cmd+="
 action = 40078
 
 [[binding]]
@@ -211,12 +208,12 @@ action = 41074
 
 [[binding]]
 luna = "Toggle Full Screen"
-key = "Ctrl+Shift+F"
+key = "Cmd+Shift+F"
 action = 40346
 
 [[binding]]
 luna = "Next Window"
-key = "Ctrl+`"
+key = "Cmd+`"
 status = "unmapped"
 comment = "REAPER has no window-cycling action in the main section."
 
@@ -251,27 +248,29 @@ action = 6
 
 [[binding]]
 luna = "Undo"
-key = "Ctrl+Z"
+key = "Cmd+Z"
 action = 40029
 
 [[binding]]
 luna = "Redo"
-key = "Ctrl+Shift+Z"
+key = "Cmd+Shift+Z"
 action = 40030
 
 [[binding]]
 luna = "Cut"
-key = "Ctrl+X"
-action = 41384
+key = "Cmd+X"
+area = 40699
+comment = "Cut-area: selectArea then Item: Cut items (clipboard set)."
 
 [[binding]]
 luna = "Cut (Commands Focus)"
 key = "X"
-action = 41384
+area = 40699
+comment = "Cut-area: selectArea then Item: Cut items (clipboard set)."
 
 [[binding]]
 luna = "Copy"
-key = "Ctrl+C"
+key = "Cmd+C"
 action = 41383
 
 [[binding]]
@@ -281,7 +280,7 @@ action = 41383
 
 [[binding]]
 luna = "Paste"
-key = "Ctrl+V"
+key = "Cmd+V"
 action = 42398
 
 [[binding]]
@@ -292,11 +291,12 @@ action = 42398
 [[binding]]
 luna = "Clear"
 key = "Delete"
-action = 40697
+area = 40006
+comment = "Delete-area: selectArea then Item: Remove items (clipboard untouched)."
 
 [[binding]]
 luna = "Duplicate selection"
-key = "Ctrl+D"
+key = "Cmd+D"
 action = 41295
 
 [[binding]]
@@ -306,12 +306,12 @@ action = 40201
 
 [[binding]]
 luna = "Mute Selection"
-key = "Ctrl+M"
+key = "Cmd+M"
 action = 40175
 
 [[binding]]
 luna = "Create Fades"
-key = "Ctrl+F"
+key = "Cmd+F"
 action = 40916
 
 [[binding]]
@@ -336,33 +336,33 @@ action = 41311
 
 [[binding]]
 luna = "Trim Clip to Selection"
-key = "Ctrl+T"
+key = "Cmd+T"
 action = 40508
 
 [[binding]]
 luna = "Separate Selection"
-key = "Ctrl+E"
-action = 40061
+key = "Cmd+E"
+area = true
 
 [[binding]]
 luna = "Separate Selection (Commands Focus)"
 key = "B"
-action = 40061
+area = true
 
 [[binding]]
 luna = "Consolidate Selection"
-key = "Alt+Shift+3"
+key = "Opt+Shift+3"
 action = 41588
 comment = "Glue, expanding to time selection if any."
 
 [[binding]]
 luna = "Heal Separation"
-key = "Ctrl+H"
+key = "Cmd+H"
 action = 40548
 
 [[binding]]
 luna = "Export Mixdown"
-key = "Alt+Ctrl+B"
+key = "Opt+Cmd+B"
 action = 40015
 
 [[binding]]
@@ -379,12 +379,12 @@ want a design decision rather than a one-to-one binding."""
 
 [[binding]]
 luna = "Select All"
-key = "Ctrl+A"
+key = "Cmd+A"
 action = 40035
 
 [[binding]]
 luna = "Select All Tracks"
-key = "Ctrl+Shift+A"
+key = "Cmd+Shift+A"
 action = 40296
 
 [[binding]]
@@ -420,63 +420,74 @@ action = 40287
 [[binding]]
 luna = "Move Selection to Next Bar"
 key = "]"
-action = 41042
+macro = [41042, 40635, 40289]
+comment = "Plain move collapses the area: move cursor, clear time selection, clear item selection."
 
 [[binding]]
 luna = "Move Selection to Next Bar (numpad)"
 key = "Num2"
-action = 41042
+macro = [41042, 40635, 40289]
+comment = "Plain move collapses the area: move cursor, clear time selection, clear item selection."
 
 [[binding]]
 luna = "Move Selection to Previous Bar"
 key = "["
-action = 41043
+macro = [41043, 40635, 40289]
+comment = "Plain move collapses the area: move cursor, clear time selection, clear item selection."
 
 [[binding]]
 luna = "Move Selection to Previous Bar (numpad)"
 key = "Num1"
-action = 41043
+macro = [41043, 40635, 40289]
+comment = "Plain move collapses the area: move cursor, clear time selection, clear item selection."
 
 [[binding]]
 luna = "Move Selection To Next Clip Edge"
 key = "'"
-action = 41168
+macro = [41168, 40635, 40289]
 comment = """Must be the "nearest item edge" pair (41167/41168), NOT "edge of item" \
 (40318/40319). The latter only walks the edges of *selected* items, so with a clip \
 selected it ping-pongs on that one clip and never crosses to the next -- verified \
 empirically. 41167/41168 ignore item selection and leave it untouched, which is what \
-Pro Tools tab-to-boundary does."""
+Pro Tools tab-to-boundary does. Plain move collapses the area: move cursor, clear \
+time selection, clear item selection."""
 
 [[binding]]
 luna = "Move Selection To Previous Clip Edge"
 key = "L"
-action = 41167
+macro = [41167, 40635, 40289]
+comment = "Plain move collapses the area: move cursor, clear time selection, clear item selection."
 
 [[binding]]
 luna = "Move Selection To Next Transient"
 key = "Tab"
-action = 40375
+macro = [40375, 40635, 40289]
+comment = "Plain move collapses the area: move cursor, clear time selection, clear item selection."
 
 [[binding]]
 luna = "Move Selection To Next Transient (alt)"
-key = "Alt+'"
-action = 40375
+key = "Opt+'"
+macro = [40375, 40635, 40289]
+comment = "Plain move collapses the area: move cursor, clear time selection, clear item selection."
 
 [[binding]]
 luna = "Move Selection To Previous Transient"
-key = "Alt+L"
-action = 40376
-comment = "LUNA also puts this on Alt+Tab, which GNOME intercepts on Linux."
+key = "Opt+L"
+macro = [40376, 40635, 40289]
+comment = """LUNA also puts this on Alt+Tab, which GNOME intercepts on Linux. Plain \
+move collapses the area: move cursor, clear time selection, clear item selection."""
 
 [[binding]]
 luna = "Move Selection To Next Marker"
-key = "Super+Alt+'"
-action = 40173
+key = "Control+Opt+'"
+macro = [40173, 40635, 40289]
+comment = "Plain move collapses the area: move cursor, clear time selection, clear item selection."
 
 [[binding]]
 luna = "Move Selection To Previous Marker"
-key = "Super+Alt+L"
-action = 40172
+key = "Control+Opt+L"
+macro = [40172, 40635, 40289]
+comment = "Plain move collapses the area: move cursor, clear time selection, clear item selection."
 
 [[binding]]
 luna = "Extend Selection To Next Transient"
@@ -485,7 +496,7 @@ action = 40802
 
 [[binding]]
 luna = "Loop Select"
-key = "Ctrl+Shift+L"
+key = "Cmd+Shift+L"
 action = 40622
 comment = "Move loop points to time selection."
 
@@ -531,19 +542,19 @@ extend = 41167
 
 [[binding]]
 luna = "Extend Selection To Previous Transient"
-key = "Alt+Shift+L"
+key = "Opt+Shift+L"
 extend = 40376
 comment = """LUNA also puts this on Alt+Shift+Tab, which GNOME intercepts. \
 Forward is Shift+Tab, which REAPER covers natively with 40802."""
 
 [[binding]]
 luna = "Extend Selection To Next Marker"
-key = "Super+Alt+Shift+'"
+key = "Control+Opt+Shift+'"
 extend = 40173
 
 [[binding]]
 luna = "Extend Selection To Previous Marker"
-key = "Super+Alt+Shift+L"
+key = "Control+Opt+Shift+L"
 extend = 40172
 
 [[binding]]
@@ -553,7 +564,7 @@ extend = 40042
 
 [[binding]]
 luna = "Extend Selection To Session End"
-key = "Alt+Shift+Return"
+key = "Opt+Shift+Return"
 extend = 40043
 
 # ---------------------------------------------------------------------------
@@ -582,17 +593,17 @@ action = 40794
 
 [[binding]]
 luna = "Nudge Content Left"
-key = "Super+,"
+key = "Control+,"
 action = 40123
 
 [[binding]]
 luna = "Nudge Content Right"
-key = "Super+."
+key = "Control+."
 action = 40124
 
 [[binding]]
 luna = "Nudge to Next Clip"
-key = "Super+Alt+."
+key = "Control+Opt+."
 status = "unmapped"
 comment = "No native equivalent."
 
@@ -602,36 +613,36 @@ comment = "No native equivalent."
 
 [[binding]]
 luna = "New Tracks"
-key = "Ctrl+Shift+N"
+key = "Cmd+Shift+N"
 action = 40001
 
 [[binding]]
 luna = "Delete Selected Tracks"
-key = "Ctrl+Shift+Delete"
+key = "Cmd+Shift+Delete"
 action = 40005
 
 [[binding]]
 luna = "Duplicate"
-key = "Alt+D"
+key = "Opt+D"
 action = 40062
 
 [[binding]]
 luna = "Import"
-key = "Ctrl+I"
+key = "Cmd+I"
 action = 40018
 
 [[binding]]
 luna = "New Track Group"
-key = "Ctrl+G"
+key = "Cmd+G"
 action = 40772
 
 [[binding]]
 luna = "Toggle Selection Grouping"
-key = "Super+G"
+key = "Control+G"
 action = 1156
 
 [[binding]]
 luna = "Create Bus"
-key = "Ctrl+Shift+B"
+key = "Cmd+Shift+B"
 status = "unmapped"
 comment = "REAPER buses are just folder tracks; wants a macro plus a naming decision."

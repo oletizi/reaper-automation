@@ -1,0 +1,112 @@
+import { parse as parseToml } from 'smol-toml'
+
+export type BindingStatus = 'ok' | 'unmapped' | 'disable'
+export type BindingKind = { action: number } | { macro: number[] } | { extend: number } | { area: number } | { area: true }
+
+export interface Binding {
+  luna: string
+  key?: string
+  label?: string
+  status: BindingStatus
+  kind?: BindingKind
+}
+export interface Meta {
+  name: string
+  target?: string
+  reaperVersion?: string
+  notes: string[]
+}
+export interface Mapping {
+  meta: Meta
+  bindings: Binding[]
+}
+
+export class MappingError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = 'MappingError'
+  }
+}
+
+function isRecord(v: unknown): v is Record<string, unknown> {
+  return typeof v === 'object' && v !== null && !Array.isArray(v)
+}
+function asInt(v: unknown, where: string): number {
+  if (typeof v !== 'number' || !Number.isInteger(v)) throw new MappingError(`${where}: expected integer, got ${JSON.stringify(v)}`)
+  return v
+}
+function asOptionalString(v: unknown, where: string): string | undefined {
+  if (v === undefined) return undefined
+  if (typeof v !== 'string') throw new MappingError(`${where}: expected string, got ${JSON.stringify(v)}`)
+  return v
+}
+function asStringArray(v: unknown, where: string): string[] {
+  if (!Array.isArray(v)) throw new MappingError(`${where}: expected array`)
+  return v.map((item, j) => {
+    if (typeof item !== 'string') throw new MappingError(`${where}[${j}]: expected string, got ${JSON.stringify(item)}`)
+    return item
+  })
+}
+
+function validateBinding(raw: unknown, i: number): Binding {
+  if (!isRecord(raw)) throw new MappingError(`binding[${i}]: not a table`)
+  if (typeof raw.luna !== 'string') throw new MappingError(`binding[${i}]: missing or non-string 'luna'`)
+  const luna = raw.luna
+  const where = `binding[${i}] (${luna})`
+
+  const statusRaw = raw.status
+  if (statusRaw !== undefined && statusRaw !== 'ok' && statusRaw !== 'unmapped' && statusRaw !== 'disable') {
+    throw new MappingError(`${where}: unknown status ${JSON.stringify(statusRaw)}`)
+  }
+  const status: BindingStatus = statusRaw ?? 'ok'
+
+  const label = asOptionalString(raw.label, `${where}.label`)
+  const key = asOptionalString(raw.key, `${where}.key`)
+
+  if (status === 'unmapped') return { luna, key, label, status }
+
+  if (key === undefined) throw new MappingError(`${where}: missing key`)
+
+  if (status === 'disable') {
+    if ('action' in raw || 'macro' in raw || 'extend' in raw || 'area' in raw) {
+      throw new MappingError(`${where}: disable must not carry a kind key`)
+    }
+    return { luna, key, label, status }
+  }
+
+  const kinds: BindingKind[] = []
+  if ('action' in raw) kinds.push({ action: asInt(raw.action, `${where}.action`) })
+  if ('extend' in raw) kinds.push({ extend: asInt(raw.extend, `${where}.extend`) })
+  if ('macro' in raw) {
+    if (!Array.isArray(raw.macro)) throw new MappingError(`${where}.macro: expected array`)
+    kinds.push({ macro: raw.macro.map((s, j) => asInt(s, `${where}.macro[${j}]`)) })
+  }
+  if ('area' in raw) {
+    if (raw.area === true) kinds.push({ area: true })
+    else kinds.push({ area: asInt(raw.area, `${where}.area`) })
+  }
+  if (kinds.length !== 1) {
+    throw new MappingError(`${where}: expected exactly one of action/macro/extend/area, got ${kinds.length}`)
+  }
+  return { luna, key, label, status, kind: kinds[0] }
+}
+
+export function parseMapping(tomlText: string): Mapping {
+  const doc: unknown = parseToml(tomlText)
+  if (!isRecord(doc)) throw new MappingError('top-level TOML is not a table')
+
+  const metaRaw = isRecord(doc.meta) ? doc.meta : {}
+  if (typeof metaRaw.name !== 'string') throw new MappingError("meta: missing or non-string 'name'")
+  const meta: Meta = {
+    name: metaRaw.name,
+    target: asOptionalString(metaRaw.target, 'meta.target'),
+    reaperVersion: asOptionalString(metaRaw.reaper_version, 'meta.reaper_version'),
+    notes: metaRaw.notes !== undefined ? asStringArray(metaRaw.notes, 'meta.notes') : [],
+  }
+
+  const rawBindings = doc.binding
+  if (rawBindings !== undefined && !Array.isArray(rawBindings)) throw new MappingError('[[binding]] is not an array')
+  const bindings = (Array.isArray(rawBindings) ? rawBindings : []).map((b, i) => validateBinding(b, i))
+
+  return { meta, bindings }
+}
