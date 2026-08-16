@@ -16,6 +16,7 @@ macro = [40296, 41325]
 [[binding]]
 luna = "Extend To Next Bar"
 key = "Shift+]"
+label = "Extend Selection To Next Bar"
 extend = 41042
 
 [[binding]]
