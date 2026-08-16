@@ -2,7 +2,7 @@ import { parse as parseKey, describe as describeKey } from '@/keyspec'
 import { superWarning, type Target } from '@/translate'
 import { stableId, slugify } from '@/ids'
 import type { ActionIndex } from '@/actions'
-import type { Binding, Mapping } from '@/mapping'
+import type { Mapping } from '@/mapping'
 import { renderExtendScript } from '@/extend-template'
 
 const SECTION_MAIN = 0
@@ -38,7 +38,7 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
       const p = parseKey(b.key as string)
       flags = p.flags; code = p.keycode
     } catch (e) {
-      errors.push(`${luna}: ${(e as Error).message}`)
+      errors.push(`${luna}: ${e instanceof Error ? e.message : String(e)}`)
       continue
     }
 
