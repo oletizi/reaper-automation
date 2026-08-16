@@ -10,7 +10,7 @@ export interface ActionRow {
 }
 
 export const DEFAULT_ACTIONS_TSV = fileURLToPath(
-  new URL('../data/reaper-actions-7.78-linux.tsv', import.meta.url),
+  new URL('../data/reaper-actions-7.78.tsv', import.meta.url),
 )
 
 export function loadActions(tsvPath: string = DEFAULT_ACTIONS_TSV): ActionRow[] {

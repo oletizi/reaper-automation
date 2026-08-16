@@ -18,7 +18,7 @@ tools/install.py                    copy keymap + scripts into REAPER's config
 tools/find_action.py                search REAPER's action list
 tools/keyspec.py                    "Ctrl+Shift+Left" -> (flags, keycode)
 tools/dump_actions.lua              ReaScript that dumps REAPER's action list
-data/reaper-actions-7.78-linux.tsv  10,578 actions dumped from REAPER 7.78
+data/reaper-actions-7.78.tsv        10,578 actions dumped from REAPER 7.78
 data/luna-shortcuts-macos-raw.tsv   LUNA's published macOS defaults
 ```
 
