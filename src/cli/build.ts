@@ -11,7 +11,7 @@ export function cmdBuild(argv: string[]): number {
   const target: Target = a.target ? parseTarget(a.target) : (process.platform === 'darwin' ? 'macos' : 'linux')
   const mapping = parseMapping(readFileSync(a.mapping, 'utf8'))
   const idx = new ActionIndex(loadActions())
-  const result = buildKeymap(mapping, idx, target) // throws on validation error -> nothing written
+  const result = buildKeymap(mapping, idx, target, a.section ?? 0) // throws on validation error -> nothing written
   mkdirSync(dirname(a.out), { recursive: true })
   writeFileSync(a.out, result.keymapText)
   if (result.scripts.size) {

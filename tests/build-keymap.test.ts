@@ -27,6 +27,20 @@ describe('buildKeymap (mini fixture, target macos)', () => {
   })
 })
 
+describe('buildKeymap section override (ReaTooled coexistence)', () => {
+  const r16 = buildKeymap(mini, idx, 'macos', 16)
+  it('emits KEY lines in the given section', () => {
+    expect(r16.keymapText).toMatch(/^KEY 1 32 40044 16/m)
+  })
+  it('emits ACT and SCR definitions in the given section', () => {
+    expect(r16.keymapText).toMatch(/^ACT 0 16 "9457b692efcdc0fa6d1a838e640ccc96"/m)
+    expect(r16.keymapText).toMatch(/^SCR 4 16 "76372f6ae70342495f98647bb34897d0"/m)
+  })
+  it('defaults to section 0 when omitted', () => {
+    expect(buildKeymap(mini, idx, 'macos').keymapText).toMatch(/^KEY 1 32 40044 0/m)
+  })
+})
+
 describe('buildKeymap strict validation', () => {
   it('throws when an action id does not exist', () => {
     const m = parseMapping('[meta]\nname="x"\n[[binding]]\nluna="B"\nkey="A"\naction=99999999\n')

@@ -5,7 +5,6 @@ import type { ActionIndex } from '@/actions'
 import type { Mapping } from '@/mapping'
 import { renderExtendScript } from '@/extend-template'
 
-const SECTION_MAIN = 0
 const SCRIPT_DIR = 'luna'
 
 export interface BuildResult {
@@ -15,7 +14,12 @@ export interface BuildResult {
   stats: { direct: number; macro: number; script: number; disabled: number; unmapped: number }
 }
 
-export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Target): BuildResult {
+// `section` is the reaper-kb.ini key section the bindings are emitted into.
+// 0 is REAPER's stock Main section. On a machine running ReaTooled, ReaTooled's
+// Main bindings live in section 16 and take precedence over an imported section-0
+// keymap, so overriding them requires emitting into section 16 as well (verified
+// empirically — see the design doc's resolved section-precedence question).
+export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Target, section = 0): BuildResult {
   const actLines: string[] = []
   const scrLines: string[] = []
   const keyLines: string[] = []
@@ -71,7 +75,7 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
         const fname = `luna_${slugify(base)}.lua`
         const sid = stableId(label)
         scripts.set(fname, renderExtendScript({ label, spec: mapping.meta.name, move, moveName }))
-        scrLines.push(`SCR 4 ${SECTION_MAIN} "${sid}" "Custom: ${label}" ${SCRIPT_DIR}/${fname}`)
+        scrLines.push(`SCR 4 ${section} "${sid}" "Custom: ${label}" ${SCRIPT_DIR}/${fname}`)
         entry = { fname, sid }
         seenScripts.set(move, entry)
       }
@@ -87,7 +91,7 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
       if (mid === undefined) {
         mid = stableId(label)
         seenMacros.set(label, mid)
-        actLines.push(`ACT 0 ${SECTION_MAIN} "${mid}" "Custom: ${label}" ${steps.join(' ')}`)
+        actLines.push(`ACT 0 ${section} "${mid}" "Custom: ${label}" ${steps.join(' ')}`)
       }
       command = '_' + mid
       desc = `${label}  [${steps.map((s) => actions.byId(s)).join(' > ')}]`
@@ -108,7 +112,7 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
       continue
     }
 
-    keyLines.push(`KEY ${flags} ${code} ${command} ${SECTION_MAIN}\t# ${combo} : ${luna} -> ${desc}`)
+    keyLines.push(`KEY ${flags} ${code} ${command} ${section}\t# ${combo} : ${luna} -> ${desc}`)
   }
 
   if (errors.length) {

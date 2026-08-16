@@ -50,6 +50,22 @@ pnpm ra build mappings/luna.toml -o build/luna-macos.ReaperKeyMap   # --target d
 The build fails rather than emitting a dead key if a command ID doesn't exist
 or two bindings collide on the same combo — nothing is written on error.
 
+### Coexisting with ReaTooled (`--section`)
+
+By default the keymap is emitted into REAPER's stock Main key section (`0`).
+**On a machine running ReaTooled, build with `--section 16`:**
+
+```sh
+pnpm ra build mappings/luna.toml -o build/luna.ReaperKeyMap --section 16
+```
+
+ReaTooled keeps its ~399 Main bindings in section `16`, and section 16 takes
+precedence over an imported section-0 keymap — so a stock (section-0) import is
+silently inert on every key ReaTooled already binds. Emitting into section 16
+makes our bindings replace ReaTooled's in the same section on import. (Verified
+on REAPER 7.78 + ReaTooled 2.6.1; REAPER's keymap import preserves the section
+field.) On stock REAPER with no ReaTooled, use the default `0`.
+
 ### Host vs. target
 
 These are two separate axes and never collapse into one value:

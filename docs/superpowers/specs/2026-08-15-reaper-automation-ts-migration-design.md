@@ -344,13 +344,22 @@ TDD, module by module, Python kept alongside until parity:
 
 ## Open questions
 
-- **Section semantics (prerequisite for `report`'s OVERRIDE/FREE labels; not a
-  prerequisite for the TypeScript port).** ReaTooled's Main bindings appear under
-  section `16` in the live `reaper-kb.ini`, while an imported Main keymap uses
-  section `0`. Before `report` can label a slot `OVERRIDE` or `FREE`, an
-  empirical probe must establish which sections share shortcut precedence with an
-  imported Main-section keymap (inspect the format, and/or import a probe keymap
-  into a throwaway resource dir and observe the merged file / live precedence).
-  Until resolved, `report` prints only the raw observation and names the sections
-  it compared — it does not assert coexistence. The core port proceeds
-  independently.
+- **Section semantics — RESOLVED (2026-08-15) by empirical test.** ReaTooled's
+  Main bindings live under section `16` in the live `reaper-kb.ini`, while a
+  keymap imported through REAPER's UI lands in section `0`. The precedence
+  question is now answered: **section 16 wins over section 0.** A section-0
+  import is therefore *inert* on any key ReaTooled already binds in section 16
+  (~399 of its Main keys) — the "layer LUNA on top via import" model silently
+  fails for every conflicting key. Verified end-to-end on REAPER 7.78 + ReaTooled
+  2.6.1: `[`/`]` bound in our section-0 import did nothing (ReaTooled's section-16
+  "set time-selection point" fired instead); rebuilding the same bindings into
+  section 16 and re-importing made them take effect. REAPER's importer preserves
+  the section field (it only normalizes keycodes, e.g. VK 221 → raw ASCII 93).
+
+  **Consequence for the tool:** `buildKeymap` takes a `section` argument (CLI
+  `--section`, default `0`). Stock REAPER uses `0`; **ReaTooled coexistence
+  requires `--section 16`** so our bindings replace ReaTooled's in the same
+  section. This is the mechanism `report` needs, too: OVERRIDE/FREE labels can
+  now be defined against same-section precedence (section 16 for a ReaTooled
+  host). Promoting `report` from raw-observation to OVERRIDE/FREE is the
+  remaining follow-up.
