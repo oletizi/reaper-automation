@@ -26,20 +26,9 @@ export function parseBuild(argv: string[]) {
 export function parseInstall(argv: string[]) {
   const { values } = parseArgs({
     args: argv,
-    options: {
-      keymap: { type: 'string' },
-      'resource-dir': { type: 'string' },
-      section: { type: 'string' },
-    },
+    options: { keymap: { type: 'string' }, 'resource-dir': { type: 'string' } },
   })
-  let section: number | undefined
-  if (values.section !== undefined) {
-    section = Number(values.section)
-    if (!Number.isInteger(section) || section < 0) {
-      throw new Error(`install: --section must be a non-negative integer, got ${JSON.stringify(values.section)}`)
-    }
-  }
-  return { keymap: values.keymap, resourceDir: values['resource-dir'], section }
+  return { keymap: values.keymap, resourceDir: values['resource-dir'] }
 }
 
 export function parseFindAction(argv: string[]) {
