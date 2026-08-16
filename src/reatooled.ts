@@ -17,6 +17,16 @@ export function parseKb(text: string): KbBinding[] {
   return out
 }
 
+// Detects whether the live reaper-kb.ini has ReaTooled's Main bindings
+// (section 16). Used by the CLI to auto-select the keymap section instead of
+// requiring the user to pass --section.
+export function detectReaTooledSection(kbText: string): 0 | 16 {
+  for (const r of parseKb(kbText)) {
+    if (r.section === 16) return 16
+  }
+  return 0
+}
+
 // Raw observation ONLY. OVERRIDE/FREE semantics are blocked on the section-
 // precedence probe (see spec Open Questions); this must not assert coexistence.
 export function observeAgainstReatooled(
