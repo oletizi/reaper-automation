@@ -16,7 +16,7 @@ export function runCli(argv: string[]): Promise<number> {
         return Promise.resolve(2)
     }
   } catch (e) {
-    console.error((e as Error).message)
+    console.error(e instanceof Error ? e.message : String(e))
     return Promise.resolve(1)
   }
 }

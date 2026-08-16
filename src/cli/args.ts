@@ -7,13 +7,12 @@ export function parseBuild(argv: string[]) {
     options: {
       out: { type: 'string', short: 'o' },
       target: { type: 'string' },
-      'no-strict': { type: 'boolean', default: false },
     },
   })
   const mapping = positionals[0]
   if (!mapping) throw new Error('build: missing <mapping> positional')
   if (!values.out) throw new Error('build: -o/--out is required')
-  return { mapping, out: values.out, target: values.target, strict: !values['no-strict'] }
+  return { mapping, out: values.out, target: values.target }
 }
 
 export function parseInstall(argv: string[]) {

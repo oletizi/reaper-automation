@@ -1,6 +1,5 @@
-import { mkdirSync, writeFileSync } from 'node:fs'
+import { mkdirSync, writeFileSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
-import { readFileSync } from 'node:fs'
 import { parseMapping } from '@/mapping'
 import { loadActions, ActionIndex } from '@/actions'
 import { buildKeymap } from '@/build-keymap'
