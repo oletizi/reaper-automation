@@ -1,7 +1,8 @@
 # reaper-automation: TypeScript migration, cross-platform, ReaTooled-aware
 
 Date: 2026-08-15
-Status: approved design; implementation plan to follow
+Status: approved design (revised after third-party review); implementation plan
+to follow
 
 ## Goals
 
@@ -20,8 +21,8 @@ Status: approved design; implementation plan to follow
   keymap import merges our overrides and leaves everything else in place.
 - Windows support. `reaper-paths` throws an explicit "unsupported platform"
   error there — no silent fallback.
-- Redesigning the mapping DSL. The TOML mapping table and its three binding
-  kinds (`action` / `macro` / `extend`, plus `status`) are preserved.
+- Redesigning the mapping DSL. It is preserved exactly; see **Mapping DSL
+  (preserved exactly)** below for the precise schema.
 
 ## Context: what exists today
 
@@ -49,16 +50,54 @@ Our tool does **not** write `reaper-kb.ini`. It emits a separate
 the combos the file names and keeps every other default. So "integrate with
 ReaTooled" is a workflow/visibility question, not a file-collision problem.
 
+### Mapping DSL (preserved exactly)
+
+The current Python builder defines the schema; the TS port reproduces it
+verbatim. Each `[[binding]]` table:
+
+- `luna` — the LUNA action name (label). Present on every binding.
+- `key` — the human key spec (e.g. `Cmd+Shift+Left`). Required unless the
+  binding is `status = "unmapped"`.
+- `status` — optional, one of:
+  - *(absent / `"ok"`)* — a normal binding; requires exactly one kind key below.
+  - `"unmapped"` — skipped entirely, emits nothing (used to park a LUNA
+    shortcut with a comment explaining why). 6 in the current data.
+  - `"disable"` — emits `KEY … 0 …`, shadowing REAPER's default for that combo.
+    Supported by the builder but **currently unused** in the data. Preserved for
+    parity; not removed.
+- Exactly one **kind key** (when not `unmapped`/`disable`):
+  - `action = <int>` — a native REAPER action id -> a plain `KEY` line.
+  - `macro = [<int>, …]` — an ordered step list -> an `ACT` custom action.
+  - `extend = <int>` — a cursor-move action id -> a generated `SCR` ReaScript
+    (the cumulative "hold Shift while moving the transport" behavior).
+- `label` — optional; overrides the generated custom-action / script name.
+
+This schema is described here **once**; other sections refer back to it rather
+than restating it.
+
 ### Verified facts (not assumptions)
 
 - **REAPER 7.78 is installed on this mac** (`reaper-install-rev.txt`), the exact
-  version the action dump was made from. REAPER native action IDs are
-  platform-shared, so the existing action TSV is reusable on macOS. We will
-  re-dump on the mac to confirm byte-identical and drop the `-linux` suffix.
-- Our current build produces **102 main-section bindings**. They collide with
-  **zero** section-0 entries in the live `reaper-kb.ini` (which carries only 3
-  section-0 KEY lines); ReaTooled's Main bindings sit under section `16` — see
-  the open question below.
+  version the action dump was made from. The action ids referenced by the
+  mapping are the invariant we actually depend on — see **Action-list
+  portability** below — not whole-file byte identity of the dump. We will
+  re-dump on the mac and rename the file to drop the `-linux` suffix.
+- Our current build produces **102 main-section bindings**. Observation only:
+  the live `reaper-kb.ini` carries 3 section-`0` KEY lines while ReaTooled's
+  Main bindings sit under section `16`, so a naive section-0 comparison shows
+  zero overlap. **This number is not evidence of coexistence** — whether
+  sections `0` and `16` share shortcut precedence is unresolved (see
+  *Section semantics*, a prerequisite for the `report` verb).
+
+### Action-list portability
+
+The guarantee the build needs is narrow: *for every action id referenced by
+`luna.toml`, the supported REAPER version's action corpus contains the expected
+action on both supported platforms.* The build already enforces this — it
+validates every referenced id against the loaded corpus and fails otherwise. We
+re-dump on macOS to confirm the referenced ids resolve; whole-file byte
+identity of the two dumps is a nice-to-have, **not** a prerequisite for
+platform neutrality.
 
 ## The modifier insight (drives the mapping design)
 
@@ -89,25 +128,47 @@ To avoid the ambiguity that sank the old vocabulary (where `Ctrl`, `Cmd`, and
 only; `Ctrl` is **not** an accepted modifier token in `mappings/luna.toml`.
 
 Because the bits are unchanged, re-authoring the current `luna-linux.toml` into
-Mac-native labels emits **byte-identical KEY bit-lines** (modulo comments). That
-is the migration's **golden-file regression anchor**: the TS build on
-`--target macos` must reproduce the current keymap's `KEY`/`ACT`/`SCR` bit-lines
-exactly.
+Mac-native labels emits **identical `KEY`/`ACT`/`SCR` semantic records** —
+identical flags, keycodes, commands, custom-action ids, and script ids. This is
+the migration's **golden-file regression anchor** (see *Testing* for the exact
+equivalence definition, which is a semantic-record comparison, **not** a naive
+byte diff — the emitted comments differ because `describe()` renders Mac vs
+Linux modifier labels).
 
-`translate.ts` is therefore near-identity:
+`keyspec.ts` parses human vocabulary into physical REAPER **bits**; everything
+downstream reasons about those bits. `translate.ts` is therefore
+presentation/policy, not translation — the unusual `Control -> bit 32 -> Linux
+Super` behavior is visible there rather than smuggled into the parser:
 
-- `--target macos` — identity; describe modifiers as Cmd/Opt/Control.
-- `--target linux` — identity bits; describe as Ctrl/Alt/Super. Emit a **warning**
-  for any binding that uses bit 32 (mac Control -> Linux Super) since GNOME may
+- `macos` target — identity bits; describe modifiers as Cmd/Opt/Control.
+- `linux` target — identity bits; describe as Ctrl/Alt/Super. Emit a **warning**
+  for any binding using bit 32 (mac Control -> Linux Super) since GNOME may
   intercept it. (A future opt-in remap can live here; not built now.)
 
-Default `--target` is the current OS.
+`--target` selects keyboard semantics for the **generated** bindings and
+defaults to the host OS. It is distinct from *host* (where the tool runs / where
+REAPER is installed) — see *Host vs. target* under the CLI.
 
 ## Architecture
 
 Node + tsx + pnpm, ESM, `@/*` path alias (-> `src/*`), vitest. No `any`, no
 `as Type`, no `@ts-ignore`. No fallbacks or mock data outside tests — missing
 action, unknown key, unsupported OS all **throw** with a description.
+
+**Runtime dependencies.** Python was stdlib-only ("Nothing to install"). Node
+has no stdlib TOML parser, so the port takes on **one** runtime dependency: a
+TOML parser (`smol-toml` — TOML 1.0, TS-native, zero transitive deps). This is a
+deliberate, named tradeoff; a hand-rolled TOML subset parser would be exactly
+the bug-factory our rules forbid. CLI argument parsing stays dependency-free via
+the stdlib `node:util` `parseArgs`; md5 ids use stdlib `node:crypto`.
+
+**The TOML boundary (typing has teeth here).** `parseToml()` returns
+**`unknown`** — untrusted, unshaped data. `mapping.ts` performs runtime
+structural validation against the *Mapping DSL (preserved exactly)* schema and
+returns a typed `Mapping`; anything malformed, or a binding that violates the
+"exactly one kind key" rule, throws `MappingError` naming the offending binding.
+`const m = parseToml(...) as Mapping` is explicitly forbidden — the validator,
+not a cast, is how untrusted TOML becomes typed.
 
 ```
 package.json            # type: module; bin verbs; scripts run via tsx
@@ -116,11 +177,11 @@ src/
   keyspec.ts            # "Cmd+Shift+Left" -> {flags,keycode}; describe() inverse
   translate.ts          # per-target bit rendering + Super-conflict warning
   actions.ts            # load + index the action TSV; find/lookup
-  mapping.ts            # TOML mapping types; Binding discriminated union
+  mapping.ts            # parseToml -> unknown -> validate -> Mapping | throw MappingError
   extend-template.ts    # the Lua EXTEND_TEMPLATE string
   build-keymap.ts       # mapping -> .ReaperKeyMap + Lua scripts (validated)
   reaper-paths.ts       # resource dir per-OS; Windows throws
-  install.ts            # copy keymap + scripts into resource dir
+  install.ts            # copy built artifacts into resource dir (never activates)
   reatooled.ts          # parse live reaper-kb.ini; conflict report
   cli/
     build.ts
@@ -154,18 +215,23 @@ own module.
 - **actions.ts** — load the action TSV into an index keyed by command id
   (section = main). `find()` (AND across terms, case-insensitive), `byId()`,
   section filter — feature parity with `find_action.py`.
-- **mapping.ts** — types for the parsed TOML: `Meta` and a `Binding`
-  discriminated union over `action | macro | extend | disable | unmapped`.
+- **mapping.ts** — the TOML boundary. `parseToml() -> unknown`, then runtime
+  structural validation to a typed `Mapping` per the *Mapping DSL* schema
+  (`Meta` + a `Binding` whose kind is one of `action | macro | extend`, with
+  `status ∈ {ok, unmapped, disable}` orthogonal). Malformed input throws
+  `MappingError`. No casts.
 - **build-keymap.ts** — the core. Validates every command id against
-  `actions.ts`; emits `KEY` lines, `ACT` custom actions (stable md5 ids), `SCR`
-  script lines, and the generated `extend` Lua files. Strict by default: on any
-  validation error or duplicate-combo collision, write nothing and exit non-zero
-  (parity with the Python build).
-- **reaper-paths.ts** — resolve the REAPER resource dir: macOS
-  `~/Library/Application Support/REAPER`, Linux `~/.config/REAPER`; honor
+  `actions.ts`; emits `KEY` lines, `ACT` custom actions and `SCR` scripts (see
+  *Stable ACT/SCR identity* — the md5 id algorithm is a migration contract), and
+  the generated `extend` Lua files. Strict by default: on any validation error
+  or duplicate-combo collision, write nothing and exit non-zero (parity with the
+  Python build).
+- **reaper-paths.ts** — resolve the REAPER resource dir *from the host OS*:
+  macOS `~/Library/Application Support/REAPER`, Linux `~/.config/REAPER`; honor
   `--resource-dir` / `$REAPER_RESOURCE_DIR`; throw on Windows/unknown.
 - **install.ts** — copy Lua scripts first, then the keymap (order matters, as
-  today), into the resolved resource dir.
+  today), into the resolved resource dir. See the **install contract** under the
+  CLI: it stages files only, and never activates or imports anything.
 - **reatooled.ts** — parse the live `reaper-kb.ini` KEY lines into a
   `(flags, keycode, section) -> command` map; provide the conflict report used
   by `cli/report.ts`.
@@ -176,25 +242,73 @@ A single `reaper-automation` bin routes verbs, argument parsing via the stdlib
 `node:util` `parseArgs` (zero dependency):
 
 - `build [mapping] -o <out> [--target macos|linux] [--no-strict]`
-- `install [--keymap <path>] [--resource-dir <dir>] [--target …]`
+- `install [--keymap <path>] [--resource-dir <dir>]`
 - `find-action <terms…> | --id <n> | --section <name>`
 - `report [--kb <reaper-kb.ini>]` — ReaTooled conflict report
+
+**Host vs. target.** These are separate axes and never collapse into one value:
+
+- *host* — the machine the tool runs on / where REAPER is installed. Determines
+  the resource dir (`reaper-paths`, override via `--resource-dir`).
+- *target* — the keyboard semantics baked into generated bindings (`--target` on
+  `build`, default = host OS).
+
+`--target` therefore lives on `build` only. `install` has **no** `--target`: it
+copies an already-built keymap to a resource dir, so a target is meaningless
+there (the semantics were fixed at build time). Cross-host installs remain
+possible via `--resource-dir` alone.
+
+**Install contract.** `install` stages generated artifacts into their expected
+filesystem locations — the built `.ReaperKeyMap` into `KeyMaps/` and the `extend`
+scripts into `Scripts/luna/`, scripts first (the keymap references them by
+path). It **does not** activate, import, or otherwise change REAPER's active
+keyboard configuration, and it **never touches `reaper-kb.ini`**. Binding
+activation is an explicit REAPER UI step (Actions -> Show action list -> Key map
+-> Import…). This is the exact behavior of the current `install.py`, kept as the
+parity contract — and it is what keeps the ReaTooled-coexistence safety story
+true.
 
 ## ReaTooled coexistence + conflict report
 
 `report` cross-references our generated bindings against the live
-`reaper-kb.ini` and prints, per binding: **OVERRIDE** (we replace a slot
-ReaTooled binds) or **FREE** (unused slot). This makes "building on ReaTooled"
-visible and deliberate. We never modify ReaTooled's files.
+`reaper-kb.ini`. **Prerequisite (blocking for `report` only):** the labels
+`OVERRIDE` / `FREE` have no defined meaning until an empirical probe establishes
+which `reaper-kb.ini` sections share shortcut precedence with an imported
+Main-section keymap (see *Section semantics*). The TypeScript migration may
+proceed before that is resolved, but until it is, the tool **must not** label a
+binding `OVERRIDE` or `FREE`; `report` instead prints the raw observation (our
+combos vs. the sections it parsed) and names the sections it compared. Once the
+precedence model is verified, `report` promotes to the OVERRIDE/FREE semantics.
+We never modify ReaTooled's files at any stage.
 
 ## Testing (vitest)
 
 - **keyspec round-trip** — `describe(parse(x))` stability across the modifier
   and key vocabulary, including extended-nav offset and literal `+`.
-- **golden keymap** — build the canonical `luna.toml` on `--target macos` and
-  assert the emitted `KEY`/`ACT`/`SCR` bit-lines match a committed reference
-  captured from the current Python output. Proves the port is behavior-
-  preserving.
+- **golden keymap — semantic-record parity (primary).** Parse both the committed
+  Python-generated `.ReaperKeyMap` and the TS `--target macos` build into
+  *ordered semantic records* and assert equality:
+  - `KEY` -> `{flags, keycode, command, section}`
+  - `ACT` -> `{id, steps[]}`
+  - `SCR` -> `{id, path}`
+
+  Comments are **not** compared — they legitimately differ, because the Python
+  reference was built from Linux-labeled source and `describe()` renders Mac
+  labels on the macos build. This proves the relabeling + the port preserve
+  every binding, custom action, and script.
+- **golden keymap — byte-for-byte (drift guard).** A committed fixture captured
+  from the **TS** macos build; assert future TS builds reproduce it byte-for-byte
+  (same target, same source — identity is genuinely expected here). Guards the
+  emitter against accidental formatting/ordering/newline drift. Our generator
+  emits only relative script paths, so no absolute-path noise arises.
+- **stable ACT/SCR identity (migration contract).** Assert every generated
+  custom-action and script `command` id equals the Python implementation's for
+  the same canonical mapping. The id algorithm must be reproduced exactly:
+  `md5("reaper-automation/" + label)` over UTF-8 bytes, lowercase hex, where
+  `label` is derived identically (macro: `LUNA: <luna>` or the `label` override;
+  extend: `LUNA: <base>`), and macro step ordering is preserved. A divergent
+  hash makes REAPER see *newly invented* actions even when the KEY bits match —
+  so this gets its own test, separate from bit parity.
 - **actions** — loading + `find`/`byId` behavior.
 - **reatooled parse** — section/flag/keycode extraction from a fixture slice of
   the live `reaper-kb.ini`.
@@ -206,27 +320,37 @@ visible and deliberate. We never modify ReaTooled's files.
 
 TDD, module by module, Python kept alongside until parity:
 
-1. Scaffold toolchain (package.json, tsconfig with `@/*`, vitest, tsx).
-2. Capture a golden reference from the current Python build output.
+1. Scaffold toolchain (package.json with the `smol-toml` dep, tsconfig with
+   `@/*`, vitest, tsx).
+2. Capture golden references from the current Python build output: the parsed
+   semantic records, and the ACT/SCR id set.
 3. Port pure leaves first (keyspec, translate, actions), each test-first.
-4. Port build-keymap; make the golden test pass on `--target macos`.
-5. Port reaper-paths + install (cross-platform); port find-action.
-6. Add reatooled.ts + report.
-7. Re-author `luna-linux.toml` -> `luna.toml` (Mac-native labels); confirm the
-   golden test still holds.
-8. Re-dump the action list on this mac; confirm byte-identical; rename to
-   `reaper-actions-7.78.tsv`; update references.
-9. Update README for the TS workflow and cross-platform usage.
+4. Port mapping.ts (TOML boundary + `MappingError`), then build-keymap; make the
+   semantic-record parity and id-stability tests pass on `--target macos`.
+5. Port reaper-paths + install (cross-platform, no `--target` on install); port
+   find-action.
+6. Add reatooled.ts + `report` in raw-observation mode (no OVERRIDE/FREE labels).
+7. Re-author `luna-linux.toml` -> `luna.toml` (Mac-native labels; `disable`
+   status preserved though unused); confirm parity + id-stability still hold.
+8. Re-dump the action list on this mac; confirm every id referenced by
+   `luna.toml` resolves (the real invariant — not whole-file byte identity);
+   rename to `reaper-actions-7.78.tsv`; update references.
+9. Update README for the TS workflow, the host/target distinction, the one new
+   runtime dependency, and cross-platform usage.
 10. Delete the Python tools in one commit once TS is at parity. `main` builds a
     correct keymap at every step.
+11. *(Separately, unblocks the `report` upgrade — not a port prerequisite)*
+    Resolve *Section semantics* (below), then promote `report` to OVERRIDE/FREE.
 
-## Open questions (resolve during implementation)
+## Open questions
 
-- **Section-16 semantics.** ReaTooled's Main bindings appear under section `16`
-  in the live `reaper-kb.ini`, while an imported Main keymap uses section `0`.
-  Before the `report` verb can compare the right slots, confirm how REAPER
-  namespaces an imported Main keymap against ReaTooled's section-16 entries
-  (short investigation: inspect the format, and/or import a probe keymap into a
-  throwaway resource dir and observe the merged file). The core port does not
-  depend on this; only the report's accuracy does. Until resolved, `report`
-  documents which section(s) it compares.
+- **Section semantics (prerequisite for `report`'s OVERRIDE/FREE labels; not a
+  prerequisite for the TypeScript port).** ReaTooled's Main bindings appear under
+  section `16` in the live `reaper-kb.ini`, while an imported Main keymap uses
+  section `0`. Before `report` can label a slot `OVERRIDE` or `FREE`, an
+  empirical probe must establish which sections share shortcut precedence with an
+  imported Main-section keymap (inspect the format, and/or import a probe keymap
+  into a throwaway resource dir and observe the merged file / live precedence).
+  Until resolved, `report` prints only the raw observation and names the sections
+  it compared — it does not assert coexistence. The core port proceeds
+  independently.
