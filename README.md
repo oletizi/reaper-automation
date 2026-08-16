@@ -116,6 +116,57 @@ Verified end-to-end against REAPER with the keymap loaded: from 4.0s, three
 presses give `4.0..6.0` → `4.0..8.0` → `4.0..10.0`, and the reverse key shrinks
 back to `4.0..8.0` → `4.0..6.0` with the anchor held.
 
+## Edit-selection model (`area`)
+
+Pro Tools/LUNA build an "edit area" to operate on from two independent axes,
+both driven entirely by keyboard:
+
+- **Tracks** (vertical scope) — `Shift+P` / `Shift+;` extend the track
+  selection up/down, non-contiguous tracks allowed. (There's currently no
+  keyboard binding for "add this track to the selection without moving the
+  focus," the Cmd-click equivalent — see *Known gaps*.)
+- **Time range** (horizontal scope) — `Shift+[` / `Shift+]`, and the
+  Shift-variants of the clip-edge/transient/marker nav keys, extend the time
+  selection. No time selection means zero-width: the area collapses to
+  wherever the edit cursor is.
+
+Tracks × time range is never stored as its own object — it's derived on
+demand by a shared ReaScript, `luna_select_area.lua` (generated from
+`src/select-area-template.ts`). Given the currently selected tracks (or all
+tracks, if none are selected) and the current time selection (or the cursor
+position, if none), it splits any items crossing those boundaries and, when
+there was a real time range, selects exactly the items that fall inside it.
+
+Two binding shapes in `mappings/luna.toml` use it:
+
+- **`area = true`** — run the select-area script and stop there. This is
+  `Separate Selection` (`B` / `Cmd+E`): materializing the split+select *is*
+  the separate.
+- **`area = <action id>`** — run the select-area script, then the given
+  native action. `Clear`/`Delete` uses `40006` (Item: Remove items,
+  clipboard untouched); `Cut` uses `40699` (Item: Cut items, clipboard set).
+  Each compiles to its own generated custom action (`ACT` line), so Delete
+  and Cut show up in REAPER's action list as two distinct, correctly-labeled
+  commands rather than one action wearing two key bindings.
+
+A plain cursor move — no Shift — is the way back out. `]` / `[`, `L` / `'`,
+`Tab`, `Opt+'` / `Opt+L`, and the marker-nav keys all compile to
+`macro = [<move-action>, 40635, 40289]`: move the cursor, clear the time
+selection (`40635`), clear the item selection (`40289`). That's the area
+collapsing to a zero-width point at wherever the cursor lands, matching Pro
+Tools' behavior of a bare nav key dropping whatever was selected.
+
+All of it — `B`, `Delete`, `Cut`, and the plain-move family — lands in
+whichever section the build auto-detects (see *Coexisting with ReaTooled*
+above), same as every other binding in the table.
+
+This intentionally diverges from the tool's original Python-era output: the
+migration-era golden fixture froze what the Python generator produced for `B`
+and the plain-move keys before this model existed. `tests/parity.test.ts`
+no longer compares against that frozen reference for those bindings — the
+byte-for-byte TS build fixture (`tests/fixtures/luna-macos.tsbuild.ReaperKeyMap`)
+is the regression baseline going forward.
+
 ## Looking up actions
 
 ```sh

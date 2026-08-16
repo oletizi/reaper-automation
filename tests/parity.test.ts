@@ -5,7 +5,6 @@ import { parseMapping } from '@/mapping'
 import { loadActions, ActionIndex } from '@/actions'
 import { buildKeymap } from '@/build-keymap'
 
-const ref = readFileSync(fileURLToPath(new URL('./fixtures/luna-linux.reference.ReaperKeyMap', import.meta.url)), 'utf8')
 const luna = parseMapping(readFileSync(fileURLToPath(new URL('../mappings/luna.toml', import.meta.url)), 'utf8'))
 const built = buildKeymap(luna, new ActionIndex(loadActions()), 'macos')
 
@@ -29,27 +28,30 @@ function toRecords(text: string): Rec {
 }
 
 describe('golden parity', () => {
-  const a = toRecords(ref)
+  // NOTE: the frozen Python-reference comparison (luna-linux.reference.ReaperKeyMap) was
+  // retired here. It served its purpose while migrating Python -> TS (proving bit-for-bit
+  // reproduction), but the edit-selection model deliberately diverges from that reference:
+  // B (Separate) now drives the `area`-select primitive, and the plain cursor-move family
+  // (bar/clip-edge/transient/marker moves) now collapse the edit area via
+  // `[move, 40635, 40289]` macros instead of issuing the bare Python move actions. "Matches
+  // Python exactly" is no longer the invariant we want. The non-vacuousness tripwire below
+  // now points at the current TS build's own records so it still catches silent
+  // build-keymap/parser breakage; the byte-for-byte drift guard further down is the real
+  // regression baseline for the intended (post-migration) output.
   const b = toRecords(built.keymapText)
 
-  it('reference records are non-empty (tripwire against silent parser drift)', () => {
-    expect(a.key.length).toBeGreaterThan(0)
-    expect(a.act.length).toBeGreaterThan(0)
-    expect(a.scr.length).toBeGreaterThan(0)
-  })
-
-  it('KEY semantic records match the Python reference (bit parity across relabel)', () => {
-    expect(b.key).toEqual(a.key)
-  })
-  it('ACT ids + steps match the Python reference', () => {
-    expect(b.act).toEqual(a.act)
-  })
-  it('SCR ids + paths match the Python reference (id-stability)', () => {
-    expect(b.scr).toEqual(a.scr)
+  it('built records are non-empty (tripwire against silent build breakage)', () => {
+    expect(b.key.length).toBeGreaterThan(0)
+    expect(b.act.length).toBeGreaterThan(0)
+    expect(b.scr.length).toBeGreaterThan(0)
   })
 })
 
 describe('byte-for-byte drift guard (TS vs TS)', () => {
+  // Regression baseline for the intended (post-migration) output. B + the plain-move family
+  // intentionally diverge from the original Python output (see note above); this fixture
+  // captures that divergence as the new expected build so future builds are checked against
+  // it rather than against the retired Python reference.
   const fx = fileURLToPath(new URL('./fixtures/luna-macos.tsbuild.ReaperKeyMap', import.meta.url))
   it('reproduces the captured TS macos build exactly', () => {
     if (!existsSync(fx)) {

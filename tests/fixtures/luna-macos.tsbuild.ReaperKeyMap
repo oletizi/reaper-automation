@@ -5,6 +5,7 @@
 # Import via: Actions > Show action list > Key map > Import...
 # Modifiers are Mac-native (Cmd/Opt/Control/Shift); no translation from LUNA's own keys.
 
+SCR 4 0 "991739d9c9358c4418bce73744f68c2c" "Custom: LUNA: Select Area" luna/luna_select_area.lua
 SCR 4 0 "76372f6ae70342495f98647bb34897d0" "Custom: LUNA: Extend Selection To Next Bar" luna/luna_extend_selection_to_next_bar.lua
 SCR 4 0 "705250128fa18c7721dc75648dd60f2f" "Custom: LUNA: Extend Selection To Previous Bar" luna/luna_extend_selection_to_previous_bar.lua
 SCR 4 0 "5085c418d287dcb2cc58fe46c2f425c0" "Custom: LUNA: Extend Selection To Next Clip Edge" luna/luna_extend_selection_to_next_clip_edge.lua
@@ -16,6 +17,20 @@ SCR 4 0 "68bcd3fa5c9154134bd13b973796404a" "Custom: LUNA: Extend Selection To Se
 SCR 4 0 "cf89bafa60a6940f74cdcea8fa2ba8f5" "Custom: LUNA: Extend Selection To Session End" luna/luna_extend_selection_to_session_end.lua
 ACT 0 0 "9457b692efcdc0fa6d1a838e640ccc96" "Custom: Increase all track heights" 40296 41325
 ACT 0 0 "47b77736c270eeece980170b5762be65" "Custom: Decrease all track heights" 40296 41326
+ACT 0 0 "13ebe12846cb16b90b1765a28fd0352c" "Custom: LUNA: Cut" _991739d9c9358c4418bce73744f68c2c 40699
+ACT 0 0 "3a01669b8c32a07aa6fc3f7dedf5c4d5" "Custom: LUNA: Cut (Commands Focus)" _991739d9c9358c4418bce73744f68c2c 40699
+ACT 0 0 "635119a49247912e4ac034046729f411" "Custom: LUNA: Clear" _991739d9c9358c4418bce73744f68c2c 40006
+ACT 0 0 "c98b9f631d4ff3a4a003d44d5001fcf1" "Custom: LUNA: Move Selection to Next Bar" 41042 40635 40289
+ACT 0 0 "a8f910f7310ec01051e2c5fd08d551c1" "Custom: LUNA: Move Selection to Next Bar (numpad)" 41042 40635 40289
+ACT 0 0 "32b85478739fc006704767be14e4b328" "Custom: LUNA: Move Selection to Previous Bar" 41043 40635 40289
+ACT 0 0 "bcc28c83228f6d1c2cf10ef0ba0efd97" "Custom: LUNA: Move Selection to Previous Bar (numpad)" 41043 40635 40289
+ACT 0 0 "c2db9b854ff8282d56e9b21b5a3c20d3" "Custom: LUNA: Move Selection To Next Clip Edge" 41168 40635 40289
+ACT 0 0 "48d6ef9bd560393747dbaa594a32d704" "Custom: LUNA: Move Selection To Previous Clip Edge" 41167 40635 40289
+ACT 0 0 "df04e3679f4fc5eccef5cb40cfb1ff9c" "Custom: LUNA: Move Selection To Next Transient" 40375 40635 40289
+ACT 0 0 "57c7dd12f657ca86e7e4f8dfc7074664" "Custom: LUNA: Move Selection To Next Transient (alt)" 40375 40635 40289
+ACT 0 0 "887d6bb7e3759fb29a587465762cc83c" "Custom: LUNA: Move Selection To Previous Transient" 40376 40635 40289
+ACT 0 0 "5a94a01f1d6f5cf03f9e06abc59809d6" "Custom: LUNA: Move Selection To Next Marker" 40173 40635 40289
+ACT 0 0 "543f508835ba4b18bcf53a9c114fd9cb" "Custom: LUNA: Move Selection To Previous Marker" 40172 40635 40289
 
 KEY 1 32 40044 0	# Space : Toggle Playback -> Transport: Play/stop
 KEY 9 32 1013 0	# Cmd+Space : Toggle Record -> Transport: Record
@@ -54,13 +69,13 @@ KEY 5 83 7 0	# Shift+S : Toggle Solo -> Track: Toggle solo for selected tracks
 KEY 5 77 6 0	# Shift+M : Toggle Mute -> Track: Toggle mute for selected tracks
 KEY 9 90 40029 0	# Cmd+Z : Undo -> Edit: Undo
 KEY 13 90 40030 0	# Cmd+Shift+Z : Redo -> Edit: Redo
-KEY 9 88 41384 0	# Cmd+X : Cut -> Edit: Cut items/tracks/envelope points (depending on focus) within time selection, if any (smart cut)
-KEY 1 88 41384 0	# X : Cut (Commands Focus) -> Edit: Cut items/tracks/envelope points (depending on focus) within time selection, if any (smart cut)
+KEY 9 88 _13ebe12846cb16b90b1765a28fd0352c 0	# Cmd+X : Cut -> LUNA: Cut  [select area > Edit: Cut items]
+KEY 1 88 _3a01669b8c32a07aa6fc3f7dedf5c4d5 0	# X : Cut (Commands Focus) -> LUNA: Cut (Commands Focus)  [select area > Edit: Cut items]
 KEY 9 67 41383 0	# Cmd+C : Copy -> Edit: Copy items/tracks/envelope points (depending on focus) within time selection, if any (smart copy)
 KEY 1 67 41383 0	# C : Copy (Commands Focus) -> Edit: Copy items/tracks/envelope points (depending on focus) within time selection, if any (smart copy)
 KEY 9 86 42398 0	# Cmd+V : Paste -> Item: Paste items/tracks
 KEY 1 86 42398 0	# V : Paste (Commands Focus) -> Item: Paste items/tracks
-KEY 1 32814 40697 0	# Delete : Clear -> Remove items/tracks/envelope points (depending on focus)
+KEY 1 32814 _635119a49247912e4ac034046729f411 0	# Delete : Clear -> LUNA: Clear  [select area > Item: Remove items]
 KEY 9 68 41295 0	# Cmd+D : Duplicate selection -> Item: Duplicate items
 KEY 5 32814 40201 0	# Shift+Delete : Shift Clear (ripple delete) -> Time selection: Remove contents of time selection (moving later items)
 KEY 9 77 40175 0	# Cmd+M : Mute Selection -> Item properties: Toggle mute
@@ -70,8 +85,8 @@ KEY 1 71 40510 0	# G : Fade To Clip Stop (Fade Out) -> Item: Fade items out from
 KEY 1 65 41305 0	# A : Trim From Clip Start -> Item edit: Trim left edge of item to edit cursor
 KEY 1 83 41311 0	# S : Trim From Clip End -> Item edit: Trim right edge of item to edit cursor
 KEY 9 84 40508 0	# Cmd+T : Trim Clip to Selection -> Item: Trim items to selected area
-KEY 9 69 40061 0	# Cmd+E : Separate Selection -> Item: Split items at time selection or razor edit
-KEY 1 66 40061 0	# B : Separate Selection (Commands Focus) -> Item: Split items at time selection or razor edit
+KEY 9 69 _991739d9c9358c4418bce73744f68c2c 0	# Cmd+E : Separate Selection -> script luna_select_area.lua  [materialize edit area]
+KEY 1 66 _991739d9c9358c4418bce73744f68c2c 0	# B : Separate Selection (Commands Focus) -> script luna_select_area.lua  [materialize edit area]
 KEY 21 51 41588 0	# Opt+Shift+3 : Consolidate Selection -> Item: Glue items, expanding to time selection if any
 KEY 9 72 40548 0	# Cmd+H : Heal Separation -> Item: Heal splits in items
 KEY 25 66 40015 0	# Cmd+Opt+B : Export Mixdown -> File: Render project to disk...
@@ -83,17 +98,17 @@ KEY 1 80 40286 0	# P : Move Selection Up -> Track: Go to previous track
 KEY 1 186 40285 0	# ; : Move Selection Down -> Track: Go to next track
 KEY 5 80 40288 0	# Shift+P : Extend Selection Up -> Track: Go to previous track (leaving other tracks selected)
 KEY 5 186 40287 0	# Shift+; : Extend Selection Down -> Track: Go to next track (leaving other tracks selected)
-KEY 1 221 41042 0	# ] : Move Selection to Next Bar -> Move edit cursor forward one measure
-KEY 1 98 41042 0	# Num2 : Move Selection to Next Bar (numpad) -> Move edit cursor forward one measure
-KEY 1 219 41043 0	# [ : Move Selection to Previous Bar -> Move edit cursor back one measure
-KEY 1 97 41043 0	# Num1 : Move Selection to Previous Bar (numpad) -> Move edit cursor back one measure
-KEY 1 222 41168 0	# ' : Move Selection To Next Clip Edge -> Item navigation: Move cursor right to nearest item edge
-KEY 1 76 41167 0	# L : Move Selection To Previous Clip Edge -> Item navigation: Move cursor left to nearest item edge
-KEY 1 9 40375 0	# Tab : Move Selection To Next Transient -> Item navigation: Move cursor to next transient in items
-KEY 17 222 40375 0	# Opt+' : Move Selection To Next Transient (alt) -> Item navigation: Move cursor to next transient in items
-KEY 17 76 40376 0	# Opt+L : Move Selection To Previous Transient -> Item navigation: Move cursor to previous transient in items
-KEY 49 222 40173 0	# Opt+Control+' : Move Selection To Next Marker -> Markers: Go to next marker/project end
-KEY 49 76 40172 0	# Opt+Control+L : Move Selection To Previous Marker -> Markers: Go to previous marker/project start
+KEY 1 221 _c98b9f631d4ff3a4a003d44d5001fcf1 0	# ] : Move Selection to Next Bar -> LUNA: Move Selection to Next Bar  [Move edit cursor forward one measure > Time selection: Remove (unselect) time selection > Item: Unselect (clear selection of) all items]
+KEY 1 98 _a8f910f7310ec01051e2c5fd08d551c1 0	# Num2 : Move Selection to Next Bar (numpad) -> LUNA: Move Selection to Next Bar (numpad)  [Move edit cursor forward one measure > Time selection: Remove (unselect) time selection > Item: Unselect (clear selection of) all items]
+KEY 1 219 _32b85478739fc006704767be14e4b328 0	# [ : Move Selection to Previous Bar -> LUNA: Move Selection to Previous Bar  [Move edit cursor back one measure > Time selection: Remove (unselect) time selection > Item: Unselect (clear selection of) all items]
+KEY 1 97 _bcc28c83228f6d1c2cf10ef0ba0efd97 0	# Num1 : Move Selection to Previous Bar (numpad) -> LUNA: Move Selection to Previous Bar (numpad)  [Move edit cursor back one measure > Time selection: Remove (unselect) time selection > Item: Unselect (clear selection of) all items]
+KEY 1 222 _c2db9b854ff8282d56e9b21b5a3c20d3 0	# ' : Move Selection To Next Clip Edge -> LUNA: Move Selection To Next Clip Edge  [Item navigation: Move cursor right to nearest item edge > Time selection: Remove (unselect) time selection > Item: Unselect (clear selection of) all items]
+KEY 1 76 _48d6ef9bd560393747dbaa594a32d704 0	# L : Move Selection To Previous Clip Edge -> LUNA: Move Selection To Previous Clip Edge  [Item navigation: Move cursor left to nearest item edge > Time selection: Remove (unselect) time selection > Item: Unselect (clear selection of) all items]
+KEY 1 9 _df04e3679f4fc5eccef5cb40cfb1ff9c 0	# Tab : Move Selection To Next Transient -> LUNA: Move Selection To Next Transient  [Item navigation: Move cursor to next transient in items > Time selection: Remove (unselect) time selection > Item: Unselect (clear selection of) all items]
+KEY 17 222 _57c7dd12f657ca86e7e4f8dfc7074664 0	# Opt+' : Move Selection To Next Transient (alt) -> LUNA: Move Selection To Next Transient (alt)  [Item navigation: Move cursor to next transient in items > Time selection: Remove (unselect) time selection > Item: Unselect (clear selection of) all items]
+KEY 17 76 _887d6bb7e3759fb29a587465762cc83c 0	# Opt+L : Move Selection To Previous Transient -> LUNA: Move Selection To Previous Transient  [Item navigation: Move cursor to previous transient in items > Time selection: Remove (unselect) time selection > Item: Unselect (clear selection of) all items]
+KEY 49 222 _5a94a01f1d6f5cf03f9e06abc59809d6 0	# Opt+Control+' : Move Selection To Next Marker -> LUNA: Move Selection To Next Marker  [Markers: Go to next marker/project end > Time selection: Remove (unselect) time selection > Item: Unselect (clear selection of) all items]
+KEY 49 76 _543f508835ba4b18bcf53a9c114fd9cb 0	# Opt+Control+L : Move Selection To Previous Marker -> LUNA: Move Selection To Previous Marker  [Markers: Go to previous marker/project start > Time selection: Remove (unselect) time selection > Item: Unselect (clear selection of) all items]
 KEY 5 9 40802 0	# Shift+Tab : Extend Selection To Next Transient -> Time selection: Extend time selection to next transient in items
 KEY 13 76 40622 0	# Cmd+Shift+L : Loop Select -> Time selection: Move loop points to time selection
 KEY 5 221 _76372f6ae70342495f98647bb34897d0 0	# Shift+] : Extend Selection To Next Bar -> script luna_extend_selection_to_next_bar.lua  [extend selection via Move edit cursor forward one measure]
