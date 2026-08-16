@@ -15,6 +15,7 @@ SCR 4 16 "4ce00b027dbc682cfaf7c276a7cd257a" "Custom: LUNA: Extend Selection To N
 SCR 4 16 "917d902d9cdbb442c97270ea2e608ec5" "Custom: LUNA: Extend Selection To Previous Marker" luna/luna_extend_selection_to_previous_marker.lua
 SCR 4 16 "68bcd3fa5c9154134bd13b973796404a" "Custom: LUNA: Extend Selection To Session Start" luna/luna_extend_selection_to_session_start.lua
 SCR 4 16 "cf89bafa60a6940f74cdcea8fa2ba8f5" "Custom: LUNA: Extend Selection To Session End" luna/luna_extend_selection_to_session_end.lua
+ACT 0 16 "5ea1611962708888ea0fd24f740a6a62" "Custom: LUNA: Return To Zero" 40042 40635 40289
 ACT 0 16 "9457b692efcdc0fa6d1a838e640ccc96" "Custom: Increase all track heights" 40296 41325
 ACT 0 16 "47b77736c270eeece980170b5762be65" "Custom: Decrease all track heights" 40296 41326
 ACT 0 16 "13ebe12846cb16b90b1765a28fd0352c" "Custom: LUNA: Cut" _991739d9c9358c4418bce73744f68c2c 40699
@@ -37,7 +38,7 @@ KEY 9 32 1013 16	# Cmd+Space : Toggle Record -> Transport: Record
 KEY 1 99 1013 16	# Num3 : Toggle Record (numpad) -> Transport: Record
 KEY 33 76 1068 16	# Control+L : Loop Playback -> Transport: Toggle repeat
 KEY 1 100 1068 16	# Num4 : Loop Playback (numpad) -> Transport: Toggle repeat
-KEY 1 13 40042 16	# Return : Return To Zero -> Transport: Go to start of project
+KEY 1 13 _5ea1611962708888ea0fd24f740a6a62 16	# Return : Return To Zero -> LUNA: Return To Zero  [Transport: Go to start of project > Time selection: Remove (unselect) time selection > Item: Unselect (clear selection of) all items]
 KEY 9 75 41818 16	# Cmd+K : Toggle Pre/Post Roll -> Pre-roll: Toggle pre-roll on play
 KEY 1 75 40364 16	# K : Toggle Metronome -> Options: Toggle metronome
 KEY 1 103 40364 16	# Num7 : Toggle Metronome (numpad) -> Options: Toggle metronome
