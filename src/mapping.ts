@@ -21,7 +21,12 @@ export interface Mapping {
   bindings: Binding[]
 }
 
-export class MappingError extends Error {}
+export class MappingError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = 'MappingError'
+  }
+}
 
 function isRecord(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null && !Array.isArray(v)
@@ -30,10 +35,23 @@ function asInt(v: unknown, where: string): number {
   if (typeof v !== 'number' || !Number.isInteger(v)) throw new MappingError(`${where}: expected integer, got ${JSON.stringify(v)}`)
   return v
 }
+function asOptionalString(v: unknown, where: string): string | undefined {
+  if (v === undefined) return undefined
+  if (typeof v !== 'string') throw new MappingError(`${where}: expected string, got ${JSON.stringify(v)}`)
+  return v
+}
+function asStringArray(v: unknown, where: string): string[] {
+  if (!Array.isArray(v)) throw new MappingError(`${where}: expected array`)
+  return v.map((item, j) => {
+    if (typeof item !== 'string') throw new MappingError(`${where}[${j}]: expected string, got ${JSON.stringify(item)}`)
+    return item
+  })
+}
 
 function validateBinding(raw: unknown, i: number): Binding {
   if (!isRecord(raw)) throw new MappingError(`binding[${i}]: not a table`)
-  const luna = typeof raw.luna === 'string' ? raw.luna : `<binding ${i}>`
+  if (typeof raw.luna !== 'string') throw new MappingError(`binding[${i}]: missing or non-string 'luna'`)
+  const luna = raw.luna
   const where = `binding[${i}] (${luna})`
 
   const statusRaw = raw.status
@@ -42,8 +60,8 @@ function validateBinding(raw: unknown, i: number): Binding {
   }
   const status: BindingStatus = statusRaw ?? 'ok'
 
-  const label = typeof raw.label === 'string' ? raw.label : undefined
-  const key = typeof raw.key === 'string' ? raw.key : undefined
+  const label = asOptionalString(raw.label, `${where}.label`)
+  const key = asOptionalString(raw.key, `${where}.key`)
 
   if (status === 'unmapped') return { luna, key, label, status }
 
@@ -74,11 +92,12 @@ export function parseMapping(tomlText: string): Mapping {
   if (!isRecord(doc)) throw new MappingError('top-level TOML is not a table')
 
   const metaRaw = isRecord(doc.meta) ? doc.meta : {}
+  if (typeof metaRaw.name !== 'string') throw new MappingError("meta: missing or non-string 'name'")
   const meta: Meta = {
-    name: typeof metaRaw.name === 'string' ? metaRaw.name : 'REAPER keymap',
-    target: typeof metaRaw.target === 'string' ? metaRaw.target : undefined,
-    reaperVersion: typeof metaRaw.reaper_version === 'string' ? metaRaw.reaper_version : undefined,
-    notes: Array.isArray(metaRaw.notes) ? metaRaw.notes.filter((n): n is string => typeof n === 'string') : [],
+    name: metaRaw.name,
+    target: asOptionalString(metaRaw.target, 'meta.target'),
+    reaperVersion: asOptionalString(metaRaw.reaper_version, 'meta.reaper_version'),
+    notes: metaRaw.notes !== undefined ? asStringArray(metaRaw.notes, 'meta.notes') : [],
   }
 
   const rawBindings = doc.binding
