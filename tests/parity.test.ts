@@ -32,6 +32,12 @@ describe('golden parity', () => {
   const a = toRecords(ref)
   const b = toRecords(built.keymapText)
 
+  it('reference records are non-empty (tripwire against silent parser drift)', () => {
+    expect(a.key.length).toBeGreaterThan(0)
+    expect(a.act.length).toBeGreaterThan(0)
+    expect(a.scr.length).toBeGreaterThan(0)
+  })
+
   it('KEY semantic records match the Python reference (bit parity across relabel)', () => {
     expect(b.key).toEqual(a.key)
   })

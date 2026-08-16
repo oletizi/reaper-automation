@@ -32,10 +32,14 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
     const luna = b.luna
     if (b.status === 'unmapped') { stats.unmapped++; continue }
 
+    if (b.key === undefined) {
+      errors.push(`${luna}: missing key`)
+      continue
+    }
     let flags: number
     let code: number
     try {
-      const p = parseKey(b.key as string)
+      const p = parseKey(b.key)
       flags = p.flags; code = p.keycode
     } catch (e) {
       errors.push(`${luna}: ${e instanceof Error ? e.message : String(e)}`)

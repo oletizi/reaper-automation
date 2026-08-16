@@ -22,6 +22,6 @@ describe('observeAgainstReatooled (raw, no OVERRIDE/FREE)', () => {
     expect(o.sectionsSeen.sort()).toEqual([0, 16])
     expect(o.sameSlotSameSection).toBe(1) // 1/85 matches the section-0 row; observation only
     // deliberately: no `override`/`free` field exists on the result yet
-    expect((o as Record<string, unknown>).override).toBeUndefined()
+    expect('override' in o).toBe(false)
   })
 })

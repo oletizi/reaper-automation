@@ -1,5 +1,5 @@
 import { copyFileSync, mkdirSync, readdirSync, statSync } from 'node:fs'
-import { join, basename } from 'node:path'
+import { join } from 'node:path'
 
 export function installArtifacts(opts: {
   keymapPath: string
