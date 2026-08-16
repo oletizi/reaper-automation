@@ -1,0 +1,23 @@
+[meta]
+name = "mini"
+target = "macos"
+
+[[binding]]
+luna = "Play"
+key = "Space"
+action = 40044
+
+[[binding]]
+luna = "Track heights"
+key = "Cmd+="
+label = "Increase all track heights"
+macro = [40296, 41325]
+
+[[binding]]
+luna = "Extend To Next Bar"
+key = "Shift+]"
+extend = 41042
+
+[[binding]]
+luna = "Parked"
+status = "unmapped"
