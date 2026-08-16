@@ -85,6 +85,13 @@ These are two separate axes and never collapse into one value:
 pnpm ra install
 ```
 
+**Always build before you install** — don't import the checked-in
+`build/*.ReaperKeyMap` artifact directly. It's committed as a build output for
+reference, but its `--section` was baked for the machine it was last built on
+(this maintainer's ReaTooled section 16); importing it as-is on a different
+machine can bind into the wrong section and produce dead keys. Run
+`pnpm ra build` (auto-detects the right section) and then `pnpm ra install`.
+
 That copies the keymap into `~/Library/Application Support/REAPER/KeyMaps/`
 (or the Linux equivalent, or `--resource-dir`/`$REAPER_RESOURCE_DIR`) and the
 generated ReaScripts into `.../Scripts/luna/`, scripts first, since the keymap
