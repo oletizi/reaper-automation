@@ -7,17 +7,18 @@ The mapping lives in a plain TOML table. A generator turns it into a
 `.ReaperKeyMap` file, validating every command ID against an action list dumped
 out of REAPER itself. Edit the table, rebuild, re-import, iterate.
 
+This is a TypeScript/Node CLI (`ra`, run via `pnpm ra`). It replaced an earlier
+Python implementation; there is no Python left in this repo.
+
 ## Layout
 
 ```
-mappings/luna-linux.toml            the mapping table — this is the thing you edit
-build/luna-linux.ReaperKeyMap       generated; import this into REAPER
+mappings/luna.toml                  the mapping table, Mac-native labels -- this is the thing you edit
+build/luna-macos.ReaperKeyMap       generated; import this into REAPER
 build/Scripts/luna/*.lua            generated ReaScripts the keymap references
-tools/build_keymap.py               TOML -> .ReaperKeyMap + ReaScripts, validated
-tools/install.py                    copy keymap + scripts into REAPER's config
-tools/find_action.py                search REAPER's action list
-tools/keyspec.py                    "Ctrl+Shift+Left" -> (flags, keycode)
-tools/dump_actions.lua              ReaScript that dumps REAPER's action list
+src/                                the TypeScript implementation (keyspec, translate, mapping, build-keymap, ...)
+src/index.ts                        CLI entry point, invoked as `pnpm ra <verb> ...`
+tools/dump_actions.lua              ReaScript that dumps REAPER's action list (runs inside REAPER)
 data/reaper-actions-7.78.tsv        10,578 actions dumped from REAPER 7.78
 data/luna-shortcuts-macos-raw.tsv   LUNA's published macOS defaults
 ```
@@ -30,29 +31,53 @@ A binding in the table is one of three kinds:
 | `macro = [40296, 41325]` | an `ACT` custom action running those steps in order |
 | `extend = 41042` | a generated ReaScript (`SCR`) — see Extend Selection below |
 
+## Setup
+
+```sh
+pnpm install
+```
+
+The one runtime dependency is `smol-toml` — Node has no stdlib TOML parser, so
+this is no longer "nothing to install." Everything else (`tsx`, `typescript`,
+`vitest`) is a dev dependency for running and testing the CLI itself.
+
 ## Build
 
 ```sh
-python3 tools/build_keymap.py mappings/luna-linux.toml -o build/luna-linux.ReaperKeyMap
+pnpm ra build mappings/luna.toml -o build/luna-macos.ReaperKeyMap   # --target defaults to host OS
 ```
 
-Nothing to install — Python 3.11+ stdlib only. The build fails rather than
-emitting a dead key if a command ID doesn't exist or two bindings collide on the
-same combo.
+The build fails rather than emitting a dead key if a command ID doesn't exist
+or two bindings collide on the same combo — nothing is written on error.
+
+### Host vs. target
+
+These are two separate axes and never collapse into one value:
+
+- **host** — the machine the tool runs on, i.e. where REAPER is installed. It
+  determines the resource directory `install` writes into (macOS
+  `~/Library/Application Support/REAPER`, Linux `~/.config/REAPER`), and is the
+  default for `--target` when building.
+- **target** — the keyboard semantics baked into the generated bindings
+  (Cmd/Opt/Control vs. Ctrl/Alt/Super). This is the `--target macos|linux` flag
+  on `build` only — `install` has no `--target`, since it just copies an
+  already-built keymap and the semantics were fixed when it was built.
 
 ## Install into REAPER
 
 ```sh
-python3 tools/install.py
+pnpm ra install
 ```
 
-That copies the keymap into `~/.config/REAPER/KeyMaps/` and the generated
-ReaScripts into `~/.config/REAPER/Scripts/luna/`. Then, in REAPER: Actions →
-Show action list → **Key map** (bottom right) → Import…, and pick
-**LUNA (Pro Tools)**.
+That copies the keymap into `~/Library/Application Support/REAPER/KeyMaps/`
+(or the Linux equivalent, or `--resource-dir`/`$REAPER_RESOURCE_DIR`) and the
+generated ReaScripts into `.../Scripts/luna/`, scripts first, since the keymap
+references them by path.
 
-Order matters — the scripts have to be on disk *before* the import, or the `SCR`
-entries resolve to nothing and those keys land on dead actions.
+`install` only **stages** files onto disk. It never activates or imports
+anything and never touches `reaper-kb.ini`. Activation is a manual REAPER UI
+step: Actions → Show action list → **Key map** (bottom right) → Import…, and
+pick **LUNA (Pro Tools)**.
 
 Importing only overrides the combos the file names; REAPER's other defaults stay
 put. To get back to stock, use Key map → Reset to factory defaults.
@@ -78,10 +103,27 @@ back to `4.0..8.0` → `4.0..6.0` with the anchor held.
 ## Looking up actions
 
 ```sh
-python3 tools/find_action.py zoom horizontal      # AND across terms, case-insensitive
-python3 tools/find_action.py --id 40509
-python3 tools/find_action.py --section midi_editor "note:"
+pnpm ra find-action zoom horizontal      # AND across terms, case-insensitive
+pnpm ra find-action --id 40509
+pnpm ra find-action --section midi_editor "note:"
 ```
+
+## Conflict report (ReaTooled)
+
+```sh
+pnpm ra report
+```
+
+Cross-references our generated bindings against the live `reaper-kb.ini` and
+prints the raw observation: our combos, the sections it parsed out of
+`reaper-kb.ini`, and how many land on the same `(section, flags, keycode)`
+slot. It deliberately stops there — it does **not** label anything `OVERRIDE`
+or `FREE` yet. Those labels require knowing which `reaper-kb.ini` sections
+actually share shortcut precedence with an imported Main-section keymap, and
+that hasn't been established empirically. See *Open questions* in
+`docs/superpowers/specs/2026-08-15-reaper-automation-ts-migration-design.md`
+for the section-precedence probe that would unblock it. We never modify
+ReaTooled's files at any stage.
 
 ## Re-dumping the action list
 
@@ -94,7 +136,7 @@ REAPER_DUMP_OUT=/tmp/reaper-actions.tsv \
 ```
 
 The script enumerates every section via `kbd_enumerateActions` and quits REAPER
-when it's done.
+when it's done. This Lua script runs inside REAPER, so it wasn't ported.
 
 ## The keymap file format
 
@@ -128,19 +170,21 @@ with identical flags, keycodes, and commands.
 
 ## Modifier translation
 
-LUNA is macOS-only, so its published defaults are Mac-flavoured. For a Linux
-target:
+The bit values above are identical on every OS — REAPER just renders them with
+different labels per platform (`+8` is Command on macOS, Ctrl on Linux/Windows;
+`+16` is Option vs. Alt). Because LUNA is itself macOS-only, `mappings/luna.toml`
+is authored directly in **Mac-native modifier tokens** — `Cmd`, `Opt`,
+`Control`, `Shift` — which map 1:1 onto LUNA's own modifier names, no
+translation needed. `Ctrl`, `Super`, `Alt`, `Win`, and `Meta` are not valid
+input tokens in the mapping table; only the Mac-native names above parse.
 
-| LUNA (macOS) | here |
-| --- | --- |
-| Cmd | Ctrl |
-| Opt | Alt |
-| Control | Super |
-
-Mapping Mac Control onto Super follows Pro Tools' own Windows convention. Watch
-out: GNOME grabs a lot of Super combos before REAPER ever sees them. If the
-Super bindings turn out to be unusable, change them in the TOML and rebuild —
-that's the one-line-per-binding case the generator exists for.
+`--target macos|linux` on `build` controls only how those same bits are
+*rendered back out* for display and warnings, not how the mapping is written.
+The one genuinely per-OS binding is LUNA's physical **Control** key (bit `+32`),
+which renders as **Super** on a Linux target — exactly the combos GNOME tends
+to intercept. If a Super binding turns out to be unusable there, change it in
+the TOML and rebuild — that's the one-line-per-binding case the generator
+exists for.
 
 ## Known gaps
 
