@@ -104,3 +104,14 @@ describe('parseMapping', () => {
     }
   })
 })
+
+describe('area kind', () => {
+  it('accepts area = <int> and area = true', () => {
+    const m = parseMapping('[meta]\nname="x"\n[[binding]]\nluna="Sep"\nkey="B"\narea=true\n[[binding]]\nluna="Del"\nkey="Delete"\narea=40006\n')
+    expect(m.bindings[0].kind).toEqual({ area: true })
+    expect(m.bindings[1].kind).toEqual({ area: 40006 })
+  })
+  it('rejects area with another kind key', () => {
+    expect(() => parseMapping('[meta]\nname="x"\n[[binding]]\nluna="B"\nkey="B"\narea=true\naction=1\n')).toThrow()
+  })
+})

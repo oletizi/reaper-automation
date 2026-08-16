@@ -4,6 +4,7 @@ import { stableId, slugify } from '@/ids'
 import type { ActionIndex } from '@/actions'
 import type { Mapping } from '@/mapping'
 import { renderExtendScript } from '@/extend-template'
+import { renderSelectAreaScript } from '@/select-area-template'
 
 const SCRIPT_DIR = 'luna'
 
@@ -31,6 +32,19 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
   const seenMacros = new Map<string, string>()
   const seenScripts = new Map<number, { fname: string; sid: string }>()
   const scripts = new Map<string, string>()
+  let selectAreaEntry: { fname: string; sid: string } | undefined
+
+  function ensureSelectArea(): string {
+    if (!selectAreaEntry) {
+      const label = 'LUNA: Select Area'
+      const fname = 'luna_select_area.lua'
+      const sid = stableId(label)
+      scripts.set(fname, renderSelectAreaScript({ label, spec: mapping.meta.name }))
+      scrLines.push(`SCR 4 ${section} "${sid}" "Custom: ${label}" ${SCRIPT_DIR}/${fname}`)
+      selectAreaEntry = { fname, sid }
+    }
+    return selectAreaEntry.sid
+  }
 
   for (const b of mapping.bindings) {
     const luna = b.luna
@@ -81,6 +95,26 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
       }
       command = '_' + entry.sid
       desc = `script ${entry.fname}  [extend selection via ${moveName}]`
+      stats.script++
+    } else if (b.kind && 'area' in b.kind) {
+      const areaSid = ensureSelectArea()
+      if (b.kind.area === true) {
+        command = '_' + areaSid
+        desc = `script luna_select_area.lua  [materialize edit area]`
+      } else {
+        const opId = String(b.kind.area)
+        const opName = actions.byId(opId)
+        if (opName === undefined) { errors.push(`${luna}: area references unknown action ${opId}`); continue }
+        const label = b.label ?? `LUNA: ${luna}`
+        let mid = seenMacros.get(label)
+        if (mid === undefined) {
+          mid = stableId(label)
+          seenMacros.set(label, mid)
+          actLines.push(`ACT 0 ${section} "${mid}" "Custom: ${label}" _${areaSid} ${opId}`)
+        }
+        command = '_' + mid
+        desc = `${label}  [select area > ${opName}]`
+      }
       stats.script++
     } else if (b.kind && 'macro' in b.kind) {
       const steps = b.kind.macro.map(String)

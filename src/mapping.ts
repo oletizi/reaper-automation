@@ -1,7 +1,7 @@
 import { parse as parseToml } from 'smol-toml'
 
 export type BindingStatus = 'ok' | 'unmapped' | 'disable'
-export type BindingKind = { action: number } | { macro: number[] } | { extend: number }
+export type BindingKind = { action: number } | { macro: number[] } | { extend: number } | { area: number } | { area: true }
 
 export interface Binding {
   luna: string
@@ -68,7 +68,7 @@ function validateBinding(raw: unknown, i: number): Binding {
   if (key === undefined) throw new MappingError(`${where}: missing key`)
 
   if (status === 'disable') {
-    if ('action' in raw || 'macro' in raw || 'extend' in raw) {
+    if ('action' in raw || 'macro' in raw || 'extend' in raw || 'area' in raw) {
       throw new MappingError(`${where}: disable must not carry a kind key`)
     }
     return { luna, key, label, status }
@@ -81,8 +81,12 @@ function validateBinding(raw: unknown, i: number): Binding {
     if (!Array.isArray(raw.macro)) throw new MappingError(`${where}.macro: expected array`)
     kinds.push({ macro: raw.macro.map((s, j) => asInt(s, `${where}.macro[${j}]`)) })
   }
+  if ('area' in raw) {
+    if (raw.area === true) kinds.push({ area: true })
+    else kinds.push({ area: asInt(raw.area, `${where}.area`) })
+  }
   if (kinds.length !== 1) {
-    throw new MappingError(`${where}: expected exactly one of action/macro/extend, got ${kinds.length}`)
+    throw new MappingError(`${where}: expected exactly one of action/macro/extend/area, got ${kinds.length}`)
   }
   return { luna, key, label, status, kind: kinds[0] }
 }
