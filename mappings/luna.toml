@@ -407,22 +407,26 @@ action = 40626
 [[binding]]
 luna = "Move Selection Up"
 key = "P"
-action = 40286
+# Changing the area\'s track selection clears stale item selection.
+macro = [40286, 40289]
 
 [[binding]]
 luna = "Move Selection Down"
 key = ";"
-action = 40285
+# Changing the area\'s track selection clears stale item selection.
+macro = [40285, 40289]
 
 [[binding]]
 luna = "Extend Selection Up"
 key = "Shift+P"
-action = 40288
+# Changing the area\'s track selection clears stale item selection.
+macro = [40288, 40289]
 
 [[binding]]
 luna = "Extend Selection Down"
 key = "Shift+;"
-action = 40287
+# Changing the area\'s track selection clears stale item selection.
+macro = [40287, 40289]
 
 [[binding]]
 luna = "Move Selection to Next Bar"
