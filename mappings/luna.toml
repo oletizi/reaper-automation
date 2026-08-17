@@ -509,20 +509,15 @@ comment = "Plain move collapses the razor area: move cursor, clear all razor are
 [[binding]]
 luna = "Tab to Transient (next)"
 key = "Tab"
-# Native LUNA Tab-to-Transient: nearest item edge, or -- when the toggle is on --
-# the nearer of the next item edge and the next audio transient. Collapses the
-# edit area like the other plain moves. No ReaTooled dependency.
-tab_transient = "next"
+# Move to the next audio transient (transients only, always on). Native REAPER
+# transient navigation; no selection clearing so repeated presses keep their
+# transient context.
+action = 40375
 
 [[binding]]
 luna = "Tab to Transient (previous)"
 key = "Opt+Tab"
-tab_transient = "prev"
-
-[[binding]]
-luna = "Toggle Tab to Transient"
-key = "Cmd+Opt+Tab"
-tab_transient = "toggle"
+action = 40376
 
 [[binding]]
 luna = "Move Selection To Next Transient (alt)"

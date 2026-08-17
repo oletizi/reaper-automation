@@ -9,7 +9,6 @@ export type BindingKind =
   | { razorTrack: number }
   | { razor: number }
   | { separate: true }
-  | { tabTransient: 'next' | 'prev' | 'toggle' }
 
 export interface Binding {
   luna: string
@@ -103,16 +102,9 @@ function validateBinding(raw: unknown, i: number): Binding {
     if (raw.separate !== true) throw new MappingError(`${where}.separate: expected true`)
     kinds.push({ separate: true })
   }
-  if ('tab_transient' in raw) {
-    const v = raw.tab_transient
-    if (v !== 'next' && v !== 'prev' && v !== 'toggle') {
-      throw new MappingError(`${where}.tab_transient: expected "next", "prev", or "toggle", got ${JSON.stringify(v)}`)
-    }
-    kinds.push({ tabTransient: v })
-  }
   if (kinds.length !== 1) {
     throw new MappingError(
-      `${where}: expected exactly one of action/macro/extend/razor_extend/razor_track/razor/separate/tab_transient, got ${kinds.length}`,
+      `${where}: expected exactly one of action/macro/extend/razor_extend/razor_track/razor/separate, got ${kinds.length}`,
     )
   }
   return { luna, key, label, status, kind: kinds[0] }

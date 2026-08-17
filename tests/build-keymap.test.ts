@@ -124,15 +124,3 @@ describe('separate kind emission', () => {
   })
 })
 
-describe('tab_transient kind emission', () => {
-  const m = parseMapping('[meta]\nname="x"\n[[binding]]\nluna="TN"\nkey="Tab"\ntab_transient="next"\n[[binding]]\nluna="TP"\nkey="A"\ntab_transient="prev"\n[[binding]]\nluna="TT"\nkey="B"\ntab_transient="toggle"\n')
-  const r = buildKeymap(m, idx, 'macos')
-  it('emits one SCR per distinct mode', () => {
-    for (const f of ['luna_tab_transient_next.lua','luna_tab_transient_prev.lua','luna_tab_transient_toggle.lua']) {
-      expect(r.scripts.has(f)).toBe(true)
-    }
-  })
-  it('rejects an unknown tab_transient value', () => {
-    expect(() => parseMapping('[meta]\nname="x"\n[[binding]]\nluna="B"\nkey="A"\ntab_transient="nope"\n')).toThrow()
-  })
-})

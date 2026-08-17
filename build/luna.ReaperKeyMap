@@ -7,9 +7,6 @@
 
 SCR 4 16 "ed6bd0338c55784c46306028fd7b42a3" "Custom: LUNA: Separate" luna/luna_separate.lua
 SCR 4 16 "5504faeeac28f59f716e73f6e00297ad" "Custom: LUNA: Repaint Area" luna/luna_razor_repaint.lua
-SCR 4 16 "d2ef1993fc7e3b7b5b6ee7a9c69319b6" "Custom: LUNA: Tab to Transient (next)" luna/luna_tab_transient_next.lua
-SCR 4 16 "9f5f2a20feeff0de50da8d33f4b16d4a" "Custom: LUNA: Tab to Transient (previous)" luna/luna_tab_transient_prev.lua
-SCR 4 16 "75f3933ecf6dbe0fefd29cef576b002e" "Custom: LUNA: Toggle Tab to Transient" luna/luna_tab_transient_toggle.lua
 SCR 4 16 "76372f6ae70342495f98647bb34897d0" "Custom: LUNA: Extend Selection To Next Bar" luna/luna_extend_selection_to_next_bar.lua
 SCR 4 16 "705250128fa18c7721dc75648dd60f2f" "Custom: LUNA: Extend Selection To Previous Bar" luna/luna_extend_selection_to_previous_bar.lua
 SCR 4 16 "5085c418d287dcb2cc58fe46c2f425c0" "Custom: LUNA: Extend Selection To Next Clip Edge" luna/luna_extend_selection_to_next_clip_edge.lua
@@ -120,9 +117,8 @@ KEY 1 219 _32b85478739fc006704767be14e4b328 16	# [ : Move Selection to Previous 
 KEY 1 97 _bcc28c83228f6d1c2cf10ef0ba0efd97 16	# Num1 : Move Selection to Previous Bar (numpad) -> LUNA: Move Selection to Previous Bar (numpad)  [Move edit cursor back one measure > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]
 KEY 1 222 _c2db9b854ff8282d56e9b21b5a3c20d3 16	# ' : Move Selection To Next Clip Edge -> LUNA: Move Selection To Next Clip Edge  [Item navigation: Move cursor right to nearest item edge > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]
 KEY 1 76 _48d6ef9bd560393747dbaa594a32d704 16	# L : Move Selection To Previous Clip Edge -> LUNA: Move Selection To Previous Clip Edge  [Item navigation: Move cursor left to nearest item edge > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]
-KEY 1 9 _d2ef1993fc7e3b7b5b6ee7a9c69319b6 16	# Tab : Tab to Transient (next) -> script luna_tab_transient_next.lua  [tab-to-transient next]
-KEY 17 9 _9f5f2a20feeff0de50da8d33f4b16d4a 16	# Opt+Tab : Tab to Transient (previous) -> script luna_tab_transient_prev.lua  [tab-to-transient prev]
-KEY 25 9 _75f3933ecf6dbe0fefd29cef576b002e 16	# Cmd+Opt+Tab : Toggle Tab to Transient -> script luna_tab_transient_toggle.lua  [tab-to-transient toggle]
+KEY 1 9 40375 16	# Tab : Tab to Transient (next) -> Item navigation: Move cursor to next transient in items
+KEY 17 9 40376 16	# Opt+Tab : Tab to Transient (previous) -> Item navigation: Move cursor to previous transient in items
 KEY 17 222 _57c7dd12f657ca86e7e4f8dfc7074664 16	# Opt+' : Move Selection To Next Transient (alt) -> LUNA: Move Selection To Next Transient (alt)  [Item navigation: Move cursor to next transient in items > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]
 KEY 17 76 _887d6bb7e3759fb29a587465762cc83c 16	# Opt+L : Move Selection To Previous Transient -> LUNA: Move Selection To Previous Transient  [Item navigation: Move cursor to previous transient in items > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]
 KEY 49 222 _5a94a01f1d6f5cf03f9e06abc59809d6 16	# Opt+Control+' : Move Selection To Next Marker -> LUNA: Move Selection To Next Marker  [Markers: Go to next marker/project end > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]

@@ -7,7 +7,6 @@ import { renderExtendScript } from '@/extend-template'
 import { renderRazorExtendScript } from '@/razor-extend-template'
 import { renderRazorRepaintScript } from '@/razor-repaint-template'
 import { renderSeparateScript } from '@/separate-template'
-import { renderTabNavScript, renderTabToggleScript } from '@/tab-transient-template'
 
 const SELECT_RAZOR_ITEMS_ACTION = 42957
 
@@ -65,27 +64,6 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
     return separateEntry
   }
 
-  const tabTransientEntries = new Map<string, { fname: string; sid: string }>()
-  function ensureTabTransient(mode: 'next' | 'prev' | 'toggle'): { fname: string; sid: string } {
-    let entry = tabTransientEntries.get(mode)
-    if (!entry) {
-      const label =
-        mode === 'toggle' ? 'LUNA: Toggle Tab to Transient'
-        : mode === 'next' ? 'LUNA: Tab to Transient (next)'
-        : 'LUNA: Tab to Transient (previous)'
-      const fname = `luna_tab_transient_${mode}.lua`
-      const sid = stableId(label)
-      const src =
-        mode === 'toggle'
-          ? renderTabToggleScript({ label, spec: mapping.meta.name })
-          : renderTabNavScript({ label, spec: mapping.meta.name, forward: mode === 'next' })
-      scripts.set(fname, src)
-      scrLines.push(`SCR 4 ${section} "${sid}" "Custom: ${label}" ${SCRIPT_DIR}/${fname}`)
-      entry = { fname, sid }
-      tabTransientEntries.set(mode, entry)
-    }
-    return entry
-  }
 
   for (const b of mapping.bindings) {
     const luna = b.luna
@@ -196,11 +174,6 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
       const entry = ensureSeparate()
       command = '_' + entry.sid
       desc = `script ${entry.fname}  [split at razor, else at edit cursor]`
-      stats.script++
-    } else if (b.kind && 'tabTransient' in b.kind) {
-      const entry = ensureTabTransient(b.kind.tabTransient)
-      command = '_' + entry.sid
-      desc = `script ${entry.fname}  [tab-to-transient ${b.kind.tabTransient}]`
       stats.script++
     } else if (b.kind && 'macro' in b.kind) {
       const steps = b.kind.macro.map(String)
