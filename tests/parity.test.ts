@@ -31,13 +31,15 @@ describe('golden parity', () => {
   // NOTE: the frozen Python-reference comparison (luna-linux.reference.ReaperKeyMap) was
   // retired here. It served its purpose while migrating Python -> TS (proving bit-for-bit
   // reproduction), but the edit-selection model deliberately diverges from that reference:
-  // B (Separate) now drives the `area`-select primitive, and the plain cursor-move family
-  // (bar/clip-edge/transient/marker moves) now collapse the edit area via
-  // `[move, 40635, 40289]` macros instead of issuing the bare Python move actions. "Matches
+  // the edit area is now a REAPER razor edit (not the retired `area` primitive) -- Separate/
+  // Delete/Cut act directly on the razor, other item ops go through `razor= [42957, id]`
+  // (select the razor's items, then act), horizontal/vertical growth use `razor_extend`/
+  // `razor_track` scripts, and the plain cursor-move family collapses the razor via
+  // `[move, 42406]` macros instead of issuing the bare Python move actions. "Matches
   // Python exactly" is no longer the invariant we want. The non-vacuousness tripwire below
   // now points at the current TS build's own records so it still catches silent
   // build-keymap/parser breakage; the byte-for-byte drift guard further down is the real
-  // regression baseline for the intended (post-migration) output.
+  // regression baseline for the intended (post-migration, post-razor-rewire) output.
   const b = toRecords(built.keymapText)
 
   it('built records are non-empty (tripwire against silent build breakage)', () => {

@@ -108,71 +108,86 @@ put. To get back to stock, use Key map → Reset to factory defaults.
 ## Extend Selection
 
 LUNA's "hold Shift while moving the transport" — `Shift+]` moves forward a bar
-*and* selects the bar you crossed, and pressing it again grows the selection
-rather than replacing it. Bound here for bar, clip edge, marker, transient, and
-session start/end.
+*and* grows the edit area you crossed, and pressing it again grows the area
+further rather than replacing it. Bound here for bar, clip edge, marker,
+transient, and session start/end.
 
-This can't be a custom action. REAPER can move the cursor (`41042`) and set the
-time selection end to the cursor (`40626`), but a macro chaining them re-anchors
-on every press: from bar 2, `Shift+]` twice gives you bar 3–4 instead of bar 2–4.
-Getting cumulative extension needs a conditional — anchor only when no selection
-exists yet — so each of these compiles to a small generated ReaScript instead.
-No extension required; Lua ships with REAPER.
+This can't be a custom action. REAPER can move the cursor (`41042`) and repaint
+the razor edit area's end to the cursor, but a macro chaining them re-anchors on
+every press: from bar 2, `Shift+]` twice gives you bar 3–4 instead of bar 2–4.
+Getting cumulative extension needs a conditional — grow the correct edge only
+when a span already exists, anchor a new one otherwise — so each of these
+compiles to a small generated ReaScript instead (`razor_extend` in the mapping
+table; see *Edit-selection model* below). No extension required; Lua ships with
+REAPER.
 
 Verified end-to-end against REAPER with the keymap loaded: from 4.0s, three
 presses give `4.0..6.0` → `4.0..8.0` → `4.0..10.0`, and the reverse key shrinks
 back to `4.0..8.0` → `4.0..6.0` with the anchor held.
 
-## Edit-selection model (`area`)
+## Edit-selection model (razor edit)
 
-Pro Tools/LUNA build an "edit area" to operate on from two independent axes,
-both driven entirely by keyboard:
+The edit area **is a native REAPER razor edit** — the same object you'd draw
+by dragging a razor rectangle across a track's top edge in the REAPER GUI,
+stored per-track in `P_RAZOREDITS`. Unlike a time selection (which REAPER
+renders identically across every track, making a "2D area" indistinguishable
+from a plain 1D range), a razor edit draws a distinct rectangle only on the
+tracks it covers — the same visual LUNA itself uses for its edit-area
+highlight. There's no separate "area" object to keep in sync: the razor *is*
+the area, and item selection is only ever derived from it transiently, for
+the operations that need it.
 
-- **Tracks** (vertical scope) — `Shift+P` / `Shift+;` extend the track
-  selection up/down, non-contiguous tracks allowed. (There's currently no
-  keyboard binding for "add this track to the selection without moving the
-  focus," the Cmd-click equivalent — see *Known gaps*.)
-- **Time range** (horizontal scope) — `Shift+[` / `Shift+]`, and the
-  Shift-variants of the clip-edge/transient/marker nav keys, extend the time
-  selection. No time selection means zero-width: the area collapses to
-  wherever the edit cursor is.
+Two axes, both driven entirely by keyboard:
 
-Tracks × time range is never stored as its own object — it's derived on
-demand by a shared ReaScript, `luna_select_area.lua` (generated from
-`src/select-area-template.ts`). Given the currently selected tracks (or all
-tracks, if none are selected) and the current time selection (or the cursor
-position, if none), it splits any items crossing those boundaries and, when
-there was a real time range, selects exactly the items that fall inside it.
+- **Horizontal (time span)** — `Shift+[` / `Shift+]` / `Shift+L` / `Shift+'`
+  and the Shift-variants of the clip-edge/transient/marker/session nav keys
+  grow the razor's time span. Each compiles to a `razor_extend` script
+  (see *Extend Selection* above): it reads the current span from
+  `P_RAZOREDITS`, grows the correct edge (forward move grows the end,
+  backward grows the start), repaints the result onto the selected tracks,
+  parks the transport at the new span's start, sets loop points from the
+  razor (`42474`), and enables repeat.
+- **Vertical (tracks)** — `Shift+P` / `Shift+;` (and plain `P` / `;`) extend
+  or move the track selection natively (`40287`/`40288`/`40285`/`40286`),
+  then repaint the *existing* razor time span onto the new track selection —
+  compiled from `razor_track = <track-selection action id>` in the mapping
+  table, via the shared `luna_razor_repaint.lua` script. (There's currently
+  no keyboard binding for "add this track to the selection without moving
+  the focus," the Cmd-click equivalent — see *Known gaps*.)
 
-Two binding shapes in `mappings/luna.toml` use it:
+Operations on the area split into two shapes in `mappings/luna.toml`,
+classified on tower per-binding (does the action honor the razor natively?):
 
-- **`area = true`** — run the select-area script and stop there. This is
-  `Separate Selection` (`B` / `Cmd+E`): materializing the split+select *is*
-  the separate.
-- **`area = <action id>`** — run the select-area script, then the given
-  native action. `Clear`/`Delete` uses `40006` (Item: Remove items,
-  clipboard untouched); `Cut` uses `40699` (Item: Cut items, clipboard set).
-  Each compiles to its own generated custom action (`ACT` line), so Delete
-  and Cut show up in REAPER's action list as two distinct, correctly-labeled
-  commands rather than one action wearing two key bindings.
+- **`action = <id>`** — razor-aware natively: the action already scopes
+  itself to the razor edit area (or, for Paste, doesn't care about any
+  selection at all), so it runs as a plain native action with no prelude.
+  Examples: `Separate Selection` (`40061`), `Delete`/`Clear` (`40006`),
+  `Cut` (`40699`).
+- **`razor = <id>`** — not razor-aware: compiles to a macro
+  `[42957, <id>]` — `42957` ("Razor edit: Select all items within razor
+  edit area") materializes the razor's items as an item selection, then
+  the given action runs against that selection. Examples: `Copy` (`41383`),
+  `Mute Selection` (`40175`), the fade/trim/duplicate family.
 
-A plain cursor move — no Shift — is the way back out. `]` / `[`, `L` / `'`,
-`Tab`, `Opt+'` / `Opt+L`, and the marker-nav keys all compile to
-`macro = [<move-action>, 40635, 40289]`: move the cursor, clear the time
-selection (`40635`), clear the item selection (`40289`). That's the area
-collapsing to a zero-width point at wherever the cursor lands, matching Pro
-Tools' behavior of a bare nav key dropping whatever was selected.
+A plain cursor move — no Shift — is the way back out: it compiles to
+`macro = [<move-action>, 42406]` (move the cursor, then `42406` clears every
+razor edit area on every track). That's the area collapsing to nothing at
+wherever the cursor lands, matching Pro Tools' behavior of a bare nav key
+dropping whatever was selected. Transport/loop always derive from the razor
+(`42474` + `GetSetRepeat(1)`), never tracked independently.
 
-All of it — `B`, `Delete`, `Cut`, and the plain-move family — lands in
-whichever section the build auto-detects (see *Coexisting with ReaTooled*
-above), same as every other binding in the table.
+All of it — the plain razor-aware actions, the `razor=` macros, the
+`razor_extend`/`razor_track` scripts, and the plain-move collapse family —
+lands in whichever section the build auto-detects (see *Coexisting with
+ReaTooled* above), same as every other binding in the table.
 
-This intentionally diverges from the tool's original Python-era output: the
-migration-era golden fixture froze what the Python generator produced for `B`
-and the plain-move keys before this model existed. `tests/parity.test.ts`
-no longer compares against that frozen reference for those bindings — the
-byte-for-byte TS build fixture (`tests/fixtures/luna-macos.tsbuild.ReaperKeyMap`)
-is the regression baseline going forward.
+This intentionally diverges from the tool's original Python-era output (and
+from an earlier, now-retired `area`-selection substrate that derived the area
+from independent track- and time-selection state rather than a razor edit).
+`tests/parity.test.ts` no longer compares against a frozen historical
+reference for these bindings — the byte-for-byte TS build fixture
+(`tests/fixtures/luna-macos.tsbuild.ReaperKeyMap`) is the regression baseline
+going forward.
 
 ## Looking up actions
 

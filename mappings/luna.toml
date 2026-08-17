@@ -331,8 +331,13 @@ razor = 40175
 [[binding]]
 luna = "Create Fades"
 key = "Cmd+F"
-razor = 40916
-comment = "Crossfades selected items -- same family as Fade In/Out."
+action = 40916
+comment = """Left as a plain action -- confirmed on tower. 40916 (Item: Crossfade \
+items within time selection) only creates fades when there is an actual project \
+time selection AND the items are selected; it ignores the razor edit area \
+entirely. Pre-selecting the razor's items via razor= (42957) does not supply a \
+time selection, so razor=40916 behaved identically to plain 40916 (a no-op) in \
+tower testing -- neither confines the crossfade to the razor'd tracks."""
 
 [[binding]]
 luna = "Fade To Clip Start (Fade In)"
@@ -380,6 +385,7 @@ comment = "Glue, expanding to time selection if any -- an item op on the selecte
 luna = "Heal Separation"
 key = "Cmd+H"
 razor = 40548
+comment = "Materializes the razor's items via the razor= select-then-act prelude, then heals the splits."
 
 [[binding]]
 luna = "Export Mixdown"
