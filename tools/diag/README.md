@@ -42,3 +42,18 @@ transient):
 - Implication for the keymap's Tab-to-Transient: when it lands only on clip
   edges in a real project, the audio/sensitivity is producing no transients —
   not the script calling the wrong action.
+
+## Root cause (confirmed 2026-08-17)
+
+The reported "Tab-to-Transient doesn't move to transients" was **not a keymap
+bug**. The offending take (`12_260816_1933.wav`) was recorded very quietly —
+peak ≈ 0.047 (**−26 dBFS**), RMS ≈ 0.0096 (**−40 dBFS**). Probing that exact
+file, `40375` found **zero** transients even after `42028` (calculate guides)
+and +30 sensitivity; it only ever stopped at item edges. Multi-item selection
+(what the keymap script does) was ruled out — `40375` walks transients across
+several selected click-items fine. **Normalizing / raising the clip level made
+the onsets detectable and Tab-to-Transient worked** (confirmed by the user).
+
+Takeaway: `40375`/`40376` are the correct actions; they depend on REAPER
+actually detecting transients, which needs adequate level. Very quiet material
+yields none.

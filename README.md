@@ -359,3 +359,11 @@ Clip-edge navigation deliberately uses the *nearest item edge* actions
 (`41167`/`41168`) rather than *edge of item* (`40318`/`40319`). The latter only
 walk the edges of **selected** items, so with a clip selected they ping-pong on
 that one clip and never cross to the next.
+
+Tab-to-Transient (`40375`/`40376`) depends on REAPER **detecting** transients,
+which needs adequate level. Very quiet takes (roughly under −30 dBFS peak)
+produce no detectable transients, so Tab only stops at clip edges — this is a
+material/level issue, not a binding one. Normalize or raise the clip gain and it
+works. The `tools/diag` harness reproduces and confirms this headlessly; the
+`luna-debug.log` line for a press shows `landed=item_end`/`item_start` when this
+is happening.
