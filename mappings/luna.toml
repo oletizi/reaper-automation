@@ -509,15 +509,16 @@ comment = "Plain move collapses the razor area: move cursor, clear all razor are
 [[binding]]
 luna = "Tab to Transient (next)"
 key = "Tab"
-# Move to the next audio transient (transients only, always on). Native REAPER
-# transient navigation; no selection clearing so repeated presses keep their
-# transient context.
-action = 40375
+# Transients only, always on. REAPER's transient nav only acts on selected items,
+# so the generated script temporarily selects items on the selected tracks (or
+# all tracks if none selected), navigates, and restores the prior selection --
+# Tab works with no clip pre-selected and leaves the selection untouched.
+tab_transient = "next"
 
 [[binding]]
 luna = "Tab to Transient (previous)"
 key = "Opt+Tab"
-action = 40376
+tab_transient = "prev"
 
 [[binding]]
 luna = "Move Selection To Next Transient (alt)"

@@ -7,6 +7,7 @@ import { renderExtendScript } from '@/extend-template'
 import { renderRazorExtendScript } from '@/razor-extend-template'
 import { renderRazorRepaintScript } from '@/razor-repaint-template'
 import { renderSeparateScript } from '@/separate-template'
+import { renderTabTransientScript } from '@/tab-transient-template'
 
 const SELECT_RAZOR_ITEMS_ACTION = 42957
 
@@ -39,6 +40,7 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
   const scripts = new Map<string, string>()
   let razorRepaintEntry: { fname: string; sid: string } | undefined
   let separateEntry: { fname: string; sid: string } | undefined
+  const tabTransientEntries = new Map<string, { fname: string; sid: string }>()
 
   function ensureRazorRepaint(): { fname: string; sid: string } {
     if (!razorRepaintEntry) {
@@ -174,6 +176,21 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
       const entry = ensureSeparate()
       command = '_' + entry.sid
       desc = `script ${entry.fname}  [split at razor, else at edit cursor]`
+      stats.script++
+    } else if (b.kind && 'tabTransient' in b.kind) {
+      const mode = b.kind.tabTransient
+      let entry = tabTransientEntries.get(mode)
+      if (!entry) {
+        const label = mode === 'next' ? 'LUNA: Tab to Transient (next)' : 'LUNA: Tab to Transient (previous)'
+        const fname = `luna_tab_transient_${mode}.lua`
+        const sid = stableId(label)
+        scripts.set(fname, renderTabTransientScript({ label, spec: mapping.meta.name, forward: mode === 'next' }))
+        scrLines.push(`SCR 4 ${section} "${sid}" "Custom: ${label}" ${SCRIPT_DIR}/${fname}`)
+        entry = { fname, sid }
+        tabTransientEntries.set(mode, entry)
+      }
+      command = '_' + entry.sid
+      desc = `script ${entry.fname}  [tab to transient ${mode}]`
       stats.script++
     } else if (b.kind && 'macro' in b.kind) {
       const steps = b.kind.macro.map(String)
