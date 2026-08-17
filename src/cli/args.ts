@@ -44,3 +44,32 @@ export function parseReport(argv: string[]) {
   const { values } = parseArgs({ args: argv, options: { kb: { type: 'string' } } })
   return { kb: values.kb }
 }
+
+export function parseRefresh(argv: string[]) {
+  const { values } = parseArgs({
+    args: argv,
+    options: {
+      mapping: { type: 'string' },
+      out: { type: 'string' },
+      target: { type: 'string' },
+      section: { type: 'string' },
+      'resource-dir': { type: 'string' },
+    },
+  })
+  let section: number | undefined
+  if (values.section !== undefined) {
+    section = Number(values.section)
+    if (!Number.isInteger(section) || section < 0) {
+      throw new Error(`refresh: --section must be a non-negative integer, got ${JSON.stringify(values.section)}`)
+    }
+  }
+  return { mapping: values.mapping, out: values.out, target: values.target, section, resourceDir: values['resource-dir'] }
+}
+
+export function parseDoctor(argv: string[]) {
+  const { values } = parseArgs({
+    args: argv,
+    options: { out: { type: 'string' }, 'resource-dir': { type: 'string' } },
+  })
+  return { out: values.out, resourceDir: values['resource-dir'] }
+}

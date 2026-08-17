@@ -14,7 +14,11 @@ export function cmdInstall(argv: string[]): number {
     resourceDir,
   })
   console.log(`keymap  -> ${out.keymap}`)
-  console.log(`scripts -> ${out.scripts.length} file(s)`)
-  console.log('Now in REAPER: Actions > Show action list > Key map > Import...')
+  console.log(`scripts -> ${out.scripts.length} file(s)${out.pruned.length ? `, pruned ${out.pruned.length} stale` : ''}`)
+  if (out.keymapChanged) {
+    console.log('Bindings changed. Now in REAPER: Actions > Show action list > Key map > Import...')
+  } else {
+    console.log('Bindings unchanged -- script changes are already live; no re-import needed.')
+  }
   return 0
 }
