@@ -33,9 +33,17 @@ local function repaint()
   reaper.GetSetRepeat(1)
 end
 
-reaper.Undo_BeginBlock()
-reaper.PreventUIRefresh(1)
-repaint()
-reaper.PreventUIRefresh(-1)
-reaper.UpdateArrange()
-reaper.Undo_EndBlock("LUNA: Repaint Area", -1)
+-- Defer the paint one frame: the razor_track macro just changed the track
+-- selection, and on macOS REAPER lays the new track out on the next cycle. Setting
+-- the razor and redrawing in the same cycle leaves the new track's razor overlay
+-- unpainted there (the data is correct, only the overlay lags). Painting one
+-- frame later lets the layout settle so the overlay redraws.
+local function run()
+  reaper.Undo_BeginBlock()
+  reaper.PreventUIRefresh(1)
+  repaint()
+  reaper.PreventUIRefresh(-1)
+  reaper.UpdateArrange()
+  reaper.Undo_EndBlock("LUNA: Repaint Area", -1)
+end
+reaper.defer(run)
