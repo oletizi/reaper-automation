@@ -37,10 +37,5 @@ reaper.Undo_BeginBlock()
 reaper.PreventUIRefresh(1)
 repaint()
 reaper.PreventUIRefresh(-1)
--- UpdateArrange alone does not redraw the razor overlay on a track that was just
--- added to the selection; force a full arrange/TCP rebuild so the new track's
--- razor renders. (The razor data is already correct without this; this is purely
--- the visual refresh.)
-reaper.TrackList_AdjustWindows(false)
 reaper.UpdateArrange()
 reaper.Undo_EndBlock("LUNA: Repaint Area", -1)
