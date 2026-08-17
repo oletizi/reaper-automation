@@ -1,3 +1,5 @@
+import { debugHook } from '@/debug-runtime'
+
 export function renderSeparateScript(opts: { label: string; spec: string }): string {
   const { label, spec } = opts
   return `-- ${label}
@@ -8,6 +10,7 @@ export function renderSeparateScript(opts: { label: string; spec: string }): str
 -- at the edit cursor (action 40012) -- the playhead-split fallback. A plain 40061
 -- errors ("No time selection active") when neither a razor nor a time selection
 -- exists, which is why this is a script rather than a bare action.
+${debugHook('separate')}
 
 local function hasRazor()
   for i = 0, reaper.CountTracks(0) - 1 do
@@ -19,7 +22,8 @@ end
 
 reaper.Undo_BeginBlock()
 reaper.PreventUIRefresh(1)
-if hasRazor() then
+local razor = hasRazor()
+if razor then
   reaper.Main_OnCommand(40061, 0)  -- Split items at time selection or razor edit
 else
   reaper.Main_OnCommand(40012, 0)  -- Split items at edit cursor
@@ -27,5 +31,6 @@ end
 reaper.PreventUIRefresh(-1)
 reaper.UpdateArrange()
 reaper.Undo_EndBlock("${label}", -1)
+_log("razor=" .. tostring(razor) .. " split=" .. (razor and "40061" or "40012"))
 `
 }

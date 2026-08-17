@@ -1,3 +1,5 @@
+import { debugHook } from '@/debug-runtime'
+
 export function renderRazorRepaintScript(opts: { label: string; spec: string }): string {
   const { label, spec } = opts
   return `-- ${label}
@@ -6,6 +8,7 @@ export function renderRazorRepaintScript(opts: { label: string; spec: string }):
 -- Repaint the razor edit (the edit area) over the currently selected tracks,
 -- keeping the current time span, then drive transport/loop from it. Used when
 -- the vertical (track) dimension of the area changes.
+${debugHook('razor_repaint')}
 
 local EPS = 1e-6
 
@@ -41,6 +44,11 @@ repaint()
 reaper.PreventUIRefresh(-1)
 reaper.UpdateArrange()
 reaper.Undo_EndBlock("${label}", -1)
+do
+  local a, b = readSpan()
+  _log(string.format("tracks_sel=%d span=%s", reaper.CountSelectedTracks(0),
+    a and string.format("%.3f..%.3f", a, b) or "none"))
+end
 -- NOTE: on macOS the razor overlay on a track that was just added to the
 -- selection does not repaint until the arrange is next interacted with (scroll,
 -- click, zoom). The razor DATA is correct and all operations act on the full

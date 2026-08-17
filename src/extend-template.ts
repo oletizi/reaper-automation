@@ -1,3 +1,5 @@
+import { debugHook } from '@/debug-runtime'
+
 export function renderExtendScript(opts: { label: string; spec: string; move: number; moveName: string }): string {
   const { label, spec, move, moveName } = opts
   return `-- ${label}
@@ -15,6 +17,7 @@ export function renderExtendScript(opts: { label: string; spec: string; move: nu
 -- (the old cursor-as-anchor scheme could not keep the transport at the start).
 --
 -- A plain custom action cannot do this: it would re-anchor on every press.
+${debugHook(`extend_${move}`)}
 
 local MOVE = ${move}
 
@@ -68,5 +71,7 @@ reaper.PreventUIRefresh(1)
 extend()
 reaper.PreventUIRefresh(-1)
 reaper.UpdateArrange()
+local ls, le = reaper.GetSet_LoopTimeRange(false, false, 0, 0, false)
+_log(string.format("move=%d sel=%.3f..%.3f", MOVE, ls, le))
 `
 }

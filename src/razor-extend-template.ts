@@ -1,3 +1,5 @@
+import { debugHook } from '@/debug-runtime'
+
 export function renderRazorExtendScript(opts: { label: string; spec: string; move: number; moveName: string }): string {
   const { label, spec, move, moveName } = opts
   return `-- ${label}
@@ -18,6 +20,7 @@ export function renderRazorExtendScript(opts: { label: string; spec: string; mov
 -- unselected tracks -- the same scoping as the razor-repaint template.
 --
 -- A plain custom action cannot do this: it would re-anchor on every press.
+${debugHook(`razor_extend_${move}`)}
 
 local EPS = 1e-6
 local MOVE = ${move}
@@ -92,5 +95,9 @@ extend()
 reaper.PreventUIRefresh(-1)
 reaper.UpdateArrange()
 reaper.Undo_EndBlock("${label}", -1)
+do
+  local a, b = readSpan()
+  _log(string.format("move=%d span=%s", MOVE, a and string.format("%.3f..%.3f", a, b) or "none"))
+end
 `
 }
