@@ -19,4 +19,10 @@ describe('renderTabTransientScript', () => {
     expect(next).toContain('GetCursorPosition')
     expect(next).toContain('moved=') // records whether the transient nav did anything
   })
+  it('logs the item bounds and classifies the landing as an edge vs inside audio', () => {
+    expect(next).toContain('D_POSITION') // reads item bounds
+    expect(next).toContain('D_LENGTH')
+    expect(next).toContain('landed=') // item_start / item_end / inside
+    expect(next).toContain('bounds=') // the item layout, so a boundary landing is provable
+  })
 })

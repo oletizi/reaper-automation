@@ -35,10 +35,15 @@ local function tabTransient()
 
   reaper.SelectAllMediaItems(0, false)
   local picked = 0
+  local bounds = {}
   for _, tr in ipairs(tracks) do
     for i = 0, reaper.CountTrackMediaItems(tr) - 1 do
-      reaper.SetMediaItemSelected(reaper.GetTrackMediaItem(tr, i), true)
+      local it = reaper.GetTrackMediaItem(tr, i)
+      reaper.SetMediaItemSelected(it, true)
       picked = picked + 1
+      local s = reaper.GetMediaItemInfo_Value(it, "D_POSITION")
+      local len = reaper.GetMediaItemInfo_Value(it, "D_LENGTH")
+      bounds[#bounds + 1] = { s = s, e = s + len }
     end
   end
 
@@ -46,17 +51,28 @@ local function tabTransient()
 
   reaper.SelectAllMediaItems(0, false)
   for _, it in ipairs(saved) do reaper.SetMediaItemSelected(it, true) end
-  return #tracks, picked
+  return #tracks, picked, bounds
 end
 
 reaper.PreventUIRefresh(1)
 local before = reaper.GetCursorPosition()
-local ntracks, npicked = tabTransient()
+local ntracks, npicked, bounds = tabTransient()
 local after = reaper.GetCursorPosition()
 reaper.PreventUIRefresh(-1)
 reaper.UpdateArrange()
 
-_log(string.format("tracks=%d items=%d cur=%.3f->%.3f moved=%s",
-  ntracks, npicked, before, after, tostring(math.abs(after - before) > 1e-9)))
+-- Classify the landing: an item edge (clip boundary) or inside the audio (a real
+-- transient). This is what distinguishes "tab only ever hits clip edges" (detection
+-- not firing) from "tab is walking transients" (working as intended).
+local EDGE_EPS = 1e-4
+local landed = "inside"
+for _, b in ipairs(bounds) do
+  if math.abs(after - b.s) < EDGE_EPS then landed = "item_start"; break end
+  if math.abs(after - b.e) < EDGE_EPS then landed = "item_end"; break end
+end
+local blist = {}
+for _, b in ipairs(bounds) do blist[#blist + 1] = string.format("%.3f..%.3f", b.s, b.e) end
+_log(string.format("tracks=%d items=%d cur=%.3f->%.3f moved=%s landed=%s bounds=[%s]",
+  ntracks, npicked, before, after, tostring(math.abs(after - before) > 1e-9), landed, table.concat(blist, ",")))
 `
 }
