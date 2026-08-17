@@ -5,6 +5,7 @@
 # Import via: Actions > Show action list > Key map > Import...
 # Modifiers are Mac-native (Cmd/Opt/Control/Shift); no translation from LUNA's own keys.
 
+SCR 4 0 "ed6bd0338c55784c46306028fd7b42a3" "Custom: LUNA: Separate" luna/luna_separate.lua
 SCR 4 0 "5504faeeac28f59f716e73f6e00297ad" "Custom: LUNA: Repaint Area" luna/luna_razor_repaint.lua
 SCR 4 0 "76372f6ae70342495f98647bb34897d0" "Custom: LUNA: Extend Selection To Next Bar" luna/luna_extend_selection_to_next_bar.lua
 SCR 4 0 "705250128fa18c7721dc75648dd60f2f" "Custom: LUNA: Extend Selection To Previous Bar" luna/luna_extend_selection_to_previous_bar.lua
@@ -98,8 +99,8 @@ KEY 1 71 _223a383e7518b913c9ea65d40347e047 0	# G : Fade To Clip Stop (Fade Out) 
 KEY 1 65 _9ea8804237d136d63a5f80b7e65642a0 0	# A : Trim From Clip Start -> LUNA: Trim From Clip Start  [select razor items > Item edit: Trim left edge of item to edit cursor]
 KEY 1 83 _87f2745a47cfdb8b9442c669b71417f1 0	# S : Trim From Clip End -> LUNA: Trim From Clip End  [select razor items > Item edit: Trim right edge of item to edit cursor]
 KEY 9 84 _be8298c5cc9c48cade6fa2e09c10240b 0	# Cmd+T : Trim Clip to Selection -> LUNA: Trim Clip to Selection  [select razor items > Item: Trim items to selected area]
-KEY 9 69 40061 0	# Cmd+E : Separate Selection -> Item: Split items at time selection or razor edit
-KEY 1 66 40061 0	# B : Separate Selection (Commands Focus) -> Item: Split items at time selection or razor edit
+KEY 9 69 _ed6bd0338c55784c46306028fd7b42a3 0	# Cmd+E : Separate Selection -> script luna_separate.lua  [split at razor, else at edit cursor]
+KEY 1 66 _ed6bd0338c55784c46306028fd7b42a3 0	# B : Separate Selection (Commands Focus) -> script luna_separate.lua  [split at razor, else at edit cursor]
 KEY 21 51 _196947a87470ece3d6b490b0397bfb80 0	# Opt+Shift+3 : Consolidate Selection -> LUNA: Consolidate Selection  [select razor items > Item: Glue items, expanding to time selection if any]
 KEY 9 72 _d06eb589b02e36624efa547b049fd30c 0	# Cmd+H : Heal Separation -> LUNA: Heal Separation  [select razor items > Item: Heal splits in items]
 KEY 25 66 40015 0	# Cmd+Opt+B : Export Mixdown -> File: Render project to disk...

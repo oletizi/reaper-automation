@@ -382,12 +382,14 @@ comment = "Trims selected items -- same family as Trim From Clip Start/End."
 [[binding]]
 luna = "Separate Selection"
 key = "Cmd+E"
-action = 40061
+# Split at the razor area if one exists, else at the edit cursor (playhead).
+# A bare 40061 errors without a razor/time selection, so this is a script.
+separate = true
 
 [[binding]]
 luna = "Separate Selection (Commands Focus)"
 key = "B"
-action = 40061
+separate = true
 
 [[binding]]
 luna = "Consolidate Selection"

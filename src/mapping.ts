@@ -8,6 +8,7 @@ export type BindingKind =
   | { razorExtend: number }
   | { razorTrack: number }
   | { razor: number }
+  | { separate: true }
 
 export interface Binding {
   luna: string
@@ -97,9 +98,13 @@ function validateBinding(raw: unknown, i: number): Binding {
   if ('razor_extend' in raw) kinds.push({ razorExtend: asInt(raw.razor_extend, `${where}.razor_extend`) })
   if ('razor_track' in raw) kinds.push({ razorTrack: asInt(raw.razor_track, `${where}.razor_track`) })
   if ('razor' in raw) kinds.push({ razor: asInt(raw.razor, `${where}.razor`) })
+  if ('separate' in raw) {
+    if (raw.separate !== true) throw new MappingError(`${where}.separate: expected true`)
+    kinds.push({ separate: true })
+  }
   if (kinds.length !== 1) {
     throw new MappingError(
-      `${where}: expected exactly one of action/macro/extend/razor_extend/razor_track/razor, got ${kinds.length}`,
+      `${where}: expected exactly one of action/macro/extend/razor_extend/razor_track/razor/separate, got ${kinds.length}`,
     )
   }
   return { luna, key, label, status, kind: kinds[0] }

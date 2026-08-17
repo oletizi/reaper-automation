@@ -6,6 +6,7 @@ import type { Mapping } from '@/mapping'
 import { renderExtendScript } from '@/extend-template'
 import { renderRazorExtendScript } from '@/razor-extend-template'
 import { renderRazorRepaintScript } from '@/razor-repaint-template'
+import { renderSeparateScript } from '@/separate-template'
 
 const SELECT_RAZOR_ITEMS_ACTION = 42957
 
@@ -37,6 +38,7 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
   const seenRazorExtendScripts = new Map<number, { fname: string; sid: string }>()
   const scripts = new Map<string, string>()
   let razorRepaintEntry: { fname: string; sid: string } | undefined
+  let separateEntry: { fname: string; sid: string } | undefined
 
   function ensureRazorRepaint(): { fname: string; sid: string } {
     if (!razorRepaintEntry) {
@@ -48,6 +50,18 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
       razorRepaintEntry = { fname, sid }
     }
     return razorRepaintEntry
+  }
+
+  function ensureSeparate(): { fname: string; sid: string } {
+    if (!separateEntry) {
+      const label = 'LUNA: Separate'
+      const fname = 'luna_separate.lua'
+      const sid = stableId(label)
+      scripts.set(fname, renderSeparateScript({ label, spec: mapping.meta.name }))
+      scrLines.push(`SCR 4 ${section} "${sid}" "Custom: ${label}" ${SCRIPT_DIR}/${fname}`)
+      separateEntry = { fname, sid }
+    }
+    return separateEntry
   }
 
   for (const b of mapping.bindings) {
@@ -155,6 +169,11 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
       command = '_' + mid
       desc = `${label}  [select razor items > ${opName}]`
       stats.macro++
+    } else if (b.kind && 'separate' in b.kind) {
+      const entry = ensureSeparate()
+      command = '_' + entry.sid
+      desc = `script ${entry.fname}  [split at razor, else at edit cursor]`
+      stats.script++
     } else if (b.kind && 'macro' in b.kind) {
       const steps = b.kind.macro.map(String)
       const missing = steps.filter((s) => !actions.has(s))

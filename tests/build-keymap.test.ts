@@ -111,3 +111,15 @@ describe('razor kind emission', () => {
     expect(() => buildKeymap(m, idx, 'macos')).toThrow(/unknown/)
   })
 })
+
+describe('separate kind emission', () => {
+  const m = parseMapping('[meta]\nname="x"\n[[binding]]\nluna="Sep"\nkey="B"\nseparate=true\n[[binding]]\nluna="Sep2"\nkey="E"\nseparate=true\n')
+  const r = buildKeymap(m, idx, 'macos')
+  it('emits the shared separate SCR exactly once for multiple bindings', () => {
+    const scr = r.keymapText.split('\n').filter((l) => l.startsWith('SCR ') && l.includes('luna_separate.lua'))
+    expect(scr).toHaveLength(1)
+  })
+  it('binds the keys directly to the separate script', () => {
+    expect(r.keymapText).toMatch(/^KEY 1 66 _[0-9a-f]{32} 0/m)
+  })
+})
