@@ -35,7 +35,10 @@ describe('golden parity', () => {
   // Delete/Cut act directly on the razor, other item ops go through `razor= [42957, id]`
   // (select the razor's items, then act), horizontal/vertical growth use `razor_extend`/
   // `razor_track` scripts, and the plain cursor-move family collapses the razor via
-  // `[move, 42406]` macros instead of issuing the bare Python move actions. "Matches
+  // `[move, 42406, 40289]` macros (move, clear all razor areas, unselect all items --
+  // the 40289 step closes a stale-item-selection hazard where a razor-aware plain op
+  // could otherwise fall back to items left selected by a prior `razor=` op) instead of
+  // issuing the bare Python move actions. "Matches
   // Python exactly" is no longer the invariant we want. The non-vacuousness tripwire below
   // now points at the current TS build's own records so it still catches silent
   // build-keymap/parser breakage; the byte-for-byte drift guard further down is the real

@@ -57,9 +57,11 @@ action = 1068
 luna = "Return To Zero"
 key = "Return"
 # Return to zero is a transport cursor move, so it collapses the razor area:
-# go to project start, then clear all razor areas.
+# go to project start, clear all razor areas, and unselect all items (40289) --
+# without this, a stale item selection left over from a prior razor= op would
+# fall through to the next razor-aware plain action (Delete/Cut/Separate).
 # (Shift+Return keeps the extend variant: select from the cursor back to zero.)
-macro = [40042, 42406]
+macro = [40042, 42406, 40289]
 
 [[binding]]
 luna = "Toggle Pre/Post Roll"
@@ -274,12 +276,24 @@ comment = "Cut is razor-aware: acts directly on the razor edit area."
 [[binding]]
 luna = "Copy"
 key = "Cmd+C"
-razor = 41383
+razor = 40057
+comment = """Changed from 41383 to 40057 -- tower testing could not get a definitive \
+paste-based confirmation either way (headless tower has no X display; item paste \
+triggers GDK clipboard/window-context calls that fail there for every copy \
+candidate tried, 41383/40057/40698 alike -- see final-fixwave-report.md). \
+Switched on the strength of the action names themselves: 41383 is 'Edit: Copy ... \
+within time selection, if any (smart copy)' -- the exact same 'depends on a real \
+project time selection' shape already proven to be a no-op under razor= for 40916 \
+(razor= / 42957 only ever sets item selection, never a time selection). 40057 is \
+'Edit: Copy ... ignoring time selection' -- unconditional on the selected items, \
+matching the razor= materialize-then-act pattern used everywhere else in this file."""
 
 [[binding]]
 luna = "Copy (Commands Focus)"
 key = "C"
-razor = 41383
+razor = 40057
+comment = """Changed from 41383 to 40057 -- see the Copy (Cmd+C) binding's comment \
+for the full rationale."""
 
 [[binding]]
 luna = "Paste"
@@ -451,74 +465,77 @@ razor_track = 40287
 [[binding]]
 luna = "Move Selection to Next Bar"
 key = "]"
-macro = [41042, 42406]
-comment = "Plain move collapses the razor area: move cursor, clear all razor areas."
+macro = [41042, 42406, 40289]
+comment = "Plain move collapses the razor area: move cursor, clear all razor areas, unselect all items (40289) so a stale item selection can't fall through to the next razor-aware plain op."
 
 [[binding]]
 luna = "Move Selection to Next Bar (numpad)"
 key = "Num2"
-macro = [41042, 42406]
-comment = "Plain move collapses the razor area: move cursor, clear all razor areas."
+macro = [41042, 42406, 40289]
+comment = "Plain move collapses the razor area: move cursor, clear all razor areas, unselect all items (40289) so a stale item selection can't fall through to the next razor-aware plain op."
 
 [[binding]]
 luna = "Move Selection to Previous Bar"
 key = "["
-macro = [41043, 42406]
-comment = "Plain move collapses the razor area: move cursor, clear all razor areas."
+macro = [41043, 42406, 40289]
+comment = "Plain move collapses the razor area: move cursor, clear all razor areas, unselect all items (40289) so a stale item selection can't fall through to the next razor-aware plain op."
 
 [[binding]]
 luna = "Move Selection to Previous Bar (numpad)"
 key = "Num1"
-macro = [41043, 42406]
-comment = "Plain move collapses the razor area: move cursor, clear all razor areas."
+macro = [41043, 42406, 40289]
+comment = "Plain move collapses the razor area: move cursor, clear all razor areas, unselect all items (40289) so a stale item selection can't fall through to the next razor-aware plain op."
 
 [[binding]]
 luna = "Move Selection To Next Clip Edge"
 key = "'"
-macro = [41168, 42406]
+macro = [41168, 42406, 40289]
 comment = """Must be the "nearest item edge" pair (41167/41168), NOT "edge of item" \
 (40318/40319). The latter only walks the edges of *selected* items, so with a clip \
 selected it ping-pongs on that one clip and never crosses to the next -- verified \
 empirically. 41167/41168 ignore item selection and leave it untouched, which is what \
 Pro Tools tab-to-boundary does. Plain move collapses the razor area: move cursor, \
-clear all razor areas."""
+clear all razor areas, unselect all items (40289) so a stale item selection can't \
+fall through to the next razor-aware plain op."""
 
 [[binding]]
 luna = "Move Selection To Previous Clip Edge"
 key = "L"
-macro = [41167, 42406]
-comment = "Plain move collapses the razor area: move cursor, clear all razor areas."
+macro = [41167, 42406, 40289]
+comment = "Plain move collapses the razor area: move cursor, clear all razor areas, unselect all items (40289) so a stale item selection can't fall through to the next razor-aware plain op."
 
 [[binding]]
 luna = "Move Selection To Next Transient"
 key = "Tab"
-macro = [40375, 42406]
-comment = "Plain move collapses the razor area: move cursor, clear all razor areas."
+macro = [40375, 42406, 40289]
+comment = "Plain move collapses the razor area: move cursor, clear all razor areas, unselect all items (40289) so a stale item selection can't fall through to the next razor-aware plain op."
 
 [[binding]]
 luna = "Move Selection To Next Transient (alt)"
 key = "Opt+'"
-macro = [40375, 42406]
-comment = "Plain move collapses the razor area: move cursor, clear all razor areas."
+macro = [40375, 42406, 40289]
+comment = "Plain move collapses the razor area: move cursor, clear all razor areas, unselect all items (40289) so a stale item selection can't fall through to the next razor-aware plain op."
 
 [[binding]]
 luna = "Move Selection To Previous Transient"
 key = "Opt+L"
-macro = [40376, 42406]
+macro = [40376, 42406, 40289]
 comment = """LUNA also puts this on Alt+Tab, which GNOME intercepts on Linux. Plain \
-move collapses the razor area: move cursor, clear all razor areas."""
+move collapses the razor area: move cursor, clear all razor areas, unselect all \
+items (40289) so a stale item selection can't fall through to the next \
+razor-aware plain op."""
 
 [[binding]]
 luna = "Move Selection To Next Marker"
 key = "Control+Opt+'"
-macro = [40173, 42406]
-comment = "Plain move collapses the razor area: move cursor, clear all razor areas."
+macro = [40173, 42406, 40289]
+comment = "Plain move collapses the razor area: move cursor, clear all razor areas, unselect all items (40289) so a stale item selection can't fall through to the next razor-aware plain op."
 
 [[binding]]
 luna = "Move Selection To Previous Marker"
 key = "Control+Opt+L"
-macro = [40172, 42406]
-comment = "Plain move collapses the razor area: move cursor, clear all razor areas."
+macro = [40172, 42406, 40289]
+comment = "Plain move collapses the razor area: move cursor, clear all razor areas, unselect all items (40289) so a stale item selection can't fall through to the next razor-aware plain op."
 
 [[binding]]
 luna = "Extend Selection To Next Transient"

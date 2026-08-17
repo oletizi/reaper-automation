@@ -106,6 +106,14 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
       if (moveName === undefined) { errors.push(`${luna}: razor_extend references unknown action ${move}`); continue }
       let entry = seenRazorExtendScripts.get(move)
       if (!entry) {
+        // NOTE: `fname` is derived from `base` the same way the `extend` branch above
+        // derives its filename, but the two branches dedup through separate maps
+        // (seenScripts vs seenRazorExtendScripts) and both write into the shared
+        // `scripts` map. A mapping with BOTH an `extend` and a `razor_extend` binding
+        // for the same base label would compute the same `fname` in both branches and
+        // one script's content would silently clobber the other in `scripts`. Not
+        // reachable today (no `extend` bindings remain in luna.toml), but worth
+        // knowing before adding one back.
         const base = b.label ?? luna.split(' (')[0]
         const label = `LUNA: ${base}`
         const fname = `luna_${slugify(base)}.lua`

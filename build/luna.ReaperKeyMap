@@ -15,11 +15,11 @@ SCR 4 16 "4ce00b027dbc682cfaf7c276a7cd257a" "Custom: LUNA: Extend Selection To N
 SCR 4 16 "917d902d9cdbb442c97270ea2e608ec5" "Custom: LUNA: Extend Selection To Previous Marker" luna/luna_extend_selection_to_previous_marker.lua
 SCR 4 16 "68bcd3fa5c9154134bd13b973796404a" "Custom: LUNA: Extend Selection To Session Start" luna/luna_extend_selection_to_session_start.lua
 SCR 4 16 "cf89bafa60a6940f74cdcea8fa2ba8f5" "Custom: LUNA: Extend Selection To Session End" luna/luna_extend_selection_to_session_end.lua
-ACT 0 16 "5ea1611962708888ea0fd24f740a6a62" "Custom: LUNA: Return To Zero" 40042 42406
+ACT 0 16 "5ea1611962708888ea0fd24f740a6a62" "Custom: LUNA: Return To Zero" 40042 42406 40289
 ACT 0 16 "9457b692efcdc0fa6d1a838e640ccc96" "Custom: Increase all track heights" 40296 41325
 ACT 0 16 "47b77736c270eeece980170b5762be65" "Custom: Decrease all track heights" 40296 41326
-ACT 0 16 "6b27fe7dd8206bc0fe6c161404dd59b5" "Custom: LUNA: Copy" 42957 41383
-ACT 0 16 "055592d700e3e8b287b4536ba8e6ef8d" "Custom: LUNA: Copy (Commands Focus)" 42957 41383
+ACT 0 16 "6b27fe7dd8206bc0fe6c161404dd59b5" "Custom: LUNA: Copy" 42957 40057
+ACT 0 16 "055592d700e3e8b287b4536ba8e6ef8d" "Custom: LUNA: Copy (Commands Focus)" 42957 40057
 ACT 0 16 "d8a995cfdc416363657ed58f0806ba69" "Custom: LUNA: Duplicate selection" 42957 41295
 ACT 0 16 "c809d6de90d9ee4cf90bc18b5d5deff1" "Custom: LUNA: Mute Selection" 42957 40175
 ACT 0 16 "cc5e58fc075614c190a9ddf3e1025896" "Custom: LUNA: Fade To Clip Start (Fade In)" 42957 40509
@@ -33,24 +33,24 @@ ACT 0 16 "16511ebee7c0d18adf3226aec1a25f13" "Custom: LUNA: Move Selection Up" 40
 ACT 0 16 "db124048ca528a5b16643c07cac2feca" "Custom: LUNA: Move Selection Down" 40285 _5504faeeac28f59f716e73f6e00297ad
 ACT 0 16 "287e23588c6028b0c8155c4e17e49c93" "Custom: LUNA: Extend Selection Up" 40288 _5504faeeac28f59f716e73f6e00297ad
 ACT 0 16 "5cfc27c62334e911cff5ca915ce3580e" "Custom: LUNA: Extend Selection Down" 40287 _5504faeeac28f59f716e73f6e00297ad
-ACT 0 16 "c98b9f631d4ff3a4a003d44d5001fcf1" "Custom: LUNA: Move Selection to Next Bar" 41042 42406
-ACT 0 16 "a8f910f7310ec01051e2c5fd08d551c1" "Custom: LUNA: Move Selection to Next Bar (numpad)" 41042 42406
-ACT 0 16 "32b85478739fc006704767be14e4b328" "Custom: LUNA: Move Selection to Previous Bar" 41043 42406
-ACT 0 16 "bcc28c83228f6d1c2cf10ef0ba0efd97" "Custom: LUNA: Move Selection to Previous Bar (numpad)" 41043 42406
-ACT 0 16 "c2db9b854ff8282d56e9b21b5a3c20d3" "Custom: LUNA: Move Selection To Next Clip Edge" 41168 42406
-ACT 0 16 "48d6ef9bd560393747dbaa594a32d704" "Custom: LUNA: Move Selection To Previous Clip Edge" 41167 42406
-ACT 0 16 "df04e3679f4fc5eccef5cb40cfb1ff9c" "Custom: LUNA: Move Selection To Next Transient" 40375 42406
-ACT 0 16 "57c7dd12f657ca86e7e4f8dfc7074664" "Custom: LUNA: Move Selection To Next Transient (alt)" 40375 42406
-ACT 0 16 "887d6bb7e3759fb29a587465762cc83c" "Custom: LUNA: Move Selection To Previous Transient" 40376 42406
-ACT 0 16 "5a94a01f1d6f5cf03f9e06abc59809d6" "Custom: LUNA: Move Selection To Next Marker" 40173 42406
-ACT 0 16 "543f508835ba4b18bcf53a9c114fd9cb" "Custom: LUNA: Move Selection To Previous Marker" 40172 42406
+ACT 0 16 "c98b9f631d4ff3a4a003d44d5001fcf1" "Custom: LUNA: Move Selection to Next Bar" 41042 42406 40289
+ACT 0 16 "a8f910f7310ec01051e2c5fd08d551c1" "Custom: LUNA: Move Selection to Next Bar (numpad)" 41042 42406 40289
+ACT 0 16 "32b85478739fc006704767be14e4b328" "Custom: LUNA: Move Selection to Previous Bar" 41043 42406 40289
+ACT 0 16 "bcc28c83228f6d1c2cf10ef0ba0efd97" "Custom: LUNA: Move Selection to Previous Bar (numpad)" 41043 42406 40289
+ACT 0 16 "c2db9b854ff8282d56e9b21b5a3c20d3" "Custom: LUNA: Move Selection To Next Clip Edge" 41168 42406 40289
+ACT 0 16 "48d6ef9bd560393747dbaa594a32d704" "Custom: LUNA: Move Selection To Previous Clip Edge" 41167 42406 40289
+ACT 0 16 "df04e3679f4fc5eccef5cb40cfb1ff9c" "Custom: LUNA: Move Selection To Next Transient" 40375 42406 40289
+ACT 0 16 "57c7dd12f657ca86e7e4f8dfc7074664" "Custom: LUNA: Move Selection To Next Transient (alt)" 40375 42406 40289
+ACT 0 16 "887d6bb7e3759fb29a587465762cc83c" "Custom: LUNA: Move Selection To Previous Transient" 40376 42406 40289
+ACT 0 16 "5a94a01f1d6f5cf03f9e06abc59809d6" "Custom: LUNA: Move Selection To Next Marker" 40173 42406 40289
+ACT 0 16 "543f508835ba4b18bcf53a9c114fd9cb" "Custom: LUNA: Move Selection To Previous Marker" 40172 42406 40289
 
 KEY 1 32 40044 16	# Space : Toggle Playback -> Transport: Play/stop
 KEY 9 32 1013 16	# Cmd+Space : Toggle Record -> Transport: Record
 KEY 1 99 1013 16	# Num3 : Toggle Record (numpad) -> Transport: Record
 KEY 33 76 1068 16	# Control+L : Loop Playback -> Transport: Toggle repeat
 KEY 1 100 1068 16	# Num4 : Loop Playback (numpad) -> Transport: Toggle repeat
-KEY 1 13 _5ea1611962708888ea0fd24f740a6a62 16	# Return : Return To Zero -> LUNA: Return To Zero  [Transport: Go to start of project > Razor edit: Clear all areas]
+KEY 1 13 _5ea1611962708888ea0fd24f740a6a62 16	# Return : Return To Zero -> LUNA: Return To Zero  [Transport: Go to start of project > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]
 KEY 9 75 41818 16	# Cmd+K : Toggle Pre/Post Roll -> Pre-roll: Toggle pre-roll on play
 KEY 1 75 40364 16	# K : Toggle Metronome -> Options: Toggle metronome
 KEY 1 103 40364 16	# Num7 : Toggle Metronome (numpad) -> Options: Toggle metronome
@@ -84,8 +84,8 @@ KEY 9 90 40029 16	# Cmd+Z : Undo -> Edit: Undo
 KEY 13 90 40030 16	# Cmd+Shift+Z : Redo -> Edit: Redo
 KEY 9 88 40699 16	# Cmd+X : Cut -> Edit: Cut items
 KEY 1 88 40699 16	# X : Cut (Commands Focus) -> Edit: Cut items
-KEY 9 67 _6b27fe7dd8206bc0fe6c161404dd59b5 16	# Cmd+C : Copy -> LUNA: Copy  [select razor items > Edit: Copy items/tracks/envelope points (depending on focus) within time selection, if any (smart copy)]
-KEY 1 67 _055592d700e3e8b287b4536ba8e6ef8d 16	# C : Copy (Commands Focus) -> LUNA: Copy (Commands Focus)  [select razor items > Edit: Copy items/tracks/envelope points (depending on focus) within time selection, if any (smart copy)]
+KEY 9 67 _6b27fe7dd8206bc0fe6c161404dd59b5 16	# Cmd+C : Copy -> LUNA: Copy  [select razor items > Edit: Copy items/tracks/envelope points (depending on focus) ignoring time selection]
+KEY 1 67 _055592d700e3e8b287b4536ba8e6ef8d 16	# C : Copy (Commands Focus) -> LUNA: Copy (Commands Focus)  [select razor items > Edit: Copy items/tracks/envelope points (depending on focus) ignoring time selection]
 KEY 9 86 42398 16	# Cmd+V : Paste -> Item: Paste items/tracks
 KEY 1 86 42398 16	# V : Paste (Commands Focus) -> Item: Paste items/tracks
 KEY 1 8 40006 16	# Backspace : Clear -> Item: Remove items
@@ -111,17 +111,17 @@ KEY 1 80 _16511ebee7c0d18adf3226aec1a25f13 16	# P : Move Selection Up -> LUNA: M
 KEY 1 186 _db124048ca528a5b16643c07cac2feca 16	# ; : Move Selection Down -> LUNA: Move Selection Down  [Track: Go to next track > repaint area]
 KEY 5 80 _287e23588c6028b0c8155c4e17e49c93 16	# Shift+P : Extend Selection Up -> LUNA: Extend Selection Up  [Track: Go to previous track (leaving other tracks selected) > repaint area]
 KEY 5 186 _5cfc27c62334e911cff5ca915ce3580e 16	# Shift+; : Extend Selection Down -> LUNA: Extend Selection Down  [Track: Go to next track (leaving other tracks selected) > repaint area]
-KEY 1 221 _c98b9f631d4ff3a4a003d44d5001fcf1 16	# ] : Move Selection to Next Bar -> LUNA: Move Selection to Next Bar  [Move edit cursor forward one measure > Razor edit: Clear all areas]
-KEY 1 98 _a8f910f7310ec01051e2c5fd08d551c1 16	# Num2 : Move Selection to Next Bar (numpad) -> LUNA: Move Selection to Next Bar (numpad)  [Move edit cursor forward one measure > Razor edit: Clear all areas]
-KEY 1 219 _32b85478739fc006704767be14e4b328 16	# [ : Move Selection to Previous Bar -> LUNA: Move Selection to Previous Bar  [Move edit cursor back one measure > Razor edit: Clear all areas]
-KEY 1 97 _bcc28c83228f6d1c2cf10ef0ba0efd97 16	# Num1 : Move Selection to Previous Bar (numpad) -> LUNA: Move Selection to Previous Bar (numpad)  [Move edit cursor back one measure > Razor edit: Clear all areas]
-KEY 1 222 _c2db9b854ff8282d56e9b21b5a3c20d3 16	# ' : Move Selection To Next Clip Edge -> LUNA: Move Selection To Next Clip Edge  [Item navigation: Move cursor right to nearest item edge > Razor edit: Clear all areas]
-KEY 1 76 _48d6ef9bd560393747dbaa594a32d704 16	# L : Move Selection To Previous Clip Edge -> LUNA: Move Selection To Previous Clip Edge  [Item navigation: Move cursor left to nearest item edge > Razor edit: Clear all areas]
-KEY 1 9 _df04e3679f4fc5eccef5cb40cfb1ff9c 16	# Tab : Move Selection To Next Transient -> LUNA: Move Selection To Next Transient  [Item navigation: Move cursor to next transient in items > Razor edit: Clear all areas]
-KEY 17 222 _57c7dd12f657ca86e7e4f8dfc7074664 16	# Opt+' : Move Selection To Next Transient (alt) -> LUNA: Move Selection To Next Transient (alt)  [Item navigation: Move cursor to next transient in items > Razor edit: Clear all areas]
-KEY 17 76 _887d6bb7e3759fb29a587465762cc83c 16	# Opt+L : Move Selection To Previous Transient -> LUNA: Move Selection To Previous Transient  [Item navigation: Move cursor to previous transient in items > Razor edit: Clear all areas]
-KEY 49 222 _5a94a01f1d6f5cf03f9e06abc59809d6 16	# Opt+Control+' : Move Selection To Next Marker -> LUNA: Move Selection To Next Marker  [Markers: Go to next marker/project end > Razor edit: Clear all areas]
-KEY 49 76 _543f508835ba4b18bcf53a9c114fd9cb 16	# Opt+Control+L : Move Selection To Previous Marker -> LUNA: Move Selection To Previous Marker  [Markers: Go to previous marker/project start > Razor edit: Clear all areas]
+KEY 1 221 _c98b9f631d4ff3a4a003d44d5001fcf1 16	# ] : Move Selection to Next Bar -> LUNA: Move Selection to Next Bar  [Move edit cursor forward one measure > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]
+KEY 1 98 _a8f910f7310ec01051e2c5fd08d551c1 16	# Num2 : Move Selection to Next Bar (numpad) -> LUNA: Move Selection to Next Bar (numpad)  [Move edit cursor forward one measure > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]
+KEY 1 219 _32b85478739fc006704767be14e4b328 16	# [ : Move Selection to Previous Bar -> LUNA: Move Selection to Previous Bar  [Move edit cursor back one measure > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]
+KEY 1 97 _bcc28c83228f6d1c2cf10ef0ba0efd97 16	# Num1 : Move Selection to Previous Bar (numpad) -> LUNA: Move Selection to Previous Bar (numpad)  [Move edit cursor back one measure > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]
+KEY 1 222 _c2db9b854ff8282d56e9b21b5a3c20d3 16	# ' : Move Selection To Next Clip Edge -> LUNA: Move Selection To Next Clip Edge  [Item navigation: Move cursor right to nearest item edge > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]
+KEY 1 76 _48d6ef9bd560393747dbaa594a32d704 16	# L : Move Selection To Previous Clip Edge -> LUNA: Move Selection To Previous Clip Edge  [Item navigation: Move cursor left to nearest item edge > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]
+KEY 1 9 _df04e3679f4fc5eccef5cb40cfb1ff9c 16	# Tab : Move Selection To Next Transient -> LUNA: Move Selection To Next Transient  [Item navigation: Move cursor to next transient in items > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]
+KEY 17 222 _57c7dd12f657ca86e7e4f8dfc7074664 16	# Opt+' : Move Selection To Next Transient (alt) -> LUNA: Move Selection To Next Transient (alt)  [Item navigation: Move cursor to next transient in items > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]
+KEY 17 76 _887d6bb7e3759fb29a587465762cc83c 16	# Opt+L : Move Selection To Previous Transient -> LUNA: Move Selection To Previous Transient  [Item navigation: Move cursor to previous transient in items > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]
+KEY 49 222 _5a94a01f1d6f5cf03f9e06abc59809d6 16	# Opt+Control+' : Move Selection To Next Marker -> LUNA: Move Selection To Next Marker  [Markers: Go to next marker/project end > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]
+KEY 49 76 _543f508835ba4b18bcf53a9c114fd9cb 16	# Opt+Control+L : Move Selection To Previous Marker -> LUNA: Move Selection To Previous Marker  [Markers: Go to previous marker/project start > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]
 KEY 5 9 40802 16	# Shift+Tab : Extend Selection To Next Transient -> Time selection: Extend time selection to next transient in items
 KEY 13 76 40622 16	# Cmd+Shift+L : Loop Select -> Time selection: Move loop points to time selection
 KEY 5 221 _76372f6ae70342495f98647bb34897d0 16	# Shift+] : Extend Selection To Next Bar -> script luna_extend_selection_to_next_bar.lua  [extend razor area via Move edit cursor forward one measure]
