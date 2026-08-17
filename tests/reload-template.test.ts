@@ -10,15 +10,23 @@ function luacAvailable(): boolean {
 }
 
 describe('renderReloadScript', () => {
-  const lua = renderReloadScript({ repoRoot: '/Users/orion/work/reaper-automation', spec: 'luna.toml' })
+  const lua = renderReloadScript({
+    repoRoot: '/Users/orion/work/reaper-automation',
+    spec: 'luna.toml',
+    pathPrefix: '/Users/orion/.nvm/versions/node/v22.19.0/bin',
+  })
 
   it('bakes the repo root so the button knows where to build from', () => {
     expect(lua).toContain('/Users/orion/work/reaper-automation')
   })
-  it('shells out through a login shell and runs the refresh verb', () => {
+  it('shells out and runs the refresh verb', () => {
     expect(lua).toContain('reaper.ExecProcess')
-    expect(lua).toContain('/bin/sh -lc')
+    expect(lua).toContain('/bin/sh')
     expect(lua).toContain('pnpm ra refresh')
+  })
+  it('bakes the node/pnpm bin dir onto PATH (a GUI app does not inherit the shell PATH)', () => {
+    expect(lua).toContain('/Users/orion/.nvm/versions/node/v22.19.0/bin')
+    expect(lua).toContain('PATH=')
   })
   it('distinguishes a bindings-changed refresh (needs re-import) from bindings-unchanged', () => {
     expect(lua).toContain('BINDINGS: changed')

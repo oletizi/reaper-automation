@@ -1,4 +1,5 @@
 import { mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync, rmSync } from 'node:fs'
+import { execFileSync } from 'node:child_process'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parseMapping } from '@/mapping'
@@ -12,6 +13,24 @@ import { readGitStamp, formatStamp } from '@/stamp'
 /** Absolute repo root, derived from this module's location (src/build-run.ts). */
 export function repoRoot(): string {
   return fileURLToPath(new URL('..', import.meta.url))
+}
+
+/**
+ * PATH prefix (colon-separated bin dirs) to bake into the reload button so it
+ * can find node/pnpm from inside REAPER's GUI environment, which does not
+ * inherit the interactive shell PATH. Detected from the running node binary and
+ * a best-effort `command -v pnpm`.
+ */
+export function detectReloadPathPrefix(): string {
+  const dirs = new Set<string>()
+  dirs.add(dirname(process.execPath)) // node's bin dir (pnpm usually sits alongside)
+  try {
+    const pnpm = execFileSync('sh', ['-lc', 'command -v pnpm'], { encoding: 'utf8' }).trim()
+    if (pnpm) dirs.add(dirname(pnpm))
+  } catch {
+    // pnpm not resolvable in this shell; node's bin dir is the high-confidence fallback
+  }
+  return [...dirs].join(':')
 }
 
 export interface RunBuildOptions {
@@ -51,7 +70,11 @@ export function runBuild(opts: RunBuildOptions): RunBuildOutput {
   }
 
   const stamp = formatStamp(readGitStamp(root))
-  const result = buildKeymap(mapping, idx, target, section, { stamp, repoRoot: root })
+  const result = buildKeymap(mapping, idx, target, section, {
+    stamp,
+    repoRoot: root,
+    reloadPathPrefix: detectReloadPathPrefix(),
+  })
 
   mkdirSync(dirname(opts.out), { recursive: true })
   writeFileSync(opts.out, result.keymapText)

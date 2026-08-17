@@ -32,6 +32,8 @@ export interface BuildOptions {
   stamp?: string
   /** Absolute repo root baked into the reload button so it can rebuild (default ""). */
   repoRoot?: string
+  /** PATH prefix (node/pnpm bin dir) baked into the reload button (default ""). */
+  reloadPathPrefix?: string
 }
 
 export function buildKeymap(
@@ -256,7 +258,11 @@ export function buildKeymap(
   const reloadLabel = 'LUNA: Reload'
   const reloadFname = 'luna_reload.lua'
   const reloadSid = stableId(reloadLabel)
-  scripts.set(reloadFname, renderReloadScript({ repoRoot: opts.repoRoot ?? '', spec: mapping.meta.name }))
+  scripts.set(reloadFname, renderReloadScript({
+    repoRoot: opts.repoRoot ?? '',
+    spec: mapping.meta.name,
+    pathPrefix: opts.reloadPathPrefix ?? '',
+  }))
   scrLines.push(`SCR 4 ${section} "${reloadSid}" "Custom: ${reloadLabel}" ${SCRIPT_DIR}/${reloadFname}`)
 
   const m = mapping.meta
