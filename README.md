@@ -14,8 +14,8 @@ Python implementation; there is no Python left in this repo.
 
 ```
 mappings/luna.toml                  the mapping table, Mac-native labels -- this is the thing you edit
-build/luna-macos.ReaperKeyMap       generated; import this into REAPER
-build/Scripts/luna/*.lua            generated ReaScripts the keymap references
+build/luna-macos.ReaperKeyMap       generated (gitignored); import this into REAPER
+build/Scripts/luna/*.lua            generated (gitignored) ReaScripts the keymap references
 src/                                the TypeScript implementation (keyspec, translate, mapping, build-keymap, ...)
 src/index.ts                        CLI entry point, invoked as `pnpm ra <verb> ...`
 tools/dump_actions.lua              ReaScript that dumps REAPER's action list (runs inside REAPER)
@@ -85,12 +85,12 @@ These are two separate axes and never collapse into one value:
 pnpm ra install
 ```
 
-**Always build before you install** — don't import the checked-in
-`build/*.ReaperKeyMap` artifact directly. It's committed as a build output for
-reference, but its `--section` was baked for the machine it was last built on
-(this maintainer's ReaTooled section 16); importing it as-is on a different
-machine can bind into the wrong section and produce dead keys. Run
-`pnpm ra build` (auto-detects the right section) and then `pnpm ra install`.
+**Always build before you install.** `build/` is a generated, gitignored
+staging directory — it's not committed, and its contents are machine-specific
+(the `--section` is baked for the host's ReaTooled state, the reload button bakes
+the host's repo + node paths, and each script carries the build's git stamp). Run
+`pnpm ra build` (auto-detects the right section) and then `pnpm ra install`, or
+just `pnpm ra refresh` to do both.
 
 That copies the keymap into `~/Library/Application Support/REAPER/KeyMaps/`
 (or the Linux equivalent, or `--resource-dir`/`$REAPER_RESOURCE_DIR`) and the
