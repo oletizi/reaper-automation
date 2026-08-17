@@ -1,3 +1,5 @@
+import { debugHook } from '@/debug-runtime'
+
 // LUNA Tab-to-Transient: move the edit cursor to the next/previous audio
 // transient. REAPER's transient-navigation actions (40375/40376) only act on
 // SELECTED items, so this temporarily selects the items on the selected tracks
@@ -15,7 +17,10 @@ export function renderTabTransientScript(opts: { label: string; spec: string; fo
 -- Transient navigation (40375/40376) only works on selected items, so this
 -- temporarily selects the items on the selected tracks (or all tracks if none
 -- are selected), runs the navigation, then restores the prior item selection.
+${debugHook(`tab_transient_${forward ? 'next' : 'prev'}`)}
 
+-- Returns the number of items it temporarily selected, so the debug line can
+-- distinguish "no items to navigate" from "navigated but the cursor held".
 local function tabTransient()
   local tracks = {}
   local nsel = reaper.CountSelectedTracks(0)
@@ -29,9 +34,11 @@ local function tabTransient()
   for i = 0, reaper.CountSelectedMediaItems(0) - 1 do saved[#saved + 1] = reaper.GetSelectedMediaItem(0, i) end
 
   reaper.SelectAllMediaItems(0, false)
+  local picked = 0
   for _, tr in ipairs(tracks) do
     for i = 0, reaper.CountTrackMediaItems(tr) - 1 do
       reaper.SetMediaItemSelected(reaper.GetTrackMediaItem(tr, i), true)
+      picked = picked + 1
     end
   end
 
@@ -39,11 +46,17 @@ local function tabTransient()
 
   reaper.SelectAllMediaItems(0, false)
   for _, it in ipairs(saved) do reaper.SetMediaItemSelected(it, true) end
+  return #tracks, picked
 end
 
 reaper.PreventUIRefresh(1)
-tabTransient()
+local before = reaper.GetCursorPosition()
+local ntracks, npicked = tabTransient()
+local after = reaper.GetCursorPosition()
 reaper.PreventUIRefresh(-1)
 reaper.UpdateArrange()
+
+_log(string.format("tracks=%d items=%d cur=%.3f->%.3f moved=%s",
+  ntracks, npicked, before, after, tostring(math.abs(after - before) > 1e-9)))
 `
 }

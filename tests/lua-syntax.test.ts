@@ -3,7 +3,12 @@ import { execFileSync } from 'node:child_process'
 import { mkdtempSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { renderDebugModule, renderStampModule, debugHook } from '@/debug-runtime'
+import { parseMapping } from '@/mapping'
+import { loadActions, ActionIndex } from '@/actions'
+import { buildKeymap } from '@/build-keymap'
 
 // Parse Lua with luac -p when available. REAPER's own Lua is not runnable
 // standalone, so this is our only pre-flight guard against a syntax error that
@@ -31,4 +36,17 @@ describe.runIf(luacAvailable())('generated Lua parses', () => {
     const script = `${debugHook('demo')}\n_log("hello")\n`
     expect(() => assertParses('demo.lua', script)).not.toThrow()
   })
+})
+
+describe.runIf(luacAvailable())('every script the real build emits parses', () => {
+  const luna = parseMapping(readFileSync(fileURLToPath(new URL('../mappings/luna.toml', import.meta.url)), 'utf8'))
+  const built = buildKeymap(luna, new ActionIndex(loadActions()), 'macos', 0, {
+    stamp: 'deadbeef-dirty',
+    repoRoot: '/Users/someone/reaper-automation',
+  })
+  for (const [name, src] of built.scripts) {
+    it(`${name} parses`, () => {
+      expect(() => assertParses(name, src)).not.toThrow()
+    })
+  }
 })

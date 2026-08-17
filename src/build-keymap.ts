@@ -8,6 +8,8 @@ import { renderRazorExtendScript } from '@/razor-extend-template'
 import { renderRazorRepaintScript } from '@/razor-repaint-template'
 import { renderSeparateScript } from '@/separate-template'
 import { renderTabTransientScript } from '@/tab-transient-template'
+import { renderReloadScript } from '@/reload-template'
+import { renderDebugModule, renderStampModule, DEBUG_MODULE_FILE, STAMP_MODULE_FILE } from '@/debug-runtime'
 
 const SELECT_RAZOR_ITEMS_ACTION = 42957
 
@@ -25,7 +27,20 @@ export interface BuildResult {
 // Main bindings live in section 16 and take precedence over an imported section-0
 // keymap, so overriding them requires emitting into section 16 as well (verified
 // empirically — see the design doc's resolved section-precedence question).
-export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Target, section = 0): BuildResult {
+export interface BuildOptions {
+  /** Version stamp baked into luna_stamp.lua (default "unknown"). */
+  stamp?: string
+  /** Absolute repo root baked into the reload button so it can rebuild (default ""). */
+  repoRoot?: string
+}
+
+export function buildKeymap(
+  mapping: Mapping,
+  actions: ActionIndex,
+  target: Target,
+  section = 0,
+  opts: BuildOptions = {},
+): BuildResult {
   const actLines: string[] = []
   const scrLines: string[] = []
   const keyLines: string[] = []
@@ -228,6 +243,21 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
   if (errors.length) {
     throw new Error(`${errors.length} error(s):\n` + errors.map((e) => `  ERROR  ${e}`).join('\n'))
   }
+
+  // Runtime infrastructure, emitted for every build regardless of the mapping:
+  //  - the shared debug module + the version stamp (runtime-only: loaded by the
+  //    action scripts via dofile, so they carry NO SCR line and never affect
+  //    keymap bytes);
+  //  - the reload button, registered with an SCR line so REAPER lists it as an
+  //    action the user can bind to a key or a toolbar button once.
+  scripts.set(DEBUG_MODULE_FILE, renderDebugModule())
+  scripts.set(STAMP_MODULE_FILE, renderStampModule(opts.stamp ?? 'unknown'))
+
+  const reloadLabel = 'LUNA: Reload'
+  const reloadFname = 'luna_reload.lua'
+  const reloadSid = stableId(reloadLabel)
+  scripts.set(reloadFname, renderReloadScript({ repoRoot: opts.repoRoot ?? '', spec: mapping.meta.name }))
+  scrLines.push(`SCR 4 ${section} "${reloadSid}" "Custom: ${reloadLabel}" ${SCRIPT_DIR}/${reloadFname}`)
 
   const m = mapping.meta
   const header = [

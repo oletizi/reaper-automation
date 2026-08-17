@@ -41,6 +41,31 @@ describe('buildKeymap section override (ReaTooled coexistence)', () => {
   })
 })
 
+describe('buildKeymap runtime infrastructure (reload + debug + stamp)', () => {
+  const r = buildKeymap(mini, idx, 'macos', 0, { stamp: '7aec6b4-dirty', repoRoot: '/repo/here' })
+
+  it('emits the shared debug module and the version stamp module', () => {
+    expect(r.scripts.has('luna_debug.lua')).toBe(true)
+    expect(r.scripts.has('luna_stamp.lua')).toBe(true)
+    expect(r.scripts.get('luna_stamp.lua')).toContain('7aec6b4-dirty')
+  })
+  it('emits the reload button baked with the repo root', () => {
+    expect(r.scripts.has('luna_reload.lua')).toBe(true)
+    expect(r.scripts.get('luna_reload.lua')).toContain('/repo/here')
+  })
+  it('registers the reload action with an SCR line so REAPER lists it', () => {
+    expect(r.keymapText).toMatch(/^SCR 4 0 "[0-9a-f]+" "Custom: LUNA: Reload" luna\/luna_reload\.lua$/m)
+  })
+  it('does not reference the runtime-only modules from SCR lines (keymap stays deterministic)', () => {
+    expect(r.keymapText).not.toContain('luna_debug.lua')
+    expect(r.keymapText).not.toContain('luna_stamp.lua')
+  })
+  it('defaults the stamp to "unknown" when none is supplied', () => {
+    const d = buildKeymap(mini, idx, 'macos')
+    expect(d.scripts.get('luna_stamp.lua')).toContain('unknown')
+  })
+})
+
 describe('buildKeymap strict validation', () => {
   it('throws when an action id does not exist', () => {
     const m = parseMapping('[meta]\nname="x"\n[[binding]]\nluna="B"\nkey="A"\naction=99999999\n')
@@ -61,7 +86,9 @@ describe('razor_extend kind emission', () => {
         '[[binding]]\nluna="Extend Prev"\nkey="D"\nrazor_extend=41043\n',
     )
     const r = buildKeymap(m, idx, 'macos')
-    const scr = r.keymapText.split('\n').filter((l) => l.startsWith('SCR '))
+    // Count the mapping's scripts; the always-emitted reload action has its own
+    // SCR line that is not part of this dedup behavior, so exclude it.
+    const scr = r.keymapText.split('\n').filter((l) => l.startsWith('SCR ') && !/luna_reload\.lua/.test(l))
     expect(scr).toHaveLength(2)
     // B (66) and C (67) both bind to the same script id (deduped on move 41042)
     const bLine = r.keymapText.split('\n').find((l) => /^KEY 1 66 /.test(l))

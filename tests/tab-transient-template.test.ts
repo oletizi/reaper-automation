@@ -14,4 +14,9 @@ describe('renderTabTransientScript', () => {
     expect(next).toContain('SelectAllMediaItems(0, false)') // clear before/after
     expect(next).toContain('SetMediaItemSelected')
   })
+  it('logs the cursor before/after and whether it actually moved', () => {
+    expect(next).toContain('_log') // debug hook wired in
+    expect(next).toContain('GetCursorPosition')
+    expect(next).toContain('moved=') // records whether the transient nav did anything
+  })
 })

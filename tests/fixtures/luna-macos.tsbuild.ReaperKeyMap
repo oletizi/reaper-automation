@@ -18,6 +18,7 @@ SCR 4 0 "4ce00b027dbc682cfaf7c276a7cd257a" "Custom: LUNA: Extend Selection To Ne
 SCR 4 0 "917d902d9cdbb442c97270ea2e608ec5" "Custom: LUNA: Extend Selection To Previous Marker" luna/luna_extend_selection_to_previous_marker.lua
 SCR 4 0 "68bcd3fa5c9154134bd13b973796404a" "Custom: LUNA: Extend Selection To Session Start" luna/luna_extend_selection_to_session_start.lua
 SCR 4 0 "cf89bafa60a6940f74cdcea8fa2ba8f5" "Custom: LUNA: Extend Selection To Session End" luna/luna_extend_selection_to_session_end.lua
+SCR 4 0 "c6e5fead50c4a4687509da116a9cec1a" "Custom: LUNA: Reload" luna/luna_reload.lua
 ACT 0 0 "5ea1611962708888ea0fd24f740a6a62" "Custom: LUNA: Return To Zero" 40042 42406 40289
 ACT 0 0 "9457b692efcdc0fa6d1a838e640ccc96" "Custom: Increase all track heights" 40296 41325
 ACT 0 0 "47b77736c270eeece980170b5762be65" "Custom: Decrease all track heights" 40296 41326
