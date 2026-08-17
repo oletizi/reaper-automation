@@ -9,6 +9,7 @@ SCR 4 0 "ed6bd0338c55784c46306028fd7b42a3" "Custom: LUNA: Separate" luna/luna_se
 SCR 4 0 "5504faeeac28f59f716e73f6e00297ad" "Custom: LUNA: Repaint Area" luna/luna_razor_repaint.lua
 SCR 4 0 "d2ef1993fc7e3b7b5b6ee7a9c69319b6" "Custom: LUNA: Tab to Transient (next)" luna/luna_tab_transient_next.lua
 SCR 4 0 "9f5f2a20feeff0de50da8d33f4b16d4a" "Custom: LUNA: Tab to Transient (previous)" luna/luna_tab_transient_prev.lua
+SCR 4 0 "1bdd3c2f35b778ac367173bfcb589880" "Custom: LUNA: Extend Selection To Next Transient" luna/luna_extend_selection_to_next_transient.lua
 SCR 4 0 "76372f6ae70342495f98647bb34897d0" "Custom: LUNA: Extend Selection To Next Bar" luna/luna_extend_selection_to_next_bar.lua
 SCR 4 0 "705250128fa18c7721dc75648dd60f2f" "Custom: LUNA: Extend Selection To Previous Bar" luna/luna_extend_selection_to_previous_bar.lua
 SCR 4 0 "5085c418d287dcb2cc58fe46c2f425c0" "Custom: LUNA: Extend Selection To Next Clip Edge" luna/luna_extend_selection_to_next_clip_edge.lua
@@ -126,7 +127,7 @@ KEY 17 222 _57c7dd12f657ca86e7e4f8dfc7074664 0	# Opt+' : Move Selection To Next 
 KEY 17 76 _887d6bb7e3759fb29a587465762cc83c 0	# Opt+L : Move Selection To Previous Transient -> LUNA: Move Selection To Previous Transient  [Item navigation: Move cursor to previous transient in items > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]
 KEY 49 222 _5a94a01f1d6f5cf03f9e06abc59809d6 0	# Opt+Control+' : Move Selection To Next Marker -> LUNA: Move Selection To Next Marker  [Markers: Go to next marker/project end > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]
 KEY 49 76 _543f508835ba4b18bcf53a9c114fd9cb 0	# Opt+Control+L : Move Selection To Previous Marker -> LUNA: Move Selection To Previous Marker  [Markers: Go to previous marker/project start > Razor edit: Clear all areas > Item: Unselect (clear selection of) all items]
-KEY 5 9 40802 0	# Shift+Tab : Extend Selection To Next Transient -> Time selection: Extend time selection to next transient in items
+KEY 5 9 _1bdd3c2f35b778ac367173bfcb589880 0	# Shift+Tab : Extend Selection To Next Transient -> script luna_extend_selection_to_next_transient.lua  [extend razor area via Item navigation: Move cursor to next transient in items]
 KEY 13 76 40622 0	# Cmd+Shift+L : Loop Select -> Time selection: Move loop points to time selection
 KEY 5 221 _76372f6ae70342495f98647bb34897d0 0	# Shift+] : Extend Selection To Next Bar -> script luna_extend_selection_to_next_bar.lua  [extend razor area via Move edit cursor forward one measure]
 KEY 5 98 _76372f6ae70342495f98647bb34897d0 0	# Shift+Num2 : Extend Selection To Next Bar (numpad) -> script luna_extend_selection_to_next_bar.lua  [extend razor area via Move edit cursor forward one measure]
@@ -134,7 +135,8 @@ KEY 5 219 _705250128fa18c7721dc75648dd60f2f 0	# Shift+[ : Extend Selection To Pr
 KEY 5 97 _705250128fa18c7721dc75648dd60f2f 0	# Shift+Num1 : Extend Selection To Previous Bar (numpad) -> script luna_extend_selection_to_previous_bar.lua  [extend razor area via Move edit cursor back one measure]
 KEY 5 222 _5085c418d287dcb2cc58fe46c2f425c0 0	# Shift+' : Extend Selection To Next Clip Edge -> script luna_extend_selection_to_next_clip_edge.lua  [extend razor area via Item navigation: Move cursor right to nearest item edge]
 KEY 5 76 _0dd389efcda65c35a1d4df9b10eaf6ab 0	# Shift+L : Extend Selection To Previous Clip Edge -> script luna_extend_selection_to_previous_clip_edge.lua  [extend razor area via Item navigation: Move cursor left to nearest item edge]
-KEY 21 76 _7eefa1b2d1c9d0e36ed7d320d2dfe767 0	# Opt+Shift+L : Extend Selection To Previous Transient -> script luna_extend_selection_to_previous_transient.lua  [extend razor area via Item navigation: Move cursor to previous transient in items]
+KEY 21 9 _7eefa1b2d1c9d0e36ed7d320d2dfe767 0	# Opt+Shift+Tab : Extend Selection To Previous Transient -> script luna_extend_selection_to_previous_transient.lua  [extend razor area via Item navigation: Move cursor to previous transient in items]
+KEY 21 76 _7eefa1b2d1c9d0e36ed7d320d2dfe767 0	# Opt+Shift+L : Extend Selection To Previous Transient (Linux-safe alias) -> script luna_extend_selection_to_previous_transient.lua  [extend razor area via Item navigation: Move cursor to previous transient in items]
 KEY 53 222 _4ce00b027dbc682cfaf7c276a7cd257a 0	# Opt+Control+Shift+' : Extend Selection To Next Marker -> script luna_extend_selection_to_next_marker.lua  [extend razor area via Markers: Go to next marker/project end]
 KEY 53 76 _917d902d9cdbb442c97270ea2e608ec5 0	# Opt+Control+Shift+L : Extend Selection To Previous Marker -> script luna_extend_selection_to_previous_marker.lua  [extend razor area via Markers: Go to previous marker/project start]
 KEY 5 13 _68bcd3fa5c9154134bd13b973796404a 0	# Shift+Return : Extend Selection To Session Start -> script luna_extend_selection_to_session_start.lua  [extend razor area via Transport: Go to start of project]

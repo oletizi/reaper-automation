@@ -24,4 +24,34 @@ describe('renderRazorExtendScript', () => {
     expect(lua).toContain('Undo_BeginBlock')
     expect(lua).toContain('Undo_EndBlock("LUNA: Extend Fwd", -1)')
   })
+
+  it('does NOT touch item selection for a plain move (no selectItems)', () => {
+    expect(lua).not.toContain('SetMediaItemSelected')
+  })
+
+  it('selects items on the target tracks (and restores) when selectItems is set', () => {
+    // Transient moves (40375/40376) only act on selected items, so the extend
+    // must select them for the probe/move to work, then restore the prior selection.
+    const t = renderRazorExtendScript({ label: 'LUNA: Extend Transient', spec: 'luna.toml', move: 40375, moveName: 'next transient', selectItems: true })
+    expect(t).toContain('SetMediaItemSelected')
+    expect(t).toContain('CountSelectedMediaItems') // saves prior selection
+    expect(t).toContain('SelectAllMediaItems(0, false)') // clears before/after
+  })
+
+  it('restores the item selection BEFORE painting (restore clears the razor)', () => {
+    // SelectAllMediaItems(0,false) clears razor edits, so restoreItems must run
+    // before paint() or it wipes the area we just painted.
+    const t = renderRazorExtendScript({ label: 'x', spec: 's', move: 40375, moveName: 'tr', selectItems: true })
+    const restore = t.indexOf('restoreItems(__saved)')
+    const paint = t.indexOf('paint(new_start, new_end)')
+    expect(restore).toBeGreaterThanOrEqual(0)
+    expect(paint).toBeGreaterThanOrEqual(0)
+    expect(restore).toBeLessThan(paint)
+  })
+
+  it('reads the existing span BEFORE selecting items (selection clears the razor)', () => {
+    const t = renderRazorExtendScript({ label: 'x', spec: 's', move: 40375, moveName: 'tr', selectItems: true })
+    // Compare the CALL sites (not the function definitions).
+    expect(t.indexOf('sel_start, sel_end = readSpan()')).toBeLessThan(t.indexOf('__saved = selectTargetItems()'))
+  })
 })

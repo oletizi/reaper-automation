@@ -550,7 +550,9 @@ comment = "Plain move collapses the razor area: move cursor, clear all razor are
 [[binding]]
 luna = "Extend Selection To Next Transient"
 key = "Shift+Tab"
-action = 40802
+razor_extend = 40375
+select_items = true
+comment = "Shift is always a selection op: grow the 2D razor area forward to the next transient (Tab's move). Transient nav (40375) only acts on selected items, so select_items makes the extend select the target-track items, move, and restore -- otherwise the move goes nowhere and the area never grows. (Was action=40802, which extends the 1D time selection, not the razor area.)"
 
 [[binding]]
 luna = "Loop Select"
@@ -601,10 +603,17 @@ razor_extend = 41167
 
 [[binding]]
 luna = "Extend Selection To Previous Transient"
+key = "Opt+Shift+Tab"
+razor_extend = 40376
+select_items = true
+comment = "Shift+Opt+Tab: grow the 2D razor area backward to the previous transient (Opt+Tab's move). select_items for the same reason as Shift+Tab."
+
+[[binding]]
+luna = "Extend Selection To Previous Transient (Linux-safe alias)"
 key = "Opt+Shift+L"
 razor_extend = 40376
-comment = """LUNA also puts this on Alt+Shift+Tab, which GNOME intercepts. \
-Forward is Shift+Tab, which REAPER covers natively with 40802."""
+select_items = true
+comment = "Same as Opt+Shift+Tab. LUNA's native combo is Alt+Shift+Tab, which GNOME intercepts on Linux, so this keeps a Tab-free alias for the previous-transient extend."
 
 [[binding]]
 luna = "Extend Selection To Next Marker"

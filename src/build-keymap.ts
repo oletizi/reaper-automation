@@ -53,7 +53,7 @@ export function buildKeymap(
   const seenKeys = new Map<string, string>()
   const seenMacros = new Map<string, string>()
   const seenScripts = new Map<number, { fname: string; sid: string }>()
-  const seenRazorExtendScripts = new Map<number, { fname: string; sid: string }>()
+  const seenRazorExtendScripts = new Map<string, { fname: string; sid: string }>()
   const scripts = new Map<string, string>()
   let razorRepaintEntry: { fname: string; sid: string } | undefined
   let separateEntry: { fname: string; sid: string } | undefined
@@ -136,9 +136,11 @@ export function buildKeymap(
       stats.script++
     } else if (b.kind && 'razorExtend' in b.kind) {
       const move = b.kind.razorExtend
+      const selectItems = b.kind.selectItems ?? false
       const moveName = actions.byId(String(move))
       if (moveName === undefined) { errors.push(`${luna}: razor_extend references unknown action ${move}`); continue }
-      let entry = seenRazorExtendScripts.get(move)
+      const dedupKey = `${move}:${selectItems ? 1 : 0}`
+      let entry = seenRazorExtendScripts.get(dedupKey)
       if (!entry) {
         // NOTE: `fname` is derived from `base` the same way the `extend` branch above
         // derives its filename, but the two branches dedup through separate maps
@@ -152,10 +154,10 @@ export function buildKeymap(
         const label = `LUNA: ${base}`
         const fname = `luna_${slugify(base)}.lua`
         const sid = stableId(label)
-        scripts.set(fname, renderRazorExtendScript({ label, spec: mapping.meta.name, move, moveName }))
+        scripts.set(fname, renderRazorExtendScript({ label, spec: mapping.meta.name, move, moveName, selectItems }))
         scrLines.push(`SCR 4 ${section} "${sid}" "Custom: ${label}" ${SCRIPT_DIR}/${fname}`)
         entry = { fname, sid }
-        seenRazorExtendScripts.set(move, entry)
+        seenRazorExtendScripts.set(dedupKey, entry)
       }
       command = '_' + entry.sid
       desc = `script ${entry.fname}  [extend razor area via ${moveName}]`

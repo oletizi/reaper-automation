@@ -110,6 +110,13 @@ describe('razor kinds', () => {
     const m = parseMapping('[meta]\nname="x"\n[[binding]]\nluna="B"\nkey="A"\nrazor_extend=41042\n')
     expect(m.bindings[0].kind).toEqual({ razorExtend: 41042 })
   })
+  it('accepts razor_extend with select_items = true (for transient moves that need item selection)', () => {
+    const m = parseMapping('[meta]\nname="x"\n[[binding]]\nluna="B"\nkey="A"\nrazor_extend=40375\nselect_items=true\n')
+    expect(m.bindings[0].kind).toEqual({ razorExtend: 40375, selectItems: true })
+  })
+  it('rejects select_items with a non-true value', () => {
+    expect(() => parseMapping('[meta]\nname="x"\n[[binding]]\nluna="B"\nkey="A"\nrazor_extend=40375\nselect_items=false\n')).toThrow(MappingError)
+  })
   it('accepts razor_track = <int>', () => {
     const m = parseMapping('[meta]\nname="x"\n[[binding]]\nluna="B"\nkey="A"\nrazor_track=40297\n')
     expect(m.bindings[0].kind).toEqual({ razorTrack: 40297 })

@@ -5,7 +5,7 @@ export type BindingKind =
   | { action: number }
   | { macro: number[] }
   | { extend: number }
-  | { razorExtend: number }
+  | { razorExtend: number; selectItems?: boolean }
   | { razorTrack: number }
   | { razor: number }
   | { separate: true }
@@ -96,7 +96,14 @@ function validateBinding(raw: unknown, i: number): Binding {
     if (!Array.isArray(raw.macro)) throw new MappingError(`${where}.macro: expected array`)
     kinds.push({ macro: raw.macro.map((s, j) => asInt(s, `${where}.macro[${j}]`)) })
   }
-  if ('razor_extend' in raw) kinds.push({ razorExtend: asInt(raw.razor_extend, `${where}.razor_extend`) })
+  if ('razor_extend' in raw) {
+    const k: { razorExtend: number; selectItems?: boolean } = { razorExtend: asInt(raw.razor_extend, `${where}.razor_extend`) }
+    if ('select_items' in raw) {
+      if (raw.select_items !== true) throw new MappingError(`${where}.select_items: expected true`)
+      k.selectItems = true
+    }
+    kinds.push(k)
+  }
   if ('razor_track' in raw) kinds.push({ razorTrack: asInt(raw.razor_track, `${where}.razor_track`) })
   if ('razor' in raw) kinds.push({ razor: asInt(raw.razor, `${where}.razor`) })
   if ('separate' in raw) {
