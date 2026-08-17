@@ -8,6 +8,12 @@ describe('renderTabTransientScript', () => {
     expect(next).toContain('40375') // next transient
     expect(prev).toContain('40376') // previous transient
   })
+  it('logs the take type of each selected item (audio vs MIDI vs empty)', () => {
+    // The transient actions only work on audio; if the items are MIDI/empty the
+    // nav can only ever hit edges. The log must reveal which, to diagnose.
+    expect(next).toContain('TakeIsMIDI')
+    expect(next).toContain('types=')
+  })
   it('selects target-track items, navigates, and restores the prior selection', () => {
     expect(next).toContain('CountSelectedTracks')
     expect(next).toContain('CountSelectedMediaItems') // save selection

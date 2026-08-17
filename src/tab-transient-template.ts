@@ -43,7 +43,17 @@ local function tabTransient()
       picked = picked + 1
       local s = reaper.GetMediaItemInfo_Value(it, "D_POSITION")
       local len = reaper.GetMediaItemInfo_Value(it, "D_LENGTH")
-      bounds[#bounds + 1] = { s = s, e = s + len }
+      local take = reaper.GetActiveTake(it)
+      local ty
+      if not take then
+        ty = "empty"
+      elseif reaper.TakeIsMIDI(take) then
+        ty = "midi"
+      else
+        local src = reaper.GetMediaItemTake_Source(take)
+        ty = src and reaper.GetMediaSourceType(src, "") or "audio?"
+      end
+      bounds[#bounds + 1] = { s = s, e = s + len, ty = ty }
     end
   end
 
@@ -71,8 +81,13 @@ for _, b in ipairs(bounds) do
   if math.abs(after - b.e) < EDGE_EPS then landed = "item_end"; break end
 end
 local blist = {}
-for _, b in ipairs(bounds) do blist[#blist + 1] = string.format("%.3f..%.3f", b.s, b.e) end
-_log(string.format("tracks=%d items=%d cur=%.3f->%.3f moved=%s landed=%s bounds=[%s]",
-  ntracks, npicked, before, after, tostring(math.abs(after - before) > 1e-9), landed, table.concat(blist, ",")))
+local tlist = {}
+for _, b in ipairs(bounds) do
+  blist[#blist + 1] = string.format("%.3f..%.3f", b.s, b.e)
+  tlist[#tlist + 1] = b.ty
+end
+_log(string.format("tracks=%d items=%d cur=%.3f->%.3f moved=%s landed=%s types=[%s] bounds=[%s]",
+  ntracks, npicked, before, after, tostring(math.abs(after - before) > 1e-9), landed,
+  table.concat(tlist, ","), table.concat(blist, ",")))
 `
 }
