@@ -105,17 +105,6 @@ describe('parseMapping', () => {
   })
 })
 
-describe('area kind', () => {
-  it('accepts area = <int> and area = true', () => {
-    const m = parseMapping('[meta]\nname="x"\n[[binding]]\nluna="Sep"\nkey="B"\narea=true\n[[binding]]\nluna="Del"\nkey="Delete"\narea=40006\n')
-    expect(m.bindings[0].kind).toEqual({ area: true })
-    expect(m.bindings[1].kind).toEqual({ area: 40006 })
-  })
-  it('rejects area with another kind key', () => {
-    expect(() => parseMapping('[meta]\nname="x"\n[[binding]]\nluna="B"\nkey="B"\narea=true\naction=1\n')).toThrow()
-  })
-})
-
 describe('razor kinds', () => {
   it('accepts razor_extend = <int>', () => {
     const m = parseMapping('[meta]\nname="x"\n[[binding]]\nluna="B"\nkey="A"\nrazor_extend=41042\n')
@@ -136,7 +125,7 @@ describe('razor kinds', () => {
     expect(() => parseMapping('[meta]\nname="x"\n[[binding]]\nluna="B"\nkey="A"\nrazor_track=40297\nextend=41042\n')).toThrow(MappingError)
   })
   it('rejects razor combined with another kind', () => {
-    expect(() => parseMapping('[meta]\nname="x"\n[[binding]]\nluna="B"\nkey="A"\nrazor=40006\narea=true\n')).toThrow(MappingError)
+    expect(() => parseMapping('[meta]\nname="x"\n[[binding]]\nluna="B"\nkey="A"\nrazor=40006\naction=1\n')).toThrow(MappingError)
   })
   it('rejects razor_extend combined with razor_track', () => {
     expect(() => parseMapping('[meta]\nname="x"\n[[binding]]\nluna="B"\nkey="A"\nrazor_extend=41042\nrazor_track=40297\n')).toThrow(MappingError)

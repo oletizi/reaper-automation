@@ -4,7 +4,6 @@ import { stableId, slugify } from '@/ids'
 import type { ActionIndex } from '@/actions'
 import type { Mapping } from '@/mapping'
 import { renderExtendScript } from '@/extend-template'
-import { renderSelectAreaScript } from '@/select-area-template'
 import { renderRazorExtendScript } from '@/razor-extend-template'
 import { renderRazorRepaintScript } from '@/razor-repaint-template'
 
@@ -37,20 +36,7 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
   const seenScripts = new Map<number, { fname: string; sid: string }>()
   const seenRazorExtendScripts = new Map<number, { fname: string; sid: string }>()
   const scripts = new Map<string, string>()
-  let selectAreaEntry: { fname: string; sid: string } | undefined
   let razorRepaintEntry: { fname: string; sid: string } | undefined
-
-  function ensureSelectArea(): { fname: string; sid: string } {
-    if (!selectAreaEntry) {
-      const label = 'LUNA: Select Area'
-      const fname = 'luna_select_area.lua'
-      const sid = stableId(label)
-      scripts.set(fname, renderSelectAreaScript({ label, spec: mapping.meta.name }))
-      scrLines.push(`SCR 4 ${section} "${sid}" "Custom: ${label}" ${SCRIPT_DIR}/${fname}`)
-      selectAreaEntry = { fname, sid }
-    }
-    return selectAreaEntry
-  }
 
   function ensureRazorRepaint(): { fname: string; sid: string } {
     if (!razorRepaintEntry) {
@@ -114,29 +100,6 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
       command = '_' + entry.sid
       desc = `script ${entry.fname}  [extend selection via ${moveName}]`
       stats.script++
-    } else if (b.kind && 'area' in b.kind) {
-      const selectArea = ensureSelectArea()
-      if (b.kind.area === true) {
-        // References the shared select-area SCR directly -- counts as a script binding.
-        command = '_' + selectArea.sid
-        desc = `script ${selectArea.fname}  [materialize edit area]`
-        stats.script++
-      } else {
-        // Emits an ACT custom action chaining select-area + the target op -- counts as a macro binding.
-        const opId = String(b.kind.area)
-        const opName = actions.byId(opId)
-        if (opName === undefined) { errors.push(`${luna}: area references unknown action ${opId}`); continue }
-        const label = b.label ?? `LUNA: ${luna}`
-        let mid = seenMacros.get(label)
-        if (mid === undefined) {
-          mid = stableId(label)
-          seenMacros.set(label, mid)
-          actLines.push(`ACT 0 ${section} "${mid}" "Custom: ${label}" _${selectArea.sid} ${opId}`)
-        }
-        command = '_' + mid
-        desc = `${label}  [select area > ${opName}]`
-        stats.macro++
-      }
     } else if (b.kind && 'razorExtend' in b.kind) {
       const move = b.kind.razorExtend
       const moveName = actions.byId(String(move))

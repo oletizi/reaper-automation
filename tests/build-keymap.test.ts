@@ -52,23 +52,6 @@ describe('buildKeymap strict validation', () => {
   })
 })
 
-describe('area kind emission', () => {
-  const m = parseMapping('[meta]\nname="x"\n[[binding]]\nluna="Sep"\nkey="B"\narea=true\n[[binding]]\nluna="Del"\nkey="Delete"\narea=40006\n')
-  const r = buildKeymap(m, idx, 'macos')
-  it('emits the shared select-area SCR exactly once', () => {
-    const scr = r.keymapText.split('\n').filter((l) => l.startsWith('SCR ') && l.includes('luna_select_area.lua'))
-    expect(scr).toHaveLength(1)
-    expect(r.scripts.has('luna_select_area.lua')).toBe(true)
-  })
-  it('area=true binds the key directly to the script', () => {
-    // B (keycode 66) -> _<selectArea id>
-    expect(r.keymapText).toMatch(/^KEY 1 66 _[0-9a-f]{32} 0/m)
-  })
-  it('area=<n> emits an ACT [_selectArea, n] and binds the key to it', () => {
-    expect(r.keymapText).toMatch(/^ACT 0 0 "[0-9a-f]{32}" "Custom: LUNA: Del" _[0-9a-f]{32} 40006$/m)
-  })
-})
-
 describe('razor_extend kind emission', () => {
   it('emits one SCR per distinct move, deduped', () => {
     const m = parseMapping(
