@@ -105,6 +105,69 @@ pick **LUNA (Pro Tools)**.
 Importing only overrides the combos the file names; REAPER's other defaults stay
 put. To get back to stock, use Key map → Reset to factory defaults.
 
+## Refresh workflow (iterating on the mapping)
+
+`build` + `install` are the two low-level steps. For day-to-day iteration use the
+single verb that chains them and checks its own work:
+
+```sh
+pnpm ra refresh
+```
+
+`refresh` builds (auto-detecting the ReaTooled section), installs, then
+**verifies the installed bytes match the build** — so "it refreshed" is never a
+lie. It prints one machine-readable line, `BINDINGS: changed` or
+`BINDINGS: unchanged`, that tells you whether a re-import is needed:
+
+- **Script bodies changed only** → `BINDINGS: unchanged`. REAPER re-reads a
+  ReaScript from disk on every run, so the change is **already live** — nothing
+  else to do.
+- **A key binding changed** (new/moved key) → `BINDINGS: changed`. REAPER only
+  reads `reaper-kb.ini` at startup, so re-import once: Actions → Show action
+  list → Key map → Import → **LUNA (Pro Tools)**.
+
+`refresh` also **prunes** installed scripts the current build no longer emits, so
+a removed feature can't leave a stale script firing behind your back.
+
+### The in-REAPER Reload button
+
+There's a generated action, **`Custom: LUNA: Reload`**, that runs `pnpm ra
+refresh` from *inside* REAPER — no terminal, no import dance for the common case.
+It shells out through a login shell with the node/pnpm bin dir (detected at build
+time) baked onto `PATH`, because a macOS GUI app doesn't inherit your interactive
+shell's `PATH`. After a refresh it shows a message box telling you whether
+scripts are live (bindings unchanged) or a one-time re-import is needed.
+
+One-time setup: after the first import, open Actions → Show action list, find
+**LUNA: Reload**, and bind it to a key or drop it on a toolbar. From then on it's
+your single reload button.
+
+### `doctor` — is what's running what I built?
+
+```sh
+pnpm ra doctor
+```
+
+Reports the version chain **source (git) → build → installed → last-fired** (the
+last is read from the debug log, below) and exits non-zero on drift — e.g. you
+edited a template but never rebuilt, or built but never installed. Every
+generated artifact carries a short git-sha stamp so these four can be compared.
+
+### Debug log
+
+Every generated script appends one capped, timestamped line to
+`~/Library/Application Support/REAPER/luna-debug.log` (Linux: the resource-dir
+equivalent), tagged with the version stamp of the script that fired:
+
+```
+2026-08-17T12:41:03  tab_transient_next  sha=101d486  tracks=3 items=12 cur=4.000->4.512 moved=true
+```
+
+This is the record for diagnosing "I pressed the key and nothing happened": it
+shows which script fired, at which version, what state it saw, and what it did.
+The log self-trims to its last ~1MB, and logging is pcall-guarded so it can never
+break the action it observes.
+
 ## Extend Selection
 
 LUNA's "hold Shift while moving the transport" — `Shift+]` moves forward a bar
