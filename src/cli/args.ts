@@ -92,3 +92,27 @@ export function parseWm(argv: string[]) {
   return { mapping: positionals[0], apply: values.apply ?? false, revert: values.revert ?? false }
 }
 
+export function parsePrefsCmd(argv: string[]) {
+  const { values } = parseArgs({
+    args: argv,
+    options: {
+      apply: { type: 'boolean' },
+      snapshot: { type: 'boolean' },
+      changed: { type: 'boolean' },
+      prefs: { type: 'string' },
+      ini: { type: 'string' },
+      'snapshot-path': { type: 'string' },
+      'resource-dir': { type: 'string' },
+    },
+  })
+  return {
+    apply: values.apply ?? false,
+    snapshotMode: values.snapshot ?? false,
+    changed: values.changed ?? false,
+    prefs: values.prefs,
+    ini: values.ini,
+    snapshot: values['snapshot-path'],
+    resourceDir: values['resource-dir'],
+  }
+}
+

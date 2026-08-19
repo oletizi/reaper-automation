@@ -43,7 +43,22 @@ A binding in the table is one of three kinds:
 
 ```sh
 just bootstrap     # or: pnpm install
+just setup         # preview everything this machine needs
+just setup apply   # perform it
 ```
+
+`just setup` is the one button: preferences (`ra prefs`), desktop key grabs
+(`ra wm`), and the keymap (`ra refresh`), in that order. Preview mode changes
+nothing — it reports the pending preference changes, the combos the desktop is
+swallowing, and `ra doctor`'s source → build → installed drift. Apply mode
+refuses to start if REAPER is running, since it rewrites `reaper.ini` on exit.
+
+Run it from a desktop-session terminal. `ra wm` needs `XDG_CURRENT_DESKTOP` to
+resolve schema defaults exactly; without it, it consults every installed profile
+and over-reports (see [docs/linux-key-grabs.md](docs/linux-key-grabs.md)).
+
+One manual step remains and no tool can remove it: REAPER reads `reaper-kb.ini`
+only at startup, so a changed keymap needs a one-time import.
 
 There's a `justfile` wrapping the CLI, so `just` alone lists every verb and
 `just refresh` / `just doctor` / `just check` do the obvious things. It's a thin
@@ -320,6 +335,29 @@ Mutter is supposed to pick the change up live, but an existing X11 grab can
 outlive it. If the desktop still swallows the combo afterwards, restart the
 shell: on X11 press **Alt+F2**, type `r`, Enter (in place, windows survive); on
 Wayland log out and back in, since no in-place restart exists.
+
+## Preferences (`ra prefs`)
+
+Bring a machine's REAPER preferences to the set declared in
+`prefs/reaper.toml`:
+
+```sh
+pnpm ra prefs             # report: what matches, what differs (dry run)
+pnpm ra prefs --apply     # write them (refuses while REAPER is running)
+```
+
+Values are **captured, never reverse-engineered** — most REAPER ini keys are
+undocumented bitfields (see [CONSTITUTION.md](CONSTITUTION.md), Principle 6). To
+add a setting:
+
+```sh
+pnpm ra prefs --snapshot   # 1. record the current reaper.ini
+                           # 2. change it in REAPER's Preferences, then QUIT REAPER
+pnpm ra prefs --changed    # 3. prints the delta as a [[pref]] block to paste
+```
+
+Editing is line-precise (every other byte of `reaper.ini` is untouched), takes a
+`.ra-backup` first, and verifies by re-reading the file afterwards.
 
 ## Keybindings reference
 

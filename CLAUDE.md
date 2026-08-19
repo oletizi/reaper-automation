@@ -36,10 +36,13 @@ re-import afterwards.
 ```sh
 just               # list the verbs
 just bootstrap     # first time (or if node_modules is missing)
+just setup         # the one button: prefs + desktop key grabs + keymap (preview)
+just setup apply   # ...and perform it (refuses while REAPER is running)
 just refresh       # build + install + verify, and say if a re-import is needed
 just doctor        # is what's running what I built?
 just check         # tests + typecheck + KEYBINDINGS.md drift check
 just wm            # what the Linux desktop grabs before REAPER sees it
+just prefs         # declared REAPER preferences vs this machine's
 ```
 
 On a new Linux machine, run `just wm --apply` once: GNOME grabs `Alt+Tab` and
