@@ -44,7 +44,11 @@ costs nothing, since GNOME already binds `Super+Tab` to the same action.
 swallows a freed combo, work through the checklist in
 [docs/linux-key-grabs.md](docs/linux-key-grabs.md) -- and verify config changes
 with `dconf read`, never `gsettings get`, which can report a write that GNOME
-never saw.
+never saw. And remember a GSettings default can differ per desktop profile: read
+defaults as
+`GSETTINGS_BACKEND=memory XDG_CURRENT_DESKTOP=<profile> gsettings get ...`,
+since an agent shell usually has no `XDG_CURRENT_DESKTOP` and will resolve a
+different value than GNOME does.
 
 `mappings/luna.toml` is the thing you edit; everything else in `build/` is
 generated. `KEYBINDINGS.md` is generated too (`just docs`) — never hand-edit it.

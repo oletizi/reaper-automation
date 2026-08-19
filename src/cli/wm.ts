@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process'
-import { readFileSync } from 'node:fs'
+import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { parseWm } from '@/cli/args'
 import { repoRoot } from '@/build-run'
@@ -11,6 +11,8 @@ import {
   planFreeing,
   formatGsettingsList,
   dconfPathFor,
+  parseOverrideProfiles,
+  unionAccels,
   chooseSessionType,
   restartAdvice,
   type SessionType,
@@ -24,19 +26,60 @@ function dconf(args: string[]): string {
   return execFileSync('dconf', args, { encoding: 'utf8' }).trim()
 }
 
+const SCHEMA_DIR = '/usr/share/glib-2.0/schemas'
+
 /**
- * The effective value: dconf's if the key is set there, otherwise the schema
- * default via gsettings. Reading dconf first matters for the same reason
- * writing through it does -- gsettings may be bound to a backend GNOME ignores.
+ * Desktop profiles whose schema defaults we must consult. The session's own
+ * XDG_CURRENT_DESKTOP when we have it; otherwise every profile any installed
+ * override names for this schema, so a profile-specific default cannot hide.
  */
-function readAccels(key: string): string[] {
+function desktopProfiles(): { profiles: string[]; guessed: boolean } {
+  const env = (process.env.XDG_CURRENT_DESKTOP ?? '').trim()
+  if (env) return { profiles: [env], guessed: false }
+  const found = new Set<string>()
+  try {
+    for (const f of readdirSync(SCHEMA_DIR)) {
+      if (!f.endsWith('.override')) continue
+      for (const p of parseOverrideProfiles(readFileSync(`${SCHEMA_DIR}/${f}`, 'utf8'), GNOME_WM_SCHEMA)) found.add(p)
+    }
+  } catch {
+    // no schema dir: fall back to the base defaults alone
+  }
+  return { profiles: ['', ...found], guessed: true }
+}
+
+/**
+ * Schema defaults, read with the memory backend so a gsettings instance bound
+ * to some other backend cannot feed us a stale value it once accepted.
+ */
+function readDefaults(key: string, profiles: string[]): string[] {
+  return unionAccels(profiles.map((p) => {
+    try {
+      const out = execFileSync('gsettings', ['get', GNOME_WM_SCHEMA, key], {
+        encoding: 'utf8',
+        env: { ...process.env, GSETTINGS_BACKEND: 'memory', XDG_CURRENT_DESKTOP: p },
+      }).trim()
+      return parseGsettingsList(out)
+    } catch {
+      return []
+    }
+  }))
+}
+
+/**
+ * The effective value GNOME acts on: the dconf user value when the key is set
+ * there, otherwise the schema default for this desktop profile. Never
+ * `gsettings get` against the ambient backend -- it can report a value GNOME
+ * has never seen.
+ */
+function readAccels(key: string, profiles: string[]): string[] {
   try {
     const raw = dconf(['read', dconfPathFor(GNOME_WM_SCHEMA, key)])
     if (raw) return parseGsettingsList(raw)
   } catch {
-    // dconf absent: fall through to gsettings
+    // dconf absent: fall through to defaults
   }
-  return parseGsettingsList(gsettings(['get', GNOME_WM_SCHEMA, key]))
+  return readDefaults(key, profiles)
 }
 
 /** Write, then read back through dconf and refuse to claim success on a mismatch. */
@@ -100,9 +143,14 @@ export function cmdWm(argv: string[]): number {
   }
 
   const keys = gsettings(['list-keys', GNOME_WM_SCHEMA]).split('\n').map((s) => s.trim()).filter(Boolean).sort()
+  const { profiles, guessed } = desktopProfiles()
+  if (guessed) {
+    console.log(`wm: XDG_CURRENT_DESKTOP is unset; consulting profiles [${profiles.map((p) => p || '(base)').join(', ')}]`)
+    console.log('    because a schema default can differ per desktop profile.')
+  }
   const current = new Map<string, string[]>()
   for (const k of keys) {
-    const accels = readAccels(k)
+    const accels = readAccels(k, profiles)
     if (accels.length) current.set(k, accels)
   }
 

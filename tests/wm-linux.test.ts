@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
+  parseOverrideProfiles,
+  unionAccels,
   dconfPathFor,
   chooseSessionType,
   restartAdvice,
@@ -144,6 +146,38 @@ describe('dconfPathFor', () => {
   it('keeps hyphenated keys intact', () => {
     expect(dconfPathFor('org.gnome.desktop.wm.keybindings', 'switch-applications-backward'))
       .toBe('/org/gnome/desktop/wm/keybindings/switch-applications-backward')
+  })
+})
+
+describe('parseOverrideProfiles', () => {
+  const override = [
+    '[org.gnome.desktop.wm.keybindings]',
+    'maximize=@as []',
+    '[org.gnome.desktop.wm.keybindings:ubuntu]',
+    "switch-windows=['<Alt>Tab']",
+    '[org.gnome.settings-daemon.plugins.media-keys:Regolith]',
+    "screensaver=['']",
+  ].join('\n')
+
+  it('finds the profiles that redefine this schema', () => {
+    expect(parseOverrideProfiles(override, 'org.gnome.desktop.wm.keybindings')).toEqual(['ubuntu'])
+  })
+  it('ignores profiles belonging to a different schema', () => {
+    expect(parseOverrideProfiles(override, 'org.gnome.desktop.interface')).toEqual([])
+  })
+  it('does not treat the unprofiled header as a profile', () => {
+    expect(parseOverrideProfiles('[org.gnome.desktop.wm.keybindings]\nmaximize=@as []', 'org.gnome.desktop.wm.keybindings')).toEqual([])
+  })
+})
+
+describe('unionAccels', () => {
+  it('merges profile-specific defaults without duplicating', () => {
+    // The real case: switch-windows is [] in the base profile and ['<Alt>Tab']
+    // under `ubuntu`. Consulting only the base profile hides the grab entirely.
+    expect(unionAccels([[], ['<Alt>Tab'], ['<Alt>Tab', '<Super>Tab']])).toEqual(['<Alt>Tab', '<Super>Tab'])
+  })
+  it('is empty when every profile is empty', () => {
+    expect(unionAccels([[], []])).toEqual([])
   })
 })
 

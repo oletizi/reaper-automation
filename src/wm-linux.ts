@@ -199,3 +199,30 @@ export function dconfPathFor(schema: string, key: string): string {
   return '/' + schema.split('.').join('/') + '/' + key
 }
 
+/**
+ * Desktop profiles named in a GSettings vendor-override file.
+ *
+ * A schema default can differ per desktop profile: a header of the form
+ * `[org.gnome.desktop.wm.keybindings:ubuntu]` applies only when
+ * XDG_CURRENT_DESKTOP names that profile. Reading defaults without the right
+ * profile silently yields a DIFFERENT value -- on Ubuntu, switch-windows is
+ * `['<Alt>Tab']` under the `ubuntu` profile and `[]` without it. That is not a
+ * hypothetical: it is what made Alt+Tab look unbound while GNOME was grabbing
+ * it. See docs/linux-key-grabs.md.
+ */
+export function parseOverrideProfiles(text: string, schema: string): string[] {
+  const out = new Set<string>()
+  for (const m of text.matchAll(/^\[([^\]:]+):([^\]]+)\]/gm)) {
+    if (m[1] === schema) out.add(m[2])
+  }
+  return [...out]
+}
+
+/** Union of accels across however many profiles had to be consulted. */
+export function unionAccels(lists: string[][]): string[] {
+  const seen = new Set<string>()
+  const out: string[] = []
+  for (const l of lists) for (const a of l) if (!seen.has(a)) { seen.add(a); out.push(a) }
+  return out
+}
+

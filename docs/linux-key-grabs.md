@@ -7,6 +7,39 @@ LUNA's reverse tab-to-transient did nothing. Date: 2026-08-19.
 
 ## What it turned out to be
 
+**Two independent faults, either of which alone would have hidden the other.**
+
+### Fault 1 — the grab was in a profile-specific schema default
+
+`Alt+Tab` was held by **`switch-windows`**, not `switch-applications`, and it
+was never a user setting at all — it was the *schema default under the `ubuntu`
+desktop profile*:
+
+```sh
+XDG_CURRENT_DESKTOP=''             gsettings get …wm.keybindings switch-windows  # @as []
+XDG_CURRENT_DESKTOP='ubuntu:GNOME' gsettings get …wm.keybindings switch-windows  # ['<Alt>Tab']
+```
+
+A vendor override can carry a `[schema:profile]` header that applies only when
+`XDG_CURRENT_DESKTOP` names that profile. GNOME Shell runs as `ubuntu:GNOME` and
+saw `['<Alt>Tab']`. A shell with an empty `XDG_CURRENT_DESKTOP` — which is what
+an agent or a cron job or a systemd unit gets — resolves the base default and
+sees `[]`.
+
+This is why every sweep reported "nothing binds Alt+Tab" while GNOME was
+demonstrably grabbing it, and why `dconf dump` couldn't help: a schema default
+is not in dconf at all.
+
+The tell, in hindsight: setting `switch-applications` to `['<Alt>F12']` left
+**both** Alt+F12 and Alt+Tab opening the switcher. One action cannot have two
+accels, so a second action had to be involved.
+
+Fix: read defaults with `GSETTINGS_BACKEND=memory` under the session's real
+profile, and where `XDG_CURRENT_DESKTOP` is unavailable, consult every profile
+any installed `.override` names for the schema and take the union.
+
+### Fault 2 — the writes were never reaching GNOME
+
 `gsettings set` was writing to a backend that was not dconf, and **GNOME reads
 dconf**. The write reported success. `gsettings get` read the new value back
 correctly. GNOME Shell never saw any of it. Every `ra wm --apply` was a silent
@@ -26,6 +59,14 @@ matches what the compositor acts on.
 The fix, now in `ra wm`: write with `dconf write`, read back with `dconf read`,
 and refuse to report success on a mismatch. Reads prefer dconf and fall back to
 the gsettings schema default only where the key is genuinely unset.
+
+### Bonus finding
+
+Reading defaults across profiles surfaced a second collision nobody had noticed:
+`Super+Up` / `Super+Down` (GNOME **maximize** / **unmaximize**) shadow LUNA's
+Increase/Decrease Selected Track Heights. Unlike the Tab case this is not a
+`Shift+<nav>` selection gesture, so Principle 5 does not settle it — it is an
+open judgement call.
 
 ## The wrong turns, and what would have caught them sooner
 
@@ -53,7 +94,13 @@ independent evidence.
 **"Something else must be grabbing it."** An exhaustive sweep of every schema
 found nothing binding `<Alt>Tab`, which felt like a dead end. It was actually
 the strongest clue available: config clean + behavior unchanged means the config
-being read is not the config in force.
+being read is not the config in force. Both faults were exactly that, and the
+sweep was repeated three times without ever questioning whether the *reader*
+was faithful.
+
+**"The switcher is the app switcher, so it must be `switch-applications`."**
+The overlay looks identical for `switch-windows`. Reasoning from what the UI
+looked like, rather than checking which action was bound, cost several rounds.
 
 ## The general lesson
 
@@ -78,6 +125,10 @@ somewhere else. See CONSTITUTION.md, Principle 2.
    that script, means the key never arrived.
 3. **Is the desktop swallowing it?** `ra wm` reports every combo the desktop
    grabs that we also bind.
-4. **Did freeing it actually take?** `dconf read <path>` — not `gsettings get`.
+4. **Did freeing it actually take?** `dconf read <path>` — not `gsettings get`,
+   which may be bound to a backend GNOME never reads.
+   And check the *default* too, under the right profile:
+   `GSETTINGS_BACKEND=memory XDG_CURRENT_DESKTOP=ubuntu:GNOME gsettings get <schema> <key>`.
+   A key absent from dconf is not unbound — it is at its profile default.
 5. **Does the compositor need restarting?** X11: Alt+F2, `r`. Wayland: log out.
    Only after step 4 confirms the value really changed.
