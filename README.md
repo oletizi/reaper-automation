@@ -34,8 +34,16 @@ A binding in the table is one of three kinds:
 ## Setup
 
 ```sh
-pnpm install
+just bootstrap     # or: pnpm install
 ```
+
+There's a `justfile` wrapping the CLI, so `just` alone lists every verb and
+`just refresh` / `just doctor` / `just check` do the obvious things. It's a thin
+convenience layer: it installs dependencies if they're missing, fails loud with
+install instructions if `pnpm` isn't on `PATH`, and delegates everything else
+straight to `ra`. Host detection, section detection and artifact naming live in
+the TypeScript, not in the justfile. `just` is optional — every verb below works
+as a plain `pnpm ra ...` invocation.
 
 The one runtime dependency is `smol-toml` — Node has no stdlib TOML parser, so
 this is no longer "nothing to install." Everything else (`tsx`, `typescript`,
@@ -44,8 +52,13 @@ this is no longer "nothing to install." Everything else (`tsx`, `typescript`,
 ## Build
 
 ```sh
-pnpm ra build mappings/luna.toml -o build/luna-macos.ReaperKeyMap   # --target defaults to host OS
+pnpm ra build          # mapping, output path and --target all default to the host
 ```
+
+The mapping defaults to `mappings/luna.toml` and the output to
+`build/luna-<host>.ReaperKeyMap`, both resolved from the repo root, so the verb
+works from any directory. Pass `<mapping>` / `-o` / `--target macos|linux` to
+override any of them.
 
 The build fails rather than emitting a dead key if a command ID doesn't exist
 or two bindings collide on the same combo — nothing is written on error.
@@ -56,7 +69,7 @@ By default the keymap is emitted into REAPER's stock Main key section (`0`).
 **On a machine running ReaTooled, build with `--section 16`:**
 
 ```sh
-pnpm ra build mappings/luna.toml -o build/luna.ReaperKeyMap --section 16
+pnpm ra build --section 16
 ```
 
 ReaTooled keeps its ~399 Main bindings in section `16`, and section 16 takes
@@ -84,6 +97,10 @@ These are two separate axes and never collapse into one value:
 ```sh
 pnpm ra install
 ```
+
+With no `--keymap`, `install` stages the artifact built **for this host** —
+`build/luna-macos.ReaperKeyMap` on macOS, `build/luna-linux.ReaperKeyMap` on
+Linux — the same file `build`, `refresh` and `doctor` name.
 
 **Always build before you install.** `build/` is a generated, gitignored
 staging directory — it's not committed, and its contents are machine-specific
