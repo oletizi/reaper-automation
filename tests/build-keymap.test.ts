@@ -151,3 +151,35 @@ describe('separate kind emission', () => {
   })
 })
 
+describe('razor_slice kind emission', () => {
+  it('splits at the razor before selecting, so the op is bound by the area not the clip', () => {
+    // CONSTITUTION.md Principle 1: an area covering part of a clip must not
+    // widen the op to the whole clip. 40061 splits at the area edges first, so
+    // 42957 then selects exactly the pieces lying inside it.
+    const m = parseMapping('[meta]\nname="x"\n[[binding]]\nluna="Mute"\nkey="B"\nrazor_slice=40175\n')
+    const r = buildKeymap(m, idx, 'macos')
+    const act = r.keymapText.split('\n').find((l) => l.startsWith('ACT ') && l.includes('40175'))
+    expect(act).toBeDefined()
+    expect(act).toContain('40061 42957 40175')
+  })
+
+  it('describes the chain in the emitted comment', () => {
+    const m = parseMapping('[meta]\nname="x"\n[[binding]]\nluna="Mute"\nkey="B"\nrazor_slice=40175\n')
+    const r = buildKeymap(m, idx, 'macos')
+    expect(r.keymapText).toContain('[split at razor > select razor items >')
+  })
+
+  it('rejects an unknown action id rather than emitting a dead key', () => {
+    const m = parseMapping('[meta]\nname="x"\n[[binding]]\nluna="Mute"\nkey="B"\nrazor_slice=99999999\n')
+    expect(() => buildKeymap(m, idx, 'macos')).toThrow(/unknown/)
+  })
+
+  it('is distinct from razor, which stays whole-clip for structural ops', () => {
+    const m = parseMapping('[meta]\nname="x"\n[[binding]]\nluna="Heal"\nkey="B"\nrazor=40548\n')
+    const r = buildKeymap(m, idx, 'macos')
+    const act = r.keymapText.split('\n').find((l) => l.startsWith('ACT ') && l.includes('40548'))
+    expect(act).not.toContain('40061')
+    expect(act).toContain('42957 40548')
+  })
+})
+

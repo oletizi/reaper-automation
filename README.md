@@ -3,6 +3,12 @@
 Making REAPER's keyboard shortcuts conform to Universal Audio's LUNA — which in
 turn inherits most of its key layout from Pro Tools.
 
+The visible goal is the key layout. The actual one is making Pro Tools' **2D
+edit area** — a time span across a set of tracks, acted on as a unit regardless
+of where clips happen to begin and end — behave like a first-class concept in a
+DAW that doesn't have one. See [CONSTITUTION.md](CONSTITUTION.md); it governs
+every design decision here.
+
 The mapping lives in a plain TOML table. A generator turns it into a
 `.ReaperKeyMap` file, validating every command ID against an action list dumped
 out of REAPER itself. Edit the table, rebuild, re-import, iterate.
@@ -30,6 +36,8 @@ A binding in the table is one of three kinds:
 | `action = 40044` | a plain `KEY` line pointing at a native REAPER action |
 | `macro = [40296, 41325]` | an `ACT` custom action running those steps in order |
 | `extend = 41042` | a generated ReaScript (`SCR`) — see Extend Selection below |
+| `razor = 40548` | an `ACT` that selects the area's items, then acts — whole-clip |
+| `razor_slice = 40175` | an `ACT` that **splits at the area edges first**, then acts — area-scoped |
 
 ## Setup
 
@@ -185,6 +193,23 @@ shows which script fired, at which version, what state it saw, and what it did.
 The log self-trims to its last ~1MB, and logging is pcall-guarded so it can never
 break the action it observes.
 
+### `razor` vs. `razor_slice`
+
+Both wrap an operation that isn't natively razor-aware, and the difference is
+what happens when the area covers only *part* of a clip:
+
+- `razor_slice = <id>` → `40061 42957 <id>` — split at the area edges, select
+  the pieces that lie inside, then act. The operation is bound by the area, not
+  by the clip. This is the default choice; see
+  [CONSTITUTION.md](CONSTITUTION.md), Principle 1.
+- `razor = <id>` → `42957 <id>` — select the area's items and act on them
+  whole. Correct only for operations that are inherently whole-clip, where
+  splitting first would be meaningless: Heal Separation, Consolidate, the
+  cursor-relative fades and trims.
+
+Delete (`40006`) and Cut (`40699`) need neither wrapper — they act on the razor
+area natively, verified on REAPER 7.78.
+
 ## Extend Selection
 
 LUNA's "hold Shift while moving the transport" — `Shift+]` moves forward a bar
@@ -268,6 +293,28 @@ from independent track- and time-selection state rather than a razor edit).
 reference for these bindings — the byte-for-byte TS build fixture
 (`tests/fixtures/luna-macos.tsbuild.ReaperKeyMap`) is the regression baseline
 going forward.
+
+## Keybindings reference
+
+[KEYBINDINGS.md](KEYBINDINGS.md) lists every combo this project binds, with both
+platform labels and the real action names each one resolves to. It is
+**generated** from `mappings/luna.toml`:
+
+```sh
+pnpm ra docs            # regenerate
+pnpm ra docs --check    # fail if it has drifted (part of `just check`)
+```
+
+Don't hand-edit it — a second hand-maintained copy of the mapping table is the
+one artifact here that could silently stop describing the keymap.
+
+### REAPER's own defaults
+
+[docs/reaper-default-shortcuts.md](docs/reaper-default-shortcuts.md) is a
+reference copy of REAPER's stock bindings with a column marking which ones this
+keymap displaces — so a proposed binding can be checked against what it would
+override instead of guessed at. It's third-party and partial; the authoritative
+check is REAPER's own action list on the machine in question.
 
 ## Looking up actions
 

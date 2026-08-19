@@ -141,3 +141,21 @@ describe('razor kinds', () => {
     expect(() => parseMapping('[meta]\nname="x"\n[[binding]]\nluna="B"\nkey="A"\nrazor=1.5\n')).toThrow(MappingError)
   })
 })
+
+describe('razor_slice parsing', () => {
+  it('parses razor_slice as its own kind', () => {
+    const m = parseMapping('[meta]\nname="x"\n[[binding]]\nluna="Mute"\nkey="B"\nrazor_slice=40175\n')
+    expect(m.bindings[0].kind).toEqual({ razorSlice: 40175 })
+  })
+  it('rejects razor and razor_slice on the same binding', () => {
+    expect(() =>
+      parseMapping('[meta]\nname="x"\n[[binding]]\nluna="Mute"\nkey="B"\nrazor=40175\nrazor_slice=40175\n'),
+    ).toThrow(/exactly one of/)
+  })
+  it('rejects razor_slice on a disabled binding', () => {
+    expect(() =>
+      parseMapping('[meta]\nname="x"\n[[binding]]\nluna="Mute"\nkey="B"\nstatus="disable"\nrazor_slice=40175\n'),
+    ).toThrow(/must not carry a kind key/)
+  })
+})
+

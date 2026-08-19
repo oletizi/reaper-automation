@@ -73,3 +73,13 @@ export function parseDoctor(argv: string[]) {
   })
   return { out: values.out, resourceDir: values['resource-dir'] }
 }
+
+export function parseDocs(argv: string[]) {
+  const { values, positionals } = parseArgs({
+    args: argv,
+    allowPositionals: true,
+    options: { out: { type: 'string', short: 'o' }, check: { type: 'boolean' } },
+  })
+  return { mapping: positionals[0], out: values.out, check: values.check ?? false }
+}
+
