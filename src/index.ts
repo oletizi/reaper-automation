@@ -2,6 +2,8 @@ import { cmdBuild } from '@/cli/build'
 import { cmdInstall } from '@/cli/install'
 import { cmdFindAction } from '@/cli/find-action'
 import { cmdReport } from '@/cli/report'
+import { cmdRefresh } from '@/cli/refresh'
+import { cmdDoctor } from '@/cli/doctor'
 
 export function runCli(argv: string[]): Promise<number> {
   const [verb, ...rest] = argv
@@ -9,10 +11,12 @@ export function runCli(argv: string[]): Promise<number> {
     switch (verb) {
       case 'build': return Promise.resolve(cmdBuild(rest))
       case 'install': return Promise.resolve(cmdInstall(rest))
+      case 'refresh': return Promise.resolve(cmdRefresh(rest))
+      case 'doctor': return Promise.resolve(cmdDoctor(rest))
       case 'find-action': return Promise.resolve(cmdFindAction(rest))
       case 'report': return Promise.resolve(cmdReport(rest))
       default:
-        console.error('usage: ra <build|install|find-action|report> ...')
+        console.error('usage: ra <build|install|refresh|doctor|find-action|report> ...')
         return Promise.resolve(2)
     }
   } catch (e) {

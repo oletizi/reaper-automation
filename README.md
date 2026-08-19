@@ -14,8 +14,8 @@ Python implementation; there is no Python left in this repo.
 
 ```
 mappings/luna.toml                  the mapping table, Mac-native labels -- this is the thing you edit
-build/luna-macos.ReaperKeyMap       generated; import this into REAPER
-build/Scripts/luna/*.lua            generated ReaScripts the keymap references
+build/luna-macos.ReaperKeyMap       generated (gitignored); import this into REAPER
+build/Scripts/luna/*.lua            generated (gitignored) ReaScripts the keymap references
 src/                                the TypeScript implementation (keyspec, translate, mapping, build-keymap, ...)
 src/index.ts                        CLI entry point, invoked as `pnpm ra <verb> ...`
 tools/dump_actions.lua              ReaScript that dumps REAPER's action list (runs inside REAPER)
@@ -85,12 +85,12 @@ These are two separate axes and never collapse into one value:
 pnpm ra install
 ```
 
-**Always build before you install** — don't import the checked-in
-`build/*.ReaperKeyMap` artifact directly. It's committed as a build output for
-reference, but its `--section` was baked for the machine it was last built on
-(this maintainer's ReaTooled section 16); importing it as-is on a different
-machine can bind into the wrong section and produce dead keys. Run
-`pnpm ra build` (auto-detects the right section) and then `pnpm ra install`.
+**Always build before you install.** `build/` is a generated, gitignored
+staging directory — it's not committed, and its contents are machine-specific
+(the `--section` is baked for the host's ReaTooled state, the reload button bakes
+the host's repo + node paths, and each script carries the build's git stamp). Run
+`pnpm ra build` (auto-detects the right section) and then `pnpm ra install`, or
+just `pnpm ra refresh` to do both.
 
 That copies the keymap into `~/Library/Application Support/REAPER/KeyMaps/`
 (or the Linux equivalent, or `--resource-dir`/`$REAPER_RESOURCE_DIR`) and the
@@ -105,74 +105,152 @@ pick **LUNA (Pro Tools)**.
 Importing only overrides the combos the file names; REAPER's other defaults stay
 put. To get back to stock, use Key map → Reset to factory defaults.
 
+## Refresh workflow (iterating on the mapping)
+
+`build` + `install` are the two low-level steps. For day-to-day iteration use the
+single verb that chains them and checks its own work:
+
+```sh
+pnpm ra refresh
+```
+
+`refresh` builds (auto-detecting the ReaTooled section), installs, then
+**verifies the installed bytes match the build** — so "it refreshed" is never a
+lie. It prints one machine-readable line, `BINDINGS: changed` or
+`BINDINGS: unchanged`, that tells you whether a re-import is needed:
+
+- **Script bodies changed only** → `BINDINGS: unchanged`. REAPER re-reads a
+  ReaScript from disk on every run, so the change is **already live** — nothing
+  else to do.
+- **A key binding changed** (new/moved key) → `BINDINGS: changed`. REAPER only
+  reads `reaper-kb.ini` at startup, so re-import once: Actions → Show action
+  list → Key map → Import → **LUNA (Pro Tools)**.
+
+`refresh` also **prunes** installed scripts the current build no longer emits, so
+a removed feature can't leave a stale script firing behind your back.
+
+### The in-REAPER Reload button
+
+There's a generated action, **`Custom: LUNA: Reload`**, that runs `pnpm ra
+refresh` from *inside* REAPER — no terminal, no import dance for the common case.
+It shells out through a login shell with the node/pnpm bin dir (detected at build
+time) baked onto `PATH`, because a macOS GUI app doesn't inherit your interactive
+shell's `PATH`. After a refresh it shows a message box telling you whether
+scripts are live (bindings unchanged) or a one-time re-import is needed.
+
+One-time setup: after the first import, open Actions → Show action list, find
+**LUNA: Reload**, and bind it to a key or drop it on a toolbar. From then on it's
+your single reload button.
+
+### `doctor` — is what's running what I built?
+
+```sh
+pnpm ra doctor
+```
+
+Reports the version chain **source (git) → build → installed → last-fired** (the
+last is read from the debug log, below) and exits non-zero on drift — e.g. you
+edited a template but never rebuilt, or built but never installed. Every
+generated artifact carries a short git-sha stamp so these four can be compared.
+
+### Debug log
+
+Every generated script appends one capped, timestamped line to
+`~/Library/Application Support/REAPER/luna-debug.log` (Linux: the resource-dir
+equivalent), tagged with the version stamp of the script that fired:
+
+```
+2026-08-17T12:41:03  tab_transient_next  sha=101d486  tracks=3 items=12 cur=4.000->4.512 moved=true
+```
+
+This is the record for diagnosing "I pressed the key and nothing happened": it
+shows which script fired, at which version, what state it saw, and what it did.
+The log self-trims to its last ~1MB, and logging is pcall-guarded so it can never
+break the action it observes.
+
 ## Extend Selection
 
 LUNA's "hold Shift while moving the transport" — `Shift+]` moves forward a bar
-*and* selects the bar you crossed, and pressing it again grows the selection
-rather than replacing it. Bound here for bar, clip edge, marker, transient, and
-session start/end.
+*and* grows the edit area you crossed, and pressing it again grows the area
+further rather than replacing it. Bound here for bar, clip edge, marker,
+transient, and session start/end.
 
-This can't be a custom action. REAPER can move the cursor (`41042`) and set the
-time selection end to the cursor (`40626`), but a macro chaining them re-anchors
-on every press: from bar 2, `Shift+]` twice gives you bar 3–4 instead of bar 2–4.
-Getting cumulative extension needs a conditional — anchor only when no selection
-exists yet — so each of these compiles to a small generated ReaScript instead.
-No extension required; Lua ships with REAPER.
+This can't be a custom action. REAPER can move the cursor (`41042`) and repaint
+the razor edit area's end to the cursor, but a macro chaining them re-anchors on
+every press: from bar 2, `Shift+]` twice gives you bar 3–4 instead of bar 2–4.
+Getting cumulative extension needs a conditional — grow the correct edge only
+when a span already exists, anchor a new one otherwise — so each of these
+compiles to a small generated ReaScript instead (`razor_extend` in the mapping
+table; see *Edit-selection model* below). No extension required; Lua ships with
+REAPER.
 
 Verified end-to-end against REAPER with the keymap loaded: from 4.0s, three
 presses give `4.0..6.0` → `4.0..8.0` → `4.0..10.0`, and the reverse key shrinks
 back to `4.0..8.0` → `4.0..6.0` with the anchor held.
 
-## Edit-selection model (`area`)
+## Edit-selection model (razor edit)
 
-Pro Tools/LUNA build an "edit area" to operate on from two independent axes,
-both driven entirely by keyboard:
+The edit area **is a native REAPER razor edit** — the same object you'd draw
+by dragging a razor rectangle across a track's top edge in the REAPER GUI,
+stored per-track in `P_RAZOREDITS`. Unlike a time selection (which REAPER
+renders identically across every track, making a "2D area" indistinguishable
+from a plain 1D range), a razor edit draws a distinct rectangle only on the
+tracks it covers — the same visual LUNA itself uses for its edit-area
+highlight. There's no separate "area" object to keep in sync: the razor *is*
+the area, and item selection is only ever derived from it transiently, for
+the operations that need it.
 
-- **Tracks** (vertical scope) — `Shift+P` / `Shift+;` extend the track
-  selection up/down, non-contiguous tracks allowed. (There's currently no
-  keyboard binding for "add this track to the selection without moving the
-  focus," the Cmd-click equivalent — see *Known gaps*.)
-- **Time range** (horizontal scope) — `Shift+[` / `Shift+]`, and the
-  Shift-variants of the clip-edge/transient/marker nav keys, extend the time
-  selection. No time selection means zero-width: the area collapses to
-  wherever the edit cursor is.
+Two axes, both driven entirely by keyboard:
 
-Tracks × time range is never stored as its own object — it's derived on
-demand by a shared ReaScript, `luna_select_area.lua` (generated from
-`src/select-area-template.ts`). Given the currently selected tracks (or all
-tracks, if none are selected) and the current time selection (or the cursor
-position, if none), it splits any items crossing those boundaries and, when
-there was a real time range, selects exactly the items that fall inside it.
+- **Horizontal (time span)** — `Shift+[` / `Shift+]` / `Shift+L` / `Shift+'`
+  and the Shift-variants of the clip-edge/transient/marker/session nav keys
+  grow the razor's time span. Each compiles to a `razor_extend` script
+  (see *Extend Selection* above): it reads the current span from
+  `P_RAZOREDITS`, grows the correct edge (forward move grows the end,
+  backward grows the start), repaints the result onto the selected tracks,
+  parks the transport at the new span's start, sets loop points from the
+  razor (`42474`), and enables repeat.
+- **Vertical (tracks)** — `Shift+P` / `Shift+;` (and plain `P` / `;`) extend
+  or move the track selection natively (`40287`/`40288`/`40285`/`40286`),
+  then repaint the *existing* razor time span onto the new track selection —
+  compiled from `razor_track = <track-selection action id>` in the mapping
+  table, via the shared `luna_razor_repaint.lua` script. (There's currently
+  no keyboard binding for "add this track to the selection without moving
+  the focus," the Cmd-click equivalent — see *Known gaps*.)
 
-Two binding shapes in `mappings/luna.toml` use it:
+Operations on the area split into two shapes in `mappings/luna.toml`,
+classified on tower per-binding (does the action honor the razor natively?):
 
-- **`area = true`** — run the select-area script and stop there. This is
-  `Separate Selection` (`B` / `Cmd+E`): materializing the split+select *is*
-  the separate.
-- **`area = <action id>`** — run the select-area script, then the given
-  native action. `Clear`/`Delete` uses `40006` (Item: Remove items,
-  clipboard untouched); `Cut` uses `40699` (Item: Cut items, clipboard set).
-  Each compiles to its own generated custom action (`ACT` line), so Delete
-  and Cut show up in REAPER's action list as two distinct, correctly-labeled
-  commands rather than one action wearing two key bindings.
+- **`action = <id>`** — razor-aware natively: the action already scopes
+  itself to the razor edit area (or, for Paste, doesn't care about any
+  selection at all), so it runs as a plain native action with no prelude.
+  Examples: `Separate Selection` (`40061`), `Delete`/`Clear` (`40006`),
+  `Cut` (`40699`).
+- **`razor = <id>`** — not razor-aware: compiles to a macro
+  `[42957, <id>]` — `42957` ("Razor edit: Select all items within razor
+  edit area") materializes the razor's items as an item selection, then
+  the given action runs against that selection. Examples: `Copy` (`41383`),
+  `Mute Selection` (`40175`), the fade/trim/duplicate family.
 
-A plain cursor move — no Shift — is the way back out. `]` / `[`, `L` / `'`,
-`Tab`, `Opt+'` / `Opt+L`, and the marker-nav keys all compile to
-`macro = [<move-action>, 40635, 40289]`: move the cursor, clear the time
-selection (`40635`), clear the item selection (`40289`). That's the area
-collapsing to a zero-width point at wherever the cursor lands, matching Pro
-Tools' behavior of a bare nav key dropping whatever was selected.
+A plain cursor move — no Shift — is the way back out: it compiles to
+`macro = [<move-action>, 42406]` (move the cursor, then `42406` clears every
+razor edit area on every track). That's the area collapsing to nothing at
+wherever the cursor lands, matching Pro Tools' behavior of a bare nav key
+dropping whatever was selected. Transport/loop always derive from the razor
+(`42474` + `GetSetRepeat(1)`), never tracked independently.
 
-All of it — `B`, `Delete`, `Cut`, and the plain-move family — lands in
-whichever section the build auto-detects (see *Coexisting with ReaTooled*
-above), same as every other binding in the table.
+All of it — the plain razor-aware actions, the `razor=` macros, the
+`razor_extend`/`razor_track` scripts, and the plain-move collapse family —
+lands in whichever section the build auto-detects (see *Coexisting with
+ReaTooled* above), same as every other binding in the table.
 
-This intentionally diverges from the tool's original Python-era output: the
-migration-era golden fixture froze what the Python generator produced for `B`
-and the plain-move keys before this model existed. `tests/parity.test.ts`
-no longer compares against that frozen reference for those bindings — the
-byte-for-byte TS build fixture (`tests/fixtures/luna-macos.tsbuild.ReaperKeyMap`)
-is the regression baseline going forward.
+This intentionally diverges from the tool's original Python-era output (and
+from an earlier, now-retired `area`-selection substrate that derived the area
+from independent track- and time-selection state rather than a razor edit).
+`tests/parity.test.ts` no longer compares against a frozen historical
+reference for these bindings — the byte-for-byte TS build fixture
+(`tests/fixtures/luna-macos.tsbuild.ReaperKeyMap`) is the regression baseline
+going forward.
 
 ## Looking up actions
 
@@ -281,3 +359,11 @@ Clip-edge navigation deliberately uses the *nearest item edge* actions
 (`41167`/`41168`) rather than *edge of item* (`40318`/`40319`). The latter only
 walk the edges of **selected** items, so with a clip selected they ping-pong on
 that one clip and never cross to the next.
+
+Tab-to-Transient (`40375`/`40376`) depends on REAPER **detecting** transients,
+which needs adequate level. Very quiet takes (roughly under −30 dBFS peak)
+produce no detectable transients, so Tab only stops at clip edges — this is a
+material/level issue, not a binding one. Normalize or raise the clip gain and it
+works. The `tools/diag` harness reproduces and confirms this headlessly; the
+`luna-debug.log` line for a press shows `landed=item_end`/`item_start` when this
+is happening.

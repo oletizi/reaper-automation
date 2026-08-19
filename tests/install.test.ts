@@ -28,4 +28,42 @@ describe('installArtifacts', () => {
     expect(existsSync(join(res, 'reaper-kb.ini'))).toBe(false)
     expect(out.scripts).toHaveLength(1)
   })
+
+  it('prunes installed scripts that the current build no longer emits', () => {
+    const src = join(work, 'build')
+    mkdirSync(join(src, 'Scripts', 'luna'), { recursive: true })
+    writeFileSync(join(src, 'luna.ReaperKeyMap'), 'KEY 1 32 40044 0\n')
+    writeFileSync(join(src, 'Scripts', 'luna', 'keep.lua'), '-- keep')
+    const res = join(work, 'REAPER')
+    mkdirSync(join(res, 'Scripts', 'luna'), { recursive: true })
+    writeFileSync(join(res, 'Scripts', 'luna', 'orphan.lua'), '-- stale from a removed feature')
+
+    const out = installArtifacts({
+      keymapPath: join(src, 'luna.ReaperKeyMap'),
+      scriptsDir: join(src, 'Scripts', 'luna'),
+      resourceDir: res,
+    })
+
+    expect(existsSync(join(res, 'Scripts', 'luna', 'keep.lua'))).toBe(true)
+    expect(existsSync(join(res, 'Scripts', 'luna', 'orphan.lua'))).toBe(false)
+    expect(out.pruned).toEqual([join(res, 'Scripts', 'luna', 'orphan.lua')])
+  })
+
+  it('reports the keymap as changed when there was no prior install, unchanged when identical', () => {
+    const src = join(work, 'build')
+    mkdirSync(src, { recursive: true })
+    writeFileSync(join(src, 'luna.ReaperKeyMap'), 'KEY 1 32 40044 0\n')
+    const res = join(work, 'REAPER')
+    mkdirSync(res)
+
+    const first = installArtifacts({ keymapPath: join(src, 'luna.ReaperKeyMap'), resourceDir: res })
+    expect(first.keymapChanged).toBe(true) // nothing was there before
+
+    const second = installArtifacts({ keymapPath: join(src, 'luna.ReaperKeyMap'), resourceDir: res })
+    expect(second.keymapChanged).toBe(false) // identical bytes re-installed
+
+    writeFileSync(join(src, 'luna.ReaperKeyMap'), 'KEY 1 32 40044 0\nKEY 1 66 41383 0\n')
+    const third = installArtifacts({ keymapPath: join(src, 'luna.ReaperKeyMap'), resourceDir: res })
+    expect(third.keymapChanged).toBe(true) // bindings differ now
+  })
 })

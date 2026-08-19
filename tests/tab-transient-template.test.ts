@@ -1,0 +1,34 @@
+import { describe, it, expect } from 'vitest'
+import { renderTabTransientScript } from '@/tab-transient-template'
+
+describe('renderTabTransientScript', () => {
+  const next = renderTabTransientScript({ label: 'LUNA: Tab next', spec: 'luna.toml', forward: true })
+  const prev = renderTabTransientScript({ label: 'LUNA: Tab prev', spec: 'luna.toml', forward: false })
+  it('uses the correct transient action per direction', () => {
+    expect(next).toContain('40375') // next transient
+    expect(prev).toContain('40376') // previous transient
+  })
+  it('logs the take type of each selected item (audio vs MIDI vs empty)', () => {
+    // The transient actions only work on audio; if the items are MIDI/empty the
+    // nav can only ever hit edges. The log must reveal which, to diagnose.
+    expect(next).toContain('TakeIsMIDI')
+    expect(next).toContain('types=')
+  })
+  it('selects target-track items, navigates, and restores the prior selection', () => {
+    expect(next).toContain('CountSelectedTracks')
+    expect(next).toContain('CountSelectedMediaItems') // save selection
+    expect(next).toContain('SelectAllMediaItems(0, false)') // clear before/after
+    expect(next).toContain('SetMediaItemSelected')
+  })
+  it('logs the cursor before/after and whether it actually moved', () => {
+    expect(next).toContain('_log') // debug hook wired in
+    expect(next).toContain('GetCursorPosition')
+    expect(next).toContain('moved=') // records whether the transient nav did anything
+  })
+  it('logs the item bounds and classifies the landing as an edge vs inside audio', () => {
+    expect(next).toContain('D_POSITION') // reads item bounds
+    expect(next).toContain('D_LENGTH')
+    expect(next).toContain('landed=') // item_start / item_end / inside
+    expect(next).toContain('bounds=') // the item layout, so a boundary landing is provable
+  })
+})

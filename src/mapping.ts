@@ -1,7 +1,15 @@
 import { parse as parseToml } from 'smol-toml'
 
 export type BindingStatus = 'ok' | 'unmapped' | 'disable'
-export type BindingKind = { action: number } | { macro: number[] } | { extend: number } | { area: number } | { area: true }
+export type BindingKind =
+  | { action: number }
+  | { macro: number[] }
+  | { extend: number }
+  | { razorExtend: number; selectItems?: boolean }
+  | { razorTrack: number }
+  | { razor: number }
+  | { separate: true }
+  | { tabTransient: 'next' | 'prev' }
 
 export interface Binding {
   luna: string
@@ -68,7 +76,14 @@ function validateBinding(raw: unknown, i: number): Binding {
   if (key === undefined) throw new MappingError(`${where}: missing key`)
 
   if (status === 'disable') {
-    if ('action' in raw || 'macro' in raw || 'extend' in raw || 'area' in raw) {
+    if (
+      'action' in raw ||
+      'macro' in raw ||
+      'extend' in raw ||
+      'razor_extend' in raw ||
+      'razor_track' in raw ||
+      'razor' in raw
+    ) {
       throw new MappingError(`${where}: disable must not carry a kind key`)
     }
     return { luna, key, label, status }
@@ -81,12 +96,31 @@ function validateBinding(raw: unknown, i: number): Binding {
     if (!Array.isArray(raw.macro)) throw new MappingError(`${where}.macro: expected array`)
     kinds.push({ macro: raw.macro.map((s, j) => asInt(s, `${where}.macro[${j}]`)) })
   }
-  if ('area' in raw) {
-    if (raw.area === true) kinds.push({ area: true })
-    else kinds.push({ area: asInt(raw.area, `${where}.area`) })
+  if ('razor_extend' in raw) {
+    const k: { razorExtend: number; selectItems?: boolean } = { razorExtend: asInt(raw.razor_extend, `${where}.razor_extend`) }
+    if ('select_items' in raw) {
+      if (raw.select_items !== true) throw new MappingError(`${where}.select_items: expected true`)
+      k.selectItems = true
+    }
+    kinds.push(k)
+  }
+  if ('razor_track' in raw) kinds.push({ razorTrack: asInt(raw.razor_track, `${where}.razor_track`) })
+  if ('razor' in raw) kinds.push({ razor: asInt(raw.razor, `${where}.razor`) })
+  if ('separate' in raw) {
+    if (raw.separate !== true) throw new MappingError(`${where}.separate: expected true`)
+    kinds.push({ separate: true })
+  }
+  if ('tab_transient' in raw) {
+    const v = raw.tab_transient
+    if (v !== 'next' && v !== 'prev') {
+      throw new MappingError(`${where}.tab_transient: expected "next" or "prev", got ${JSON.stringify(v)}`)
+    }
+    kinds.push({ tabTransient: v })
   }
   if (kinds.length !== 1) {
-    throw new MappingError(`${where}: expected exactly one of action/macro/extend/area, got ${kinds.length}`)
+    throw new MappingError(
+      `${where}: expected exactly one of action/macro/extend/razor_extend/razor_track/razor/separate/tab_transient, got ${kinds.length}`,
+    )
   }
   return { luna, key, label, status, kind: kinds[0] }
 }

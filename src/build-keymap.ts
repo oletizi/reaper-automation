@@ -4,7 +4,14 @@ import { stableId, slugify } from '@/ids'
 import type { ActionIndex } from '@/actions'
 import type { Mapping } from '@/mapping'
 import { renderExtendScript } from '@/extend-template'
-import { renderSelectAreaScript } from '@/select-area-template'
+import { renderRazorExtendScript } from '@/razor-extend-template'
+import { renderRazorRepaintScript } from '@/razor-repaint-template'
+import { renderSeparateScript } from '@/separate-template'
+import { renderTabTransientScript } from '@/tab-transient-template'
+import { renderReloadScript } from '@/reload-template'
+import { renderDebugModule, renderStampModule, DEBUG_MODULE_FILE, STAMP_MODULE_FILE } from '@/debug-runtime'
+
+const SELECT_RAZOR_ITEMS_ACTION = 42957
 
 const SCRIPT_DIR = 'luna'
 
@@ -20,7 +27,22 @@ export interface BuildResult {
 // Main bindings live in section 16 and take precedence over an imported section-0
 // keymap, so overriding them requires emitting into section 16 as well (verified
 // empirically — see the design doc's resolved section-precedence question).
-export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Target, section = 0): BuildResult {
+export interface BuildOptions {
+  /** Version stamp baked into luna_stamp.lua (default "unknown"). */
+  stamp?: string
+  /** Absolute repo root baked into the reload button so it can rebuild (default ""). */
+  repoRoot?: string
+  /** PATH prefix (node/pnpm bin dir) baked into the reload button (default ""). */
+  reloadPathPrefix?: string
+}
+
+export function buildKeymap(
+  mapping: Mapping,
+  actions: ActionIndex,
+  target: Target,
+  section = 0,
+  opts: BuildOptions = {},
+): BuildResult {
   const actLines: string[] = []
   const scrLines: string[] = []
   const keyLines: string[] = []
@@ -31,20 +53,36 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
   const seenKeys = new Map<string, string>()
   const seenMacros = new Map<string, string>()
   const seenScripts = new Map<number, { fname: string; sid: string }>()
+  const seenRazorExtendScripts = new Map<string, { fname: string; sid: string }>()
   const scripts = new Map<string, string>()
-  let selectAreaEntry: { fname: string; sid: string } | undefined
+  let razorRepaintEntry: { fname: string; sid: string } | undefined
+  let separateEntry: { fname: string; sid: string } | undefined
+  const tabTransientEntries = new Map<string, { fname: string; sid: string }>()
 
-  function ensureSelectArea(): { fname: string; sid: string } {
-    if (!selectAreaEntry) {
-      const label = 'LUNA: Select Area'
-      const fname = 'luna_select_area.lua'
+  function ensureRazorRepaint(): { fname: string; sid: string } {
+    if (!razorRepaintEntry) {
+      const label = 'LUNA: Repaint Area'
+      const fname = 'luna_razor_repaint.lua'
       const sid = stableId(label)
-      scripts.set(fname, renderSelectAreaScript({ label, spec: mapping.meta.name }))
+      scripts.set(fname, renderRazorRepaintScript({ label, spec: mapping.meta.name }))
       scrLines.push(`SCR 4 ${section} "${sid}" "Custom: ${label}" ${SCRIPT_DIR}/${fname}`)
-      selectAreaEntry = { fname, sid }
+      razorRepaintEntry = { fname, sid }
     }
-    return selectAreaEntry
+    return razorRepaintEntry
   }
+
+  function ensureSeparate(): { fname: string; sid: string } {
+    if (!separateEntry) {
+      const label = 'LUNA: Separate'
+      const fname = 'luna_separate.lua'
+      const sid = stableId(label)
+      scripts.set(fname, renderSeparateScript({ label, spec: mapping.meta.name }))
+      scrLines.push(`SCR 4 ${section} "${sid}" "Custom: ${label}" ${SCRIPT_DIR}/${fname}`)
+      separateEntry = { fname, sid }
+    }
+    return separateEntry
+  }
+
 
   for (const b of mapping.bindings) {
     const luna = b.luna
@@ -96,29 +134,83 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
       command = '_' + entry.sid
       desc = `script ${entry.fname}  [extend selection via ${moveName}]`
       stats.script++
-    } else if (b.kind && 'area' in b.kind) {
-      const selectArea = ensureSelectArea()
-      if (b.kind.area === true) {
-        // References the shared select-area SCR directly -- counts as a script binding.
-        command = '_' + selectArea.sid
-        desc = `script ${selectArea.fname}  [materialize edit area]`
-        stats.script++
-      } else {
-        // Emits an ACT custom action chaining select-area + the target op -- counts as a macro binding.
-        const opId = String(b.kind.area)
-        const opName = actions.byId(opId)
-        if (opName === undefined) { errors.push(`${luna}: area references unknown action ${opId}`); continue }
-        const label = b.label ?? `LUNA: ${luna}`
-        let mid = seenMacros.get(label)
-        if (mid === undefined) {
-          mid = stableId(label)
-          seenMacros.set(label, mid)
-          actLines.push(`ACT 0 ${section} "${mid}" "Custom: ${label}" _${selectArea.sid} ${opId}`)
-        }
-        command = '_' + mid
-        desc = `${label}  [select area > ${opName}]`
-        stats.macro++
+    } else if (b.kind && 'razorExtend' in b.kind) {
+      const move = b.kind.razorExtend
+      const selectItems = b.kind.selectItems ?? false
+      const moveName = actions.byId(String(move))
+      if (moveName === undefined) { errors.push(`${luna}: razor_extend references unknown action ${move}`); continue }
+      const dedupKey = `${move}:${selectItems ? 1 : 0}`
+      let entry = seenRazorExtendScripts.get(dedupKey)
+      if (!entry) {
+        // NOTE: `fname` is derived from `base` the same way the `extend` branch above
+        // derives its filename, but the two branches dedup through separate maps
+        // (seenScripts vs seenRazorExtendScripts) and both write into the shared
+        // `scripts` map. A mapping with BOTH an `extend` and a `razor_extend` binding
+        // for the same base label would compute the same `fname` in both branches and
+        // one script's content would silently clobber the other in `scripts`. Not
+        // reachable today (no `extend` bindings remain in luna.toml), but worth
+        // knowing before adding one back.
+        const base = b.label ?? luna.split(' (')[0]
+        const label = `LUNA: ${base}`
+        const fname = `luna_${slugify(base)}.lua`
+        const sid = stableId(label)
+        scripts.set(fname, renderRazorExtendScript({ label, spec: mapping.meta.name, move, moveName, selectItems }))
+        scrLines.push(`SCR 4 ${section} "${sid}" "Custom: ${label}" ${SCRIPT_DIR}/${fname}`)
+        entry = { fname, sid }
+        seenRazorExtendScripts.set(dedupKey, entry)
       }
+      command = '_' + entry.sid
+      desc = `script ${entry.fname}  [extend razor area via ${moveName}]`
+      stats.script++
+    } else if (b.kind && 'razorTrack' in b.kind) {
+      const trackActionId = String(b.kind.razorTrack)
+      const trackActionName = actions.byId(trackActionId)
+      if (trackActionName === undefined) { errors.push(`${luna}: razor_track references unknown action ${trackActionId}`); continue }
+      const repaint = ensureRazorRepaint()
+      const label = b.label ?? `LUNA: ${luna}`
+      let mid = seenMacros.get(label)
+      if (mid === undefined) {
+        mid = stableId(label)
+        seenMacros.set(label, mid)
+        actLines.push(`ACT 0 ${section} "${mid}" "Custom: ${label}" ${trackActionId} _${repaint.sid}`)
+      }
+      command = '_' + mid
+      desc = `${label}  [${trackActionName} > repaint area]`
+      stats.macro++
+    } else if (b.kind && 'razor' in b.kind) {
+      const opId = String(b.kind.razor)
+      const opName = actions.byId(opId)
+      if (opName === undefined) { errors.push(`${luna}: razor references unknown action ${opId}`); continue }
+      const label = b.label ?? `LUNA: ${luna}`
+      let mid = seenMacros.get(label)
+      if (mid === undefined) {
+        mid = stableId(label)
+        seenMacros.set(label, mid)
+        actLines.push(`ACT 0 ${section} "${mid}" "Custom: ${label}" ${SELECT_RAZOR_ITEMS_ACTION} ${opId}`)
+      }
+      command = '_' + mid
+      desc = `${label}  [select razor items > ${opName}]`
+      stats.macro++
+    } else if (b.kind && 'separate' in b.kind) {
+      const entry = ensureSeparate()
+      command = '_' + entry.sid
+      desc = `script ${entry.fname}  [split at razor, else at edit cursor]`
+      stats.script++
+    } else if (b.kind && 'tabTransient' in b.kind) {
+      const mode = b.kind.tabTransient
+      let entry = tabTransientEntries.get(mode)
+      if (!entry) {
+        const label = mode === 'next' ? 'LUNA: Tab to Transient (next)' : 'LUNA: Tab to Transient (previous)'
+        const fname = `luna_tab_transient_${mode}.lua`
+        const sid = stableId(label)
+        scripts.set(fname, renderTabTransientScript({ label, spec: mapping.meta.name, forward: mode === 'next' }))
+        scrLines.push(`SCR 4 ${section} "${sid}" "Custom: ${label}" ${SCRIPT_DIR}/${fname}`)
+        entry = { fname, sid }
+        tabTransientEntries.set(mode, entry)
+      }
+      command = '_' + entry.sid
+      desc = `script ${entry.fname}  [tab to transient ${mode}]`
+      stats.script++
     } else if (b.kind && 'macro' in b.kind) {
       const steps = b.kind.macro.map(String)
       const missing = steps.filter((s) => !actions.has(s))
@@ -155,6 +247,25 @@ export function buildKeymap(mapping: Mapping, actions: ActionIndex, target: Targ
   if (errors.length) {
     throw new Error(`${errors.length} error(s):\n` + errors.map((e) => `  ERROR  ${e}`).join('\n'))
   }
+
+  // Runtime infrastructure, emitted for every build regardless of the mapping:
+  //  - the shared debug module + the version stamp (runtime-only: loaded by the
+  //    action scripts via dofile, so they carry NO SCR line and never affect
+  //    keymap bytes);
+  //  - the reload button, registered with an SCR line so REAPER lists it as an
+  //    action the user can bind to a key or a toolbar button once.
+  scripts.set(DEBUG_MODULE_FILE, renderDebugModule())
+  scripts.set(STAMP_MODULE_FILE, renderStampModule(opts.stamp ?? 'unknown'))
+
+  const reloadLabel = 'LUNA: Reload'
+  const reloadFname = 'luna_reload.lua'
+  const reloadSid = stableId(reloadLabel)
+  scripts.set(reloadFname, renderReloadScript({
+    repoRoot: opts.repoRoot ?? '',
+    spec: mapping.meta.name,
+    pathPrefix: opts.reloadPathPrefix ?? '',
+  }))
+  scrLines.push(`SCR 4 ${section} "${reloadSid}" "Custom: ${reloadLabel}" ${SCRIPT_DIR}/${reloadFname}`)
 
   const m = mapping.meta
   const header = [
