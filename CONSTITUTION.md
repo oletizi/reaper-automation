@@ -59,3 +59,29 @@ do the obvious thing rather than nothing.
 Where a binding cannot match LUNA, it carries a `status` and a comment saying
 why, rather than being silently approximated. The mapping table is the record of
 those decisions; `mappings/luna.toml` explains every unmapped or aliased key.
+
+## Principle 4 — Commit and push early; never hold work locally
+
+**Work that is committed and pushed is safe. Work that is not, is not.** git plus
+a GitHub remote is a journaled data store, and the asymmetry is total: a
+committed, pushed change we dislike can always be rolled back, reverted, or
+amended, while a change that was never committed cannot be retrieved by anyone
+once it is lost. There is no symmetric risk to weigh — "wait until it's clean"
+trades a recoverable outcome for an unrecoverable one.
+
+So: commit at every point the work is coherent, and push the branch as soon as
+it exists rather than at the end. Do not bank a series of commits locally
+waiting for a milestone, and do not leave a working tree dirty across a pause.
+A feature branch is the unit of "this might be wrong" — that is what makes
+committing to it cheap, and what makes rolling it back cheap too.
+
+Corollaries:
+
+- Push a branch on its first commit, not its last. An unpushed branch is a
+  single disk failure away from gone.
+- Prefer several small commits that each say one thing over one large commit
+  that says everything. Small commits are what make a rollback surgical.
+- A commit is not a claim that the work is finished or correct; it is a
+  savepoint. Reviewability comes from the branch and the PR, not from withholding
+  commits.
+
