@@ -308,6 +308,14 @@ pnpm ra docs --check    # fail if it has drifted (part of `just check`)
 Don't hand-edit it — a second hand-maintained copy of the mapping table is the
 one artifact here that could silently stop describing the keymap.
 
+### REAPER's own defaults
+
+[docs/reaper-default-shortcuts.md](docs/reaper-default-shortcuts.md) is a
+reference copy of REAPER's stock bindings with a column marking which ones this
+keymap displaces — so a proposed binding can be checked against what it would
+override instead of guessed at. It's third-party and partial; the authoritative
+check is REAPER's own action list on the machine in question.
+
 ## Looking up actions
 
 ```sh
