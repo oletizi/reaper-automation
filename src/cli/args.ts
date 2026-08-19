@@ -10,9 +10,9 @@ export function parseBuild(argv: string[]) {
       section: { type: 'string' },
     },
   })
+  // Both optional, mirroring `refresh`: the caller shouldn't have to know the
+  // artifact-naming rule. cmdBuild fills them in from the repo root + host.
   const mapping = positionals[0]
-  if (!mapping) throw new Error('build: missing <mapping> positional')
-  if (!values.out) throw new Error('build: -o/--out is required')
   let section: number | undefined
   if (values.section !== undefined) {
     section = Number(values.section)
