@@ -1,0 +1,443 @@
+context	key	action
+Editing	equal	Editing/temporal-zoom-in
+Editing	minus	Editing/temporal-zoom-out
+Editing	e	Editing/set-mouse-mode-content
+Editing	r	Editing/set-mouse-mode-range
+Editing	Primary-r	Editing/redo
+Editing	t	Editing/set-mouse-mode-timefx
+Editing	y	Editing/set-mouse-mode-grid
+Editing	Primary-y	Editing/alternate-redo
+Editing	d	Editing/set-mouse-mode-draw
+Editing	g	Editing/set-mouse-mode-object
+Editing	Primary-z	Editing/undo
+Editing	Primary-Tertiary-z	Editing/alternate-alternate-redo
+Editing	Primary-x	Editing/editor-cut
+Editing	c	Editing/set-mouse-mode-cut
+Editing	Primary-c	Editing/editor-copy
+Editing	Primary-v	Editing/editor-paste
+Editing	Delete	Editing/editor-delete
+Editing	BackSpace	Editing/alternate-editor-delete
+Editing	4	Editing/cycle-snap-mode
+Editing	5	Editing/prev-grid-choice
+Editing	6	Editing/next-grid-choice
+Editor	Secondary-equal	Editor/expand-tracks
+Editor	Secondary-minus	Editor/shrink-tracks
+Editor	Primary-Tertiary-underscore	Editor/zoom-to-session
+Editor	apostrophe	Editor/edit-cursor-to-previous-region-sync
+Editor	semicolon	Editor/edit-cursor-to-next-region-sync
+Editor	Primary-Tertiary-space	Editor/play-from-edit-point-and-return
+Editor	slash	Editor/editor-fade-range
+Editor	Primary-slash	Region/set-fade-in-length
+Editor	Primary-backslash	Region/set-fade-out-length
+Editor	Primary-j	Region/trim-to-previous-region
+Editor	Primary-k	Region/trim-to-next-region
+Editor	bracketright	Editor/set-loop-from-edit-range
+Editor	bracketleft	Editor/set-punch-from-edit-range
+Editor	Secondary-1	Region/toggle-region-mute
+Editor	Secondary-2	Region/naturalize-region
+Editor	Secondary-3	Region/normalize-region
+Editor	Secondary-4	Region/reverse-region
+Editor	Secondary-5	Region/quantize-region
+Editor	Secondary-6	Region/boost-region-gain
+Editor	Secondary-7	Region/cut-region-gain
+Editor	Secondary-8	Region/pitch-shift-region
+Editor	Secondary-9	Region/rename-region
+Editor	Secondary-0	Region/toggle-opaque-region
+Editor	Primary-Secondary-e	Region/export-region
+Editor	Primary-Tertiary-e	Editor/select-all-after-edit-cursor
+Editor	Tertiary-e	Editor/show-editor-mixer
+Editor	Primary-Tertiary-r	Editor/select-from-regions
+Editor	Secondary-Tertiary-r	Editor/add-range-marker-from-selection
+Editor	Primary-u	Editor/select-all-between-cursors
+Editor	u	Editor/select-all-within-cursors
+Editor	Tertiary-u	Region/fork-regions-from-unselected
+Editor	i	Region/insert-region-from-source-list
+Editor	Secondary-i	Editor/toggle-midi-input-active
+Editor	p	Editor/set-playhead
+Editor	Tertiary-p	Editor/show-editor-props
+Editor	Primary-a	Editor/select-all-objects
+Editor	Secondary-a	Region/align-regions-end
+Editor	Tertiary-a	Region/align-regions-sync
+Editor	Primary-Secondary-a	Region/align-regions-start
+Editor	Primary-Tertiary-a	Region/align-regions-start-relative
+Editor	s	Editor/split-region
+Editor	Secondary-s	Editor/track-solo-toggle
+Editor	Tertiary-s	Editor/ToggleSummary
+Editor	Primary-d	Editor/duplicate
+Editor	Secondary-d	Editor/multi-duplicate
+Editor	Tertiary-d	Editor/select-all-in-punch-range
+Editor	f	Editor/fit-selection
+Editor	Primary-f	EditorEditing/toggle-follow-playhead
+Editor	Tertiary-f	EditorEditing/toggle-stationary-playhead
+Editor	Secondary-f	Region/show-rhythm-ferret
+Editor	Primary-g	Editor/group-selected-regions
+Editor	Primary-Tertiary-g	Editor/ungroup-selected-regions
+Editor	h	Region/play-selected-regions
+Editor	j	Region/trim-front
+Editor	k	Region/trim-back
+Editor	Primary-l	Editor/select-all-in-loop-range
+Editor	Tertiary-l	Editor/show-editor-list
+Editor	Primary-Tertiary-l	Editor/find-and-display-stripable
+Editor	z	Editor/zoom-to-selection
+Editor	Tertiary-z	Editor/toggle-zoom
+Editor	x	Region/align-regions-sync-relative
+Editor	Primary-Tertiary-x	Editor/cut-paste-section
+Editor	Primary-Secondary-c	Editor/editor-crop
+Editor	Primary-Tertiary-c	Editor/copy-paste-section
+Editor	Primary-Tertiary-Delete	Editor/delete-section
+Editor	Primary-Tertiary-BackSpace	Editor/alternate-delete-section
+Editor	Secondary-Tertiary-c	Editor/editor-consolidate
+Editor	v	Region/set-region-sync-position
+Editor	Secondary-v	Editor/ToggleJadeo
+Editor	Tertiary-v	Editor/ToggleVerticalSummary
+Editor	Tertiary-b	Editor/track-record-enable-toggle
+Editor	m	Region/add-region-cue-marker
+Editor	Up	Editor/step-tracks-up
+Editor	Secondary-Up	Editor/select-prev-route
+Editor	Secondary-Tertiary-Up	Editor/select-prev-stripable
+Editor	Primary-Up	Editor/move-selected-tracks-up
+Editor	Down	Editor/step-tracks-down
+Editor	Secondary-Down	Editor/select-next-route
+Editor	Secondary-Tertiary-Down	Editor/select-next-stripable
+Editor	Primary-Down	Editor/move-selected-tracks-down
+Editor	Secondary-Tertiary-Left	Editor/playhead-to-previous-region-boundary
+Editor	Primary-Secondary-Left	Editor/playhead-to-previous-region-sync
+Editor	Primary-Left	Editor/tab-to-transient-backwards
+Editor	Primary-Tertiary-Left	Editor/selected-marker-to-previous-region-boundary
+Editor	Secondary-Tertiary-Right	Editor/playhead-to-next-region-boundary
+Editor	Primary-Secondary-Right	Editor/playhead-to-next-region-sync
+Editor	Primary-Right	Editor/tab-to-transient-forwards
+Editor	Primary-Tertiary-Right	Editor/selected-marker-to-next-region-boundary
+Editor	Page_Down	Editor/scroll-tracks-down
+Editor	Page_Up	Editor/scroll-tracks-up
+Editor	KP_Subtract	Editor/nudge-backward
+Editor	KP_Add	Editor/nudge-forward
+Editor	Tertiary-colon	Editor/copy-playlists-for-selected-tracks
+Editor	Primary->Secondary->Tertiary-colon	Editor/copy-playlists-for-armed-tracks
+Editor	Primary->Tertiary-colon	Editor/copy-playlists-for-all-tracks
+Editor	Tertiary-quotedbl	Editor/new-playlists-for-selected-tracks
+Editor	Primary->Secondary->Tertiary-quotedbl	Editor/new-playlists-for-armed-tracks
+Editor	Primary->Tertiary-quotedbl	Editor/new-playlists-for-all-tracks
+Editor	Tertiary-braceleft	Editor/layer-display-overlaid
+Editor	Tertiary-braceright	Editor/layer-display-stacked
+Editor	Tertiary-bar	Region/raise-region-to-top
+Editor	Tertiary-question	Editor/show-plist-selector
+Editor	Primary-F1	Editor/save-visual-state-1
+Editor	Primary-F2	Editor/save-visual-state-2
+Editor	Primary-F3	Editor/save-visual-state-3
+Editor	Primary-F4	Editor/save-visual-state-4
+Editor	Primary-F5	Editor/save-visual-state-5
+Editor	Primary-F6	Editor/save-visual-state-6
+Editor	Primary-F7	Editor/save-visual-state-7
+Editor	Primary-F8	Editor/save-visual-state-8
+Editor	Primary-F9	Editor/save-visual-state-9
+Editor	Primary-F10	Editor/save-visual-state-10
+Editor	Primary-F11	Editor/save-visual-state-11
+Editor	Primary-F12	Editor/save-visual-state-12
+Editor	F1	Editor/goto-visual-state-1
+Editor	F2	Editor/goto-visual-state-2
+Editor	F3	Editor/goto-visual-state-3
+Editor	F4	Editor/goto-visual-state-4
+Editor	F5	Editor/goto-visual-state-5
+Editor	F6	Editor/goto-visual-state-6
+Editor	F7	Editor/goto-visual-state-7
+Editor	F8	Editor/goto-visual-state-8
+Editor	F9	Editor/goto-visual-state-9
+Editor	F10	Editor/goto-visual-state-10
+Editor	F11	Editor/goto-visual-state-11
+Editor	F12	Editor/goto-visual-state-12
+Editor	1	Editor/cycle-edit-mode
+Editor	2	Editor/cycle-edit-point
+Editor	Primary-2	Editor/cycle-edit-point-with-marker
+Editor	3	Editor/set-mouse-mode-object-range
+Editor	9	Region/set-tempo-from-region
+Editor	0	Editor/set-tempo-from-edit-range
+Global	space	Transport/ToggleRoll
+Global	Secondary-space	Transport/PlaySelection
+Global	Primary-Secondary-space	Transport/ToggleRollMaybe
+Global	Primary-space	Transport/ToggleRollForgetCapture
+Global	Tertiary-space	Transport/record-roll
+Global	Tab	Common/add-location-from-playhead
+Global	Primary-Tab	Common/remove-location-from-playhead
+Global	Return	Transport/alternate-GotoStart
+Global	q	Common/jump-backward-to-mark
+Global	Primary-q	Common/Quit
+Global	w	Common/jump-forward-to-mark
+Global	Primary-e	Main/QuickExport
+Global	Secondary-e	Main/ExportAudio
+Global	Secondary-Tertiary-e	Main/StemExport
+Global	Secondary-r	Common/show-recorder
+Global	Tertiary-r	Transport/Record
+Global	Primary-t	Common/select-all-visible-lanes
+Global	Primary-i	Common/addExistingAudioFiles
+Global	Primary-Tertiary-i	Common/invert-selection
+Global	Primary-o	Main/Open
+Global	Primary-Tertiary-o	Main/Recent
+Global	Secondary-o	Window/toggle-session-options-editor
+Global	a	Transport/solo-selection
+Global	Secondary-Tertiary-a	Window/toggle-audio-connection-manager
+Global	Primary-s	Common/Save
+Global	Primary-Tertiary-s	Main/SnapshotStay
+Global	Primary-Secondary-f	Common/ToggleMaximalEditor
+Global	Primary-Tertiary-f	Common/ToggleMaximalMixer
+Global	Secondary-k	Window/toggle-virtual-keyboard
+Global	Secondary-Tertiary-s	Window/toggle-rtawindow
+Global	l	Transport/Loop
+Global	Secondary-l	Window/toggle-locations
+Global	Secondary-c	Common/show-trigger
+Global	Secondary-b	Common/toggle-meterbridge
+Global	Primary-Tertiary-n	Main/AddTrackBus
+Global	Primary-n	Main/New
+Global	Secondary-Tertiary-m	Window/toggle-midi-connection-manager
+Global	Secondary-m	Common/show-mixer
+Global	Primary-m	Monitor Section/monitor-cut-all
+Global	Primary-Secondary-m	Monitor Section/monitor-mono
+Global	Primary-Tertiary-m	Monitor Section/monitor-dim-all
+Global	Tertiary-Up	Transport/TransitionToRoll
+Global	Tertiary-Down	Transport/TransitionToReverse
+Global	Left	Common/playhead-backward-to-grid
+Global	Secondary-Left	Common/nudge-playhead-backward
+Global	Tertiary-Left	Transport/Rewind
+Global	Right	Common/playhead-forward-to-grid
+Global	Secondary-Right	Common/nudge-playhead-forward
+Global	Tertiary-Right	Transport/Forward
+Global	Primary-Page_Down	Common/next-tab
+Global	Primary-Page_Up	Common/previous-tab
+Global	Home	Transport/GotoStart
+Global	End	Transport/GotoEnd
+Global	Escape	Main/Escape
+Global	Primary-KP_Subtract	Common/nudge-next-backward
+Global	Primary-KP_Right	Common/alternate-jump-forward-to-mark
+Global	Primary-KP_Left	Common/alternate-jump-backward-to-mark
+Global	Primary-KP_Add	Common/nudge-next-forward
+Global	comma	Common/start-range
+Global	period	Common/finish-range
+Global	Primary-KP_Down	Common/alt-start-range
+Global	Primary-KP_Up	Common/alt-finish-range
+Global	Primary-comma	Common/start-punch-range
+Global	Primary-period	Common/finish-punch-range
+Global	Secondary-comma	Common/start-loop-range
+Global	Secondary-period	Common/finish-loop-range
+Global	Tertiary-less	Transport/RecordPreroll
+Global	Tertiary-greater	Transport/RecordCountIn
+Global	KP_Enter	Common/alternate-add-location-from-playhead
+Global	Primary-KP_Enter	Common/alternate-remove-location-from-playhead
+Global	KP_Divide	Transport/focus-on-clock
+Global	KP_Decimal	Transport/numpad-decimal
+Global	KP_Separator	Transport/alternate-numpad-decimal
+Global	KP_0	Transport/numpad-0
+Global	KP_1	Transport/numpad-1
+Global	KP_2	Transport/numpad-2
+Global	KP_3	Transport/numpad-3
+Global	KP_4	Transport/numpad-4
+Global	KP_5	Transport/numpad-5
+Global	KP_6	Transport/numpad-6
+Global	KP_7	Transport/numpad-7
+Global	KP_8	Transport/numpad-8
+Global	KP_9	Transport/numpad-9
+Global	grave	Transport/ToggleClick
+Global	Primary-grave	MIDI/panic
+Global	Secondary-grave	Transport/ToggleExternalSync
+Global	Primary-3	Transport/ToggleFollowEdits
+Global	7	Transport/ToggleAutoReturn
+Global	Primary-7	Transport/ToggleAutoPlay
+Global	8	Transport/TogglePunch
+MIDI	comma	Notes/move-starts-earlier
+MIDI	Secondary-comma	Notes/move-starts-earlier-fine
+MIDI	period	Notes/move-ends-later
+MIDI	Secondary-period	Notes/move-ends-later-fine
+MIDI	Primary-comma	Notes/move-starts-later
+MIDI	Primary-Secondary-comma	Notes/move-starts-later-fine
+MIDI	Primary-period	Notes/move-ends-earlier
+MIDI	Primary-Secondary-period	Notes/move-ends-earlier-fine
+MIDI	Right	Notes/nudge-later
+MIDI	Secondary-Right	Notes/nudge-later-fine
+MIDI	Left	Notes/nudge-earlier
+MIDI	Secondary-Left	Notes/nudge-earlier-fine
+MIDI	c	Notes/edit-channels
+MIDI	v	Notes/edit-velocities
+MIDI	Primary-e	Notes/split-notes-grid
+MIDI	j	Notes/join-notes
+MIDI	s	Notes/split-notes-more
+MIDI	Tertiary-s	Notes/split-notes-less
+MIDI	Level4-KP_1	Notes/add-interval-m2
+MIDI	Level4-KP_2	Notes/add-interval-M2
+MIDI	Level4-KP_3	Notes/add-interval-m3
+MIDI	Level4-KP_4	Notes/add-interval-M3
+MIDI	Level4-KP_5	Notes/add-interval-P4
+MIDI	Level4-KP_7	Notes/add-interval-P5
+MIDI	Level4-KP_8	Notes/add-interval-M7
+MIDI	Level4-KP_9	Notes/add-interval-m7
+MIDI	Level4-KP_0	Notes/add-interval-P8
+MIDI	Primary-d	Notes/duplicate-notes
+MIDI	Secondary-Up	Notes/transpose-up-octave
+MIDI	Secondary-Down	Notes/transpose-down-octave
+MIDI	Up	Notes/transpose-up-semitone
+MIDI	Down	Notes/transpose-down-semitone
+MIDI	Tertiary-Up	Notes/transpose-up-octave-smush
+MIDI	Tertiary-Down	Notes/transpose-down-octave-smush
+MIDI	Secondary-Tertiary-Up	Notes/transpose-up-semitone-smush
+MIDI	Secondary-Tertiary-Down	Notes/transpose-down-semitone-smush
+MIDI	Primary-Up	Notes/increase-velocity
+MIDI	Primary-Down	Notes/decrease-velocity
+MIDI	Primary-Tertiary-Up	Notes/increase-velocity-smush
+MIDI	Primary-Tertiary-Down	Notes/decrease-velocity-smush
+MIDI	Primary-Secondary-Up	Notes/increase-velocity-fine
+MIDI	Primary-Secondary-Down	Notes/decrease-velocity-fine
+MIDI	Primary-Secondary-Tertiary-Up	Notes/increase-velocity-fine-smush
+MIDI	Primary-Secondary-Tertiary-Down	Notes/decrease-velocity-fine-smush
+MIDI	q	Notes/quantize-selected-notes
+MIDI	Primary-a	Notes/select-all
+MIDI	Tab	Notes/select-next
+MIDI	Primary-Tab	Notes/select-previous
+MIDI	Tertiary-Tab	Notes/add-select-next
+MIDI	Primary-Tertiary-Tab	Notes/add-select-previous
+MIDI	Tertiary-ISO_Left_Tab	Notes/alt-add-select-next
+MIDI	Primary-Tertiary-ISO_Left_Tab	Notes/alt-add-select-previous
+MIDI	Tertiary-e	Notes/extend-selection
+MIDI	Tertiary-i	Notes/invert-selection
+MIDI	Tertiary-d	Notes/duplicate-selection
+MIDI	Escape	Notes/clear-selection
+Recorder	Primary-r	Recorder/arm-all
+Recorder	Primary-Tertiary-r	Recorder/arm-none
+Recorder	Primary-z	Recorder/rec-undo
+Recorder	Primary-Tertiary-z	Recorder/rec-redo
+Recorder	Primary-y	Recorder/alternate-rec-redo
+Mixer	d	Mixer/toggle-disk-monitor
+Mixer	i	Mixer/toggle-input-monitor
+Mixer	m	Mixer/mute
+Mixer	s	Mixer/solo
+Mixer	Secondary-i	Mixer/toggle-midi-input-active
+Mixer	r	Mixer/recenable
+Mixer	0	Mixer/unity-gain
+Mixer	Up	Mixer/increment-gain
+Mixer	Down	Mixer/decrement-gain
+Mixer	Left	Mixer/scroll-left
+Mixer	Right	Mixer/scroll-right
+Mixer	Primary-x	Mixer/cut-processors
+Mixer	Primary-c	Mixer/copy-processors
+Mixer	Primary-v	Mixer/paste-processors
+Mixer	Delete	Mixer/delete-processors
+Mixer	BackSpace	Mixer/delete-processors-alt
+Mixer	Primary-a	Mixer/select-all-processors
+Mixer	slash	Mixer/ab-plugins
+Mixer	Secondary-m	Common/show-editor
+Mixer	Secondary-Down	Mixer/select-next-stripable
+Mixer	Secondary-Up	Mixer/select-prev-stripable
+Mixer	Return	Transport/GotoStart
+Mixer	Tertiary-l	Mixer/ToggleMixerList
+Mixer	Tertiary-v	Mixer/ToggleVCAPane
+Mixer	Tertiary-m	Mixer/ToggleMonitorSection
+Mixer	Tertiary-f	Mixer/ToggleFoldbackStrip
+Mixer	Primary-F1	Mixer/store-mixer-scene-1
+Mixer	Primary-F2	Mixer/store-mixer-scene-2
+Mixer	Primary-F3	Mixer/store-mixer-scene-3
+Mixer	Primary-F4	Mixer/store-mixer-scene-4
+Mixer	Primary-F5	Mixer/store-mixer-scene-5
+Mixer	Primary-F6	Mixer/store-mixer-scene-6
+Mixer	Primary-F7	Mixer/store-mixer-scene-7
+Mixer	Primary-F8	Mixer/store-mixer-scene-8
+Mixer	Primary-F9	Mixer/store-mixer-scene-9
+Mixer	Primary-F10	Mixer/store-mixer-scene-10
+Mixer	Primary-F11	Mixer/store-mixer-scene-11
+Mixer	Primary-F12	Mixer/store-mixer-scene-12
+Mixer	F1	Mixer/recall-mixer-scene-1
+Mixer	F2	Mixer/recall-mixer-scene-2
+Mixer	F3	Mixer/recall-mixer-scene-3
+Mixer	F4	Mixer/recall-mixer-scene-4
+Mixer	F5	Mixer/recall-mixer-scene-5
+Mixer	F6	Mixer/recall-mixer-scene-6
+Mixer	F7	Mixer/recall-mixer-scene-7
+Mixer	F8	Mixer/recall-mixer-scene-8
+Mixer	F9	Mixer/recall-mixer-scene-9
+Mixer	F10	Mixer/recall-mixer-scene-10
+Mixer	F11	Mixer/recall-mixer-scene-11
+Mixer	F12	Mixer/recall-mixer-scene-12
+Step Editing	grave	StepEditing/octave-0
+Step Editing	1	StepEditing/octave-1
+Step Editing	2	StepEditing/octave-2
+Step Editing	3	StepEditing/octave-3
+Step Editing	4	StepEditing/octave-4
+Step Editing	5	StepEditing/octave-5
+Step Editing	6	StepEditing/octave-6
+Step Editing	7	StepEditing/octave-7
+Step Editing	8	StepEditing/octave-8
+Step Editing	9	StepEditing/octave-9
+Step Editing	0	StepEditing/octave-10
+Step Editing	F1	StepEditing/note-length-whole
+Step Editing	F2	StepEditing/note-length-half
+Step Editing	F3	StepEditing/note-length-third
+Step Editing	F4	StepEditing/note-length-quarter
+Step Editing	F5	StepEditing/note-length-eighth
+Step Editing	F6	StepEditing/note-length-sixteenth
+Step Editing	F7	StepEditing/note-length-thirtysecond
+Step Editing	F8	StepEditing/note-length-sixtyfourth
+Step Editing	a	StepEditing/insert-c
+Step Editing	w	StepEditing/insert-csharp
+Step Editing	s	StepEditing/insert-d
+Step Editing	e	StepEditing/insert-dsharp
+Step Editing	d	StepEditing/insert-e
+Step Editing	f	StepEditing/insert-f
+Step Editing	t	StepEditing/insert-fsharp
+Step Editing	g	StepEditing/insert-g
+Step Editing	y	StepEditing/insert-gsharp
+Step Editing	h	StepEditing/insert-a
+Step Editing	u	StepEditing/insert-asharp
+Step Editing	j	StepEditing/insert-b
+Step Editing	Tab	StepEditing/insert-rest
+Step Editing	Primary-Tab	StepEditing/insert-snap-rest
+Step Editing	BackSpace	StepEditing/back
+Step Editing	z	StepEditing/note-velocity-ppp
+Step Editing	x	StepEditing/note-velocity-pp
+Step Editing	c	StepEditing/note-velocity-p
+Step Editing	v	StepEditing/note-velocity-mp
+Step Editing	b	StepEditing/note-velocity-mf
+Step Editing	n	StepEditing/note-velocity-f
+Step Editing	m	StepEditing/note-velocity-ff
+Step Editing	comma	StepEditing/note-velocity-fff
+Step Editing	Up	StepEditing/next-note-velocity
+Step Editing	Down	StepEditing/prev-note-velocity
+Step Editing	Primary-Up	StepEditing/next-note-length
+Step Editing	Primary-Down	StepEditing/prev-note-length
+Step Editing	apostrophe	StepEditing/toggle-triplet
+Step Editing	period	StepEditing/toggle-dotted
+Step Editing	Primary-period	StepEditing/no-dotted
+Step Editing	Tertiary-bar	StepEditing/toggle-chord
+Monitor Section	e	Solo/toggle-exclusive-solo
+Monitor Section	Shift-o	Solo/toggle-mute-overrides-solo
+Monitor Section	b	Monitor/toggle-monitor-processor-box
+Monitor Section	l	Monitor/monitor-cut-0
+Monitor Section	Primary-l	Monitor/monitor-solo-0
+Monitor Section	Secondary-l	Monitor/monitor-dim-0
+Monitor Section	Tertiary-l	Monitor/monitor-invert-0
+Monitor Section	r	Monitor/monitor-cut-1
+Monitor Section	Primary-r	Monitor/monitor-solo-1
+Monitor Section	Secondary-r	Monitor/monitor-dim-1
+Monitor Section	Tertiary-r	Monitor/monitor-invert-1
+Monitor Section	i	Solo/solo-use-in-place
+Monitor Section	p	Solo/solo-use-pfl
+Monitor Section	a	Solo/solo-use-afl
+Processor Box	Delete	ProcessorMenu/delete
+Processor Box	BackSpace	ProcessorMenu/backspace
+Cues	F1	Cues/trigger-cue-0
+Cues	F2	Cues/trigger-cue-1
+Cues	F3	Cues/trigger-cue-2
+Cues	F4	Cues/trigger-cue-3
+Cues	F5	Cues/trigger-cue-4
+Cues	F6	Cues/trigger-cue-5
+Cues	F7	Cues/trigger-cue-6
+Cues	F8	Cues/trigger-cue-7
+Cues	Delete	Cues/clear-trigger-slot
+Cues	BackSpace	Cues/clear-trigger-slot-alt
+Cues	Tertiary-l	Cues/ToggleTriggerList
+Cues	Tertiary-p	Cues/ToggleTriggerProps
+RegionFx Box	Delete	RegionFxMenu/rfx-delete
+RegionFx Box	BackSpace	RegionFxMenu/rfx-backspace
+Automation	Return	Automation/create-point
+Automation	Secondary-Return	Automation/create-point-with-guards
+Automation	Right	Automation/move-points-later
+Automation	Left	Automation/move-points-earlier
+Automation	Up	Automation/raise-points
+Automation	Down	Automation/lower-points
+Automation	Primary-Return	Automation/begin-edit
+Automation	Escape	Automation/end-edit

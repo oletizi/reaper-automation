@@ -1,0 +1,760 @@
+bare_action	qualified	source
+AddTrackBus	Main/AddTrackBus	keys+menus
+Archive		menus
+Cleanup		menus
+CleanupPeakFiles		menus
+CleanupUnusedRegions		menus
+CleanupUnusedSources		menus
+Close		menus
+CloseVideo		menus
+Edit		menus
+EditMetadata		menus
+EditorEditing/cycle-snap-mode		menus
+EditorEditing/editor-copy		menus
+EditorEditing/editor-cut		menus
+EditorEditing/editor-delete		menus
+EditorEditing/editor-paste		menus
+EditorEditing/next-grid-choice		menus
+EditorEditing/prev-grid-choice		menus
+EditorEditing/redo		menus
+EditorEditing/toggle-follow-playhead		menus
+EditorEditing/toggle-stationary-playhead		menus
+EditorEditing/undo		menus
+EditorMenu		menus
+EditorSnap/grid-type-asixteenthbeat		menus
+EditorSnap/grid-type-bar		menus
+EditorSnap/grid-type-beat		menus
+EditorSnap/grid-type-cdframe		menus
+EditorSnap/grid-type-eighths		menus
+EditorSnap/grid-type-fifths		menus
+EditorSnap/grid-type-fourteenths		menus
+EditorSnap/grid-type-halves		menus
+EditorSnap/grid-type-minsec		menus
+EditorSnap/grid-type-none		menus
+EditorSnap/grid-type-quarters		menus
+EditorSnap/grid-type-sevenths		menus
+EditorSnap/grid-type-sixths		menus
+EditorSnap/grid-type-tenths		menus
+EditorSnap/grid-type-thirds		menus
+EditorSnap/grid-type-thirtyseconds		menus
+EditorSnap/grid-type-timecode		menus
+EditorSnap/grid-type-twelfths		menus
+EditorSnap/grid-type-twentieths		menus
+EditorSnap/grid-type-twentyeighths		menus
+EditorSnap/grid-type-twentyfourths		menus
+EditorZoom/cycle-zoom-focus		menus
+EditorZoom/zoom-focus-center		menus
+EditorZoom/zoom-focus-edit		menus
+EditorZoom/zoom-focus-left		menus
+EditorZoom/zoom-focus-mouse		menus
+EditorZoom/zoom-focus-playhead		menus
+EditorZoom/zoom-focus-right		menus
+Escape	Main/Escape	keys
+Export		menus
+ExportAudio	Main/ExportAudio	keys+menus
+ExportStrips		menus
+ExportVideo		menus
+FlushWastebasket		menus
+Forward	Transport/Forward	keys+menus
+GlobalQuantize		menus
+GotoEnd	Transport/GotoEnd	keys+menus
+GotoStart	Transport/GotoStart	keys+menus
+GotoWallClock		menus
+GotoZero		menus
+GridChoice		menus
+GridChoiceQuintuplets		menus
+GridChoiceSeptuplets		menus
+GridChoiceTriplets		menus
+Help		menus
+ImportMetadata		menus
+ImportStrips		menus
+Loop	Transport/Loop	keys+menus
+LoudnessAssistant		menus
+MainMenu		menus
+ManageTemplates		menus
+Metadata		menus
+MixerMenu		menus
+MonitorMenu		menus
+New	Main/New	keys+menus
+NewMIDITracer		menus
+Open	Main/Open	keys+menus
+OpenVideo		menus
+PlayPreroll		menus
+PlaySelection	Transport/PlaySelection	keys+menus
+PopupRegionMenu		menus
+PrefsMenu		menus
+QuickExport	Main/QuickExport	keys+menus
+Quit	Common/Quit	keys+menus
+Recent	Main/Recent	keys+menus
+Record	Transport/Record	keys+menus
+RecordCountIn	Transport/RecordCountIn	keys+menus
+RecordPreroll	Transport/RecordPreroll	keys+menus
+RecorderMenu		menus
+RegionMenu		menus
+RegionMenuDuplicate		menus
+RegionMenuEdit		menus
+RegionMenuFades		menus
+RegionMenuGain		menus
+RegionMenuLayering		menus
+RegionMenuMIDI		menus
+RegionMenuMarkers		menus
+RegionMenuPosition		menus
+RegionMenuRanges		menus
+RegionMenuTrim		menus
+Rename		menus
+Rewind	Transport/Rewind	keys+menus
+Save	Common/Save	keys+menus
+SaveAs		menus
+SaveTemplate		menus
+Session		menus
+SetShuttleUnitsPercentage		menus
+SetShuttleUnitsSemitones		menus
+SnapshotStay	Main/SnapshotStay	keys+menus
+SnapshotSwitch		menus
+StemExport	Main/StemExport	keys+menus
+ToggleAutoInput		menus
+ToggleAutoPlay	Transport/ToggleAutoPlay	keys+menus
+ToggleAutoReturn	Transport/ToggleAutoReturn	keys+menus
+ToggleClick	Transport/ToggleClick	keys+menus
+ToggleExternalSync	Transport/ToggleExternalSync	keys+menus
+ToggleFoldbackStrip	Mixer/ToggleFoldbackStrip	keys+menus
+ToggleFollowEdits	Transport/ToggleFollowEdits	keys+menus
+ToggleGroupTabs		menus
+ToggleJadeo	Editor/ToggleJadeo	keys+menus
+ToggleMaximalEditor	Common/ToggleMaximalEditor	keys+menus
+ToggleMaximalMixer	Common/ToggleMaximalMixer	keys+menus
+ToggleMixerList	Mixer/ToggleMixerList	keys+menus
+ToggleMonitorSection	Mixer/ToggleMonitorSection	keys+menus
+TogglePunch	Transport/TogglePunch	keys+menus
+TogglePunchIn		menus
+TogglePunchOut		menus
+ToggleRoll	Transport/ToggleRoll	keys+menus
+ToggleRollForgetCapture	Transport/ToggleRollForgetCapture	keys+menus
+ToggleRollMaybe	Transport/ToggleRollMaybe	keys+menus
+ToggleSummary	Editor/ToggleSummary	keys+menus
+ToggleTimeMaster		menus
+ToggleTriggerList	Cues/ToggleTriggerList	keys+menus
+ToggleTriggerProps	Cues/ToggleTriggerProps	keys+menus
+ToggleVCAPane	Mixer/ToggleVCAPane	keys+menus
+ToggleVerticalSummary	Editor/ToggleVerticalSummary	keys+menus
+TrackHeightMenu		menus
+TrackMenu		menus
+TrackPlaylistMenu		menus
+TransitionToReverse	Transport/TransitionToReverse	keys+menus
+TransitionToRoll	Transport/TransitionToRoll	keys+menus
+Transport		menus
+TriggerMenu		menus
+UseMonitorSection		menus
+ZoomFocus		menus
+ab-plugins	Mixer/ab-plugins	keys
+ab_plugins		menus
+activate_all		menus
+add-interval-M2	Notes/add-interval-M2	keys
+add-interval-M3	Notes/add-interval-M3	keys
+add-interval-M7	Notes/add-interval-M7	keys
+add-interval-P4	Notes/add-interval-P4	keys
+add-interval-P5	Notes/add-interval-P5	keys
+add-interval-P8	Notes/add-interval-P8	keys
+add-interval-m2	Notes/add-interval-m2	keys
+add-interval-m3	Notes/add-interval-m3	keys
+add-interval-m7	Notes/add-interval-m7	keys
+add-location-from-playhead	Common/add-location-from-playhead	keys+menus
+add-range-marker-from-region		menus
+add-range-marker-from-selection	Editor/add-range-marker-from-selection	keys+menus
+add-range-markers-from-region		menus
+add-region-cue-marker	Region/add-region-cue-marker	keys+menus
+add-select-next	Notes/add-select-next	keys
+add-select-previous	Notes/add-select-previous	keys
+addExistingAudioFiles	Common/addExistingAudioFiles	keys+menus
+addExistingPTFiles		menus
+addExternalAudioToRegionList		menus
+align-regions-end	Region/align-regions-end	keys+menus
+align-regions-end-relative		menus
+align-regions-start	Region/align-regions-start	keys+menus
+align-regions-start-relative	Region/align-regions-start-relative	keys+menus
+align-regions-sync	Region/align-regions-sync	keys+menus
+align-regions-sync-relative	Region/align-regions-sync-relative	keys+menus
+alt-add-select-next	Notes/alt-add-select-next	keys
+alt-add-select-previous	Notes/alt-add-select-previous	keys
+alt-finish-range	Common/alt-finish-range	keys
+alt-start-range	Common/alt-start-range	keys
+alternate-GotoStart	Transport/alternate-GotoStart	keys
+alternate-add-location-from-playhead	Common/alternate-add-location-from-playhead	keys
+alternate-alternate-redo	Editing/alternate-alternate-redo	keys
+alternate-delete-section	Editor/alternate-delete-section	keys
+alternate-editor-delete	Editing/alternate-editor-delete	keys
+alternate-jump-backward-to-mark	Common/alternate-jump-backward-to-mark	keys
+alternate-jump-forward-to-mark	Common/alternate-jump-forward-to-mark	keys
+alternate-numpad-decimal	Transport/alternate-numpad-decimal	keys
+alternate-rec-redo	Recorder/alternate-rec-redo	keys
+alternate-redo	Editing/alternate-redo	keys
+alternate-remove-location-from-playhead	Common/alternate-remove-location-from-playhead	keys
+arm-all	Recorder/arm-all	keys
+arm-none	Recorder/arm-none	keys
+attach-editor		menus
+attach-mixer		menus
+attach-preferences		menus
+attach-recorder		menus
+attach-trigger		menus
+back	StepEditing/back	keys
+backspace	ProcessorMenu/backspace	keys
+begin-edit	Automation/begin-edit	keys
+boost-region-gain	Region/boost-region-gain	keys+menus
+bounce-regions-processed		menus
+bounce-regions-unprocessed		menus
+bring-into-session		menus
+center-playhead		menus
+chat		menus
+clear		menus
+clear-region-cue-markers		menus
+clear-selection	Notes/clear-selection	keys
+clear-trigger-slot	Cues/clear-trigger-slot	keys
+clear-trigger-slot-alt	Cues/clear-trigger-slot-alt	keys
+clear_post		menus
+clear_pre		menus
+close-region-gaps		menus
+combine-regions		menus
+controls		menus
+copy		menus
+copy-paste-section	Editor/copy-paste-section	keys+menus
+copy-playlists-for-all-tracks	Editor/copy-playlists-for-all-tracks	keys+menus
+copy-playlists-for-armed-tracks	Editor/copy-playlists-for-armed-tracks	keys+menus
+copy-playlists-for-selected-tracks	Editor/copy-playlists-for-selected-tracks	keys+menus
+copy-processors	Mixer/copy-processors	keys
+create-point	Automation/create-point	keys
+create-point-with-guards	Automation/create-point-with-guards	keys
+custom-volume-pos		menus
+cut		menus
+cut-paste-section	Editor/cut-paste-section	keys+menus
+cut-processors	Mixer/cut-processors	keys
+cut-region-gain	Region/cut-region-gain	keys+menus
+cycle-edit-mode	Editor/cycle-edit-mode	keys
+cycle-edit-point	Editor/cycle-edit-point	keys+menus
+cycle-edit-point-with-marker	Editor/cycle-edit-point-with-marker	keys+menus
+cycle-marker-click-behavior		menus
+cycle-snap-mode	Editing/cycle-snap-mode	keys
+deactivate_all		menus
+decrease-velocity	Notes/decrease-velocity	keys
+decrease-velocity-fine	Notes/decrease-velocity-fine	keys
+decrease-velocity-fine-smush	Notes/decrease-velocity-fine-smush	keys
+decrease-velocity-smush	Notes/decrease-velocity-smush	keys
+decrement-gain	Mixer/decrement-gain	keys
+deinterlace-midi		menus
+delete	ProcessorMenu/delete	keys+menus
+delete-processors	Mixer/delete-processors	keys
+delete-processors-alt	Mixer/delete-processors-alt	keys
+delete-section	Editor/delete-section	keys+menus
+deselect-all		menus
+deselectall		menus
+detach-editor		menus
+detach-mixer		menus
+detach-preferences		menus
+detach-recorder		menus
+detach-trigger		menus
+disk-io-custom		menus
+disk-io-postfader		menus
+disk-io-prefader		menus
+duplicate	Editor/duplicate	keys
+duplicate-notes	Notes/duplicate-notes	keys
+duplicate-region		menus
+duplicate-routes		menus
+duplicate-selection	Notes/duplicate-selection	keys
+edit		menus
+edit-channels	Notes/edit-channels	keys
+edit-cursor-to-next-region-sync	Editor/edit-cursor-to-next-region-sync	keys+menus
+edit-cursor-to-previous-region-sync	Editor/edit-cursor-to-previous-region-sync	keys+menus
+edit-generic		menus
+edit-region-dedicated-window		menus
+edit-velocities	Notes/edit-velocities	keys
+editor-analyze-loudness		menus
+editor-analyze-spectrum		menus
+editor-consolidate	Editor/editor-consolidate	keys+menus
+editor-consolidate-with-processing		menus
+editor-copy	Editing/editor-copy	keys
+editor-crop	Editor/editor-crop	keys+menus
+editor-cut	Editing/editor-cut	keys
+editor-delete	Editing/editor-delete	keys
+editor-fade-range	Editor/editor-fade-range	keys+menus
+editor-loudness-assistant		menus
+editor-paste	Editing/editor-paste	keys
+end-edit	Automation/end-edit	keys
+expand-tracks	Editor/expand-tracks	keys+menus
+export-region	Region/export-region	keys+menus
+extend-selection	Notes/extend-selection	keys
+find-and-display-stripable	Editor/find-and-display-stripable	keys+menus
+finish-loop-range	Common/finish-loop-range	keys
+finish-punch-range	Common/finish-punch-range	keys
+finish-range	Common/finish-range	keys+menus
+fit-selection	Editor/fit-selection	keys+menus
+focus-on-clock	Transport/focus-on-clock	keys+menus
+fork-region		menus
+fork-regions-from-unselected	Region/fork-regions-from-unselected	keys+menus
+forums		menus
+goto-mark-1		menus
+goto-mark-2		menus
+goto-mark-3		menus
+goto-mark-4		menus
+goto-mark-5		menus
+goto-mark-6		menus
+goto-mark-7		menus
+goto-mark-8		menus
+goto-mark-9		menus
+goto-visual-state-1	Editor/goto-visual-state-1	keys+menus
+goto-visual-state-10	Editor/goto-visual-state-10	keys+menus
+goto-visual-state-11	Editor/goto-visual-state-11	keys+menus
+goto-visual-state-12	Editor/goto-visual-state-12	keys+menus
+goto-visual-state-2	Editor/goto-visual-state-2	keys+menus
+goto-visual-state-3	Editor/goto-visual-state-3	keys+menus
+goto-visual-state-4	Editor/goto-visual-state-4	keys+menus
+goto-visual-state-5	Editor/goto-visual-state-5	keys+menus
+goto-visual-state-6	Editor/goto-visual-state-6	keys+menus
+goto-visual-state-7	Editor/goto-visual-state-7	keys+menus
+goto-visual-state-8	Editor/goto-visual-state-8	keys+menus
+goto-visual-state-9	Editor/goto-visual-state-9	keys+menus
+group-selected-regions	Editor/group-selected-regions	keys+menus
+hide-editor		menus
+hide-mixer		menus
+hide-preferences		menus
+hide-recorder		menus
+hide-trigger		menus
+howto-report		menus
+increase-velocity	Notes/increase-velocity	keys
+increase-velocity-fine	Notes/increase-velocity-fine	keys
+increase-velocity-fine-smush	Notes/increase-velocity-fine-smush	keys
+increase-velocity-smush	Notes/increase-velocity-smush	keys
+increment-gain	Mixer/increment-gain	keys
+insert-a	StepEditing/insert-a	keys
+insert-asharp	StepEditing/insert-asharp	keys
+insert-b	StepEditing/insert-b	keys
+insert-c	StepEditing/insert-c	keys
+insert-csharp	StepEditing/insert-csharp	keys
+insert-d	StepEditing/insert-d	keys
+insert-dsharp	StepEditing/insert-dsharp	keys
+insert-e	StepEditing/insert-e	keys
+insert-f	StepEditing/insert-f	keys
+insert-fsharp	StepEditing/insert-fsharp	keys
+insert-g	StepEditing/insert-g	keys
+insert-gsharp	StepEditing/insert-gsharp	keys
+insert-patch-change		menus
+insert-patch-change-context		menus
+insert-region-from-source-list	Region/insert-region-from-source-list	keys+menus
+insert-rest	StepEditing/insert-rest	keys
+insert-snap-rest	StepEditing/insert-snap-rest	keys
+insert-time		menus
+invert-selection	Common/invert-selection;Notes/invert-selection	keys+menus
+join-notes	Notes/join-notes	keys
+jump-backward-to-mark	Common/jump-backward-to-mark	keys+menus
+jump-forward-to-mark	Common/jump-forward-to-mark	keys+menus
+jump-to-loop-end		menus
+jump-to-loop-start		menus
+layer-display-overlaid	Editor/layer-display-overlaid	keys+menus
+layer-display-stacked	Editor/layer-display-stacked	keys+menus
+legatize-region		menus
+lock		menus
+loop-region		menus
+loudness-analyze-region		menus
+lower-points	Automation/lower-points	keys
+lower-region		menus
+lower-region-to-bottom		menus
+make-region-markers-cd		menus
+make-region-markers-global		menus
+manage-pins		menus
+marker-click-locate		menus
+marker-click-locate-when-stopped		menus
+marker-click-select-only		menus
+menu-show-preferences		menus
+monitor-cut-0	Monitor/monitor-cut-0	keys
+monitor-cut-1	Monitor/monitor-cut-1	keys
+monitor-cut-all	Monitor Section/monitor-cut-all	keys+menus
+monitor-dim-0	Monitor/monitor-dim-0	keys
+monitor-dim-1	Monitor/monitor-dim-1	keys
+monitor-dim-all	Monitor Section/monitor-dim-all	keys+menus
+monitor-invert-0	Monitor/monitor-invert-0	keys
+monitor-invert-1	Monitor/monitor-invert-1	keys
+monitor-mono	Monitor Section/monitor-mono	keys+menus
+monitor-solo-0	Monitor/monitor-solo-0	keys
+monitor-solo-1	Monitor/monitor-solo-1	keys
+move-ends-earlier	Notes/move-ends-earlier	keys
+move-ends-earlier-fine	Notes/move-ends-earlier-fine	keys
+move-ends-later	Notes/move-ends-later	keys
+move-ends-later-fine	Notes/move-ends-later-fine	keys
+move-points-earlier	Automation/move-points-earlier	keys
+move-points-later	Automation/move-points-later	keys
+move-range-end-to-next-region-boundary		menus
+move-range-end-to-previous-region-boundary		menus
+move-range-start-to-next-region-boundary		menus
+move-range-start-to-previous-region-boundary		menus
+move-selected-tracks-down	Editor/move-selected-tracks-down	keys
+move-selected-tracks-up	Editor/move-selected-tracks-up	keys
+move-starts-earlier	Notes/move-starts-earlier	keys
+move-starts-earlier-fine	Notes/move-starts-earlier-fine	keys
+move-starts-later	Notes/move-starts-later	keys
+move-starts-later-fine	Notes/move-starts-later-fine	keys
+multi-duplicate	Editor/multi-duplicate	keys
+multi-duplicate-region		menus
+mute	Mixer/mute	keys
+naturalize-region	Region/naturalize-region	keys+menus
+new-playlists-for-all-tracks	Editor/new-playlists-for-all-tracks	keys+menus
+new-playlists-for-armed-tracks	Editor/new-playlists-for-armed-tracks	keys+menus
+new-playlists-for-selected-tracks	Editor/new-playlists-for-selected-tracks	keys+menus
+newaux		menus
+newinsert		menus
+newlisten		menus
+newplugin		menus
+newsend		menus
+next-grid-choice	Editing/next-grid-choice	keys
+next-note-length	StepEditing/next-note-length	keys
+next-note-velocity	StepEditing/next-note-velocity	keys
+next-tab	Common/next-tab	keys
+no-dotted	StepEditing/no-dotted	keys
+normalize-region	Region/normalize-region	keys+menus
+note-length-eighth	StepEditing/note-length-eighth	keys
+note-length-half	StepEditing/note-length-half	keys
+note-length-quarter	StepEditing/note-length-quarter	keys
+note-length-sixteenth	StepEditing/note-length-sixteenth	keys
+note-length-sixtyfourth	StepEditing/note-length-sixtyfourth	keys
+note-length-third	StepEditing/note-length-third	keys
+note-length-thirtysecond	StepEditing/note-length-thirtysecond	keys
+note-length-whole	StepEditing/note-length-whole	keys
+note-velocity-f	StepEditing/note-velocity-f	keys
+note-velocity-ff	StepEditing/note-velocity-ff	keys
+note-velocity-fff	StepEditing/note-velocity-fff	keys
+note-velocity-mf	StepEditing/note-velocity-mf	keys
+note-velocity-mp	StepEditing/note-velocity-mp	keys
+note-velocity-p	StepEditing/note-velocity-p	keys
+note-velocity-pp	StepEditing/note-velocity-pp	keys
+note-velocity-ppp	StepEditing/note-velocity-ppp	keys
+nudge-backward	Editor/nudge-backward	keys+menus
+nudge-backward-by-capture-offset		menus
+nudge-earlier	Notes/nudge-earlier	keys
+nudge-earlier-fine	Notes/nudge-earlier-fine	keys
+nudge-forward	Editor/nudge-forward	keys+menus
+nudge-forward-by-capture-offset		menus
+nudge-later	Notes/nudge-later	keys
+nudge-later-fine	Notes/nudge-later-fine	keys
+nudge-next-backward	Common/nudge-next-backward	keys
+nudge-next-forward	Common/nudge-next-forward	keys
+nudge-playhead-backward	Common/nudge-playhead-backward	keys+menus
+nudge-playhead-forward	Common/nudge-playhead-forward	keys+menus
+numpad-0	Transport/numpad-0	keys
+numpad-1	Transport/numpad-1	keys
+numpad-2	Transport/numpad-2	keys
+numpad-3	Transport/numpad-3	keys
+numpad-4	Transport/numpad-4	keys
+numpad-5	Transport/numpad-5	keys
+numpad-6	Transport/numpad-6	keys
+numpad-7	Transport/numpad-7	keys
+numpad-8	Transport/numpad-8	keys
+numpad-9	Transport/numpad-9	keys
+numpad-decimal	Transport/numpad-decimal	keys
+octave-0	StepEditing/octave-0	keys
+octave-1	StepEditing/octave-1	keys
+octave-10	StepEditing/octave-10	keys
+octave-2	StepEditing/octave-2	keys
+octave-3	StepEditing/octave-3	keys
+octave-4	StepEditing/octave-4	keys
+octave-5	StepEditing/octave-5	keys
+octave-6	StepEditing/octave-6	keys
+octave-7	StepEditing/octave-7	keys
+octave-8	StepEditing/octave-8	keys
+octave-9	StepEditing/octave-9	keys
+panic	MIDI/panic	keys+menus
+paste		menus
+paste-processors	Mixer/paste-processors	keys
+pitch-shift-region	Region/pitch-shift-region	keys+menus
+place-transient		menus
+play-from-edit-point-and-return	Editor/play-from-edit-point-and-return	keys+menus
+play-selected-regions	Region/play-selected-regions	keys+menus
+playhead-backward-to-grid	Common/playhead-backward-to-grid	keys+menus
+playhead-forward-to-grid	Common/playhead-forward-to-grid	keys+menus
+playhead-to-edit		menus
+playhead-to-next-region-boundary	Editor/playhead-to-next-region-boundary	keys+menus
+playhead-to-next-region-boundary-noselection		menus
+playhead-to-next-region-sync	Editor/playhead-to-next-region-sync	keys+menus
+playhead-to-previous-region-boundary	Editor/playhead-to-previous-region-boundary	keys+menus
+playhead-to-previous-region-boundary-noselection		menus
+playhead-to-previous-region-sync	Editor/playhead-to-previous-region-sync	keys+menus
+presets		menus
+prev-grid-choice	Editing/prev-grid-choice	keys
+prev-note-length	StepEditing/prev-note-length	keys
+prev-note-velocity	StepEditing/prev-note-velocity	keys
+previous-tab	Common/previous-tab	keys
+quantize-region	Region/quantize-region	keys+menus
+quantize-selected-notes	Notes/quantize-selected-notes	keys
+raise-points	Automation/raise-points	keys
+raise-region		menus
+raise-region-to-top	Region/raise-region-to-top	keys+menus
+rec-redo	Recorder/rec-redo	keys
+rec-undo	Recorder/rec-undo	keys
+recall-mixer-scene-1	Mixer/recall-mixer-scene-1	keys
+recall-mixer-scene-10	Mixer/recall-mixer-scene-10	keys
+recall-mixer-scene-11	Mixer/recall-mixer-scene-11	keys
+recall-mixer-scene-12	Mixer/recall-mixer-scene-12	keys
+recall-mixer-scene-2	Mixer/recall-mixer-scene-2	keys
+recall-mixer-scene-3	Mixer/recall-mixer-scene-3	keys
+recall-mixer-scene-4	Mixer/recall-mixer-scene-4	keys
+recall-mixer-scene-5	Mixer/recall-mixer-scene-5	keys
+recall-mixer-scene-6	Mixer/recall-mixer-scene-6	keys
+recall-mixer-scene-7	Mixer/recall-mixer-scene-7	keys
+recall-mixer-scene-8	Mixer/recall-mixer-scene-8	keys
+recall-mixer-scene-9	Mixer/recall-mixer-scene-9	keys
+recenable	Mixer/recenable	keys
+record-roll	Transport/record-roll	keys+menus
+redo	Editing/redo	keys
+redo-last-selection-op		menus
+reference		menus
+region-fill-track		menus
+remove-gaps		menus
+remove-last-capture		menus
+remove-location-from-playhead	Common/remove-location-from-playhead	keys+menus
+remove-overlap		menus
+remove-region		menus
+remove-region-sync		menus
+remove-time		menus
+remove-track		menus
+removeUnusedRegions		menus
+removelisten		menus
+rename		menus
+rename-region	Region/rename-region	keys+menus
+reset-region-gain		menus
+reset-region-gain-envelopes		menus
+reverse-region	Region/reverse-region	keys+menus
+rfx-backspace	RegionFxMenu/rfx-backspace	keys
+rfx-delete	RegionFxMenu/rfx-delete	keys
+rlAudition		menus
+save-visual-state-1	Editor/save-visual-state-1	keys+menus
+save-visual-state-10	Editor/save-visual-state-10	keys+menus
+save-visual-state-11	Editor/save-visual-state-11	keys+menus
+save-visual-state-12	Editor/save-visual-state-12	keys+menus
+save-visual-state-2	Editor/save-visual-state-2	keys+menus
+save-visual-state-3	Editor/save-visual-state-3	keys+menus
+save-visual-state-4	Editor/save-visual-state-4	keys+menus
+save-visual-state-5	Editor/save-visual-state-5	keys+menus
+save-visual-state-6	Editor/save-visual-state-6	keys+menus
+save-visual-state-7	Editor/save-visual-state-7	keys+menus
+save-visual-state-8	Editor/save-visual-state-8	keys+menus
+save-visual-state-9	Editor/save-visual-state-9	keys+menus
+script-1		menus
+script-2		menus
+script-3		menus
+script-4		menus
+script-5		menus
+script-6		menus
+script-7		menus
+script-8		menus
+script-9		menus
+scroll-backward		menus
+scroll-forward		menus
+scroll-left	Mixer/scroll-left	keys
+scroll-right	Mixer/scroll-right	keys
+scroll-tracks-down	Editor/scroll-tracks-down	keys+menus
+scroll-tracks-up	Editor/scroll-tracks-up	keys+menus
+select-all	Notes/select-all	keys
+select-all-after-edit-cursor	Editor/select-all-after-edit-cursor	keys+menus
+select-all-before-edit-cursor		menus
+select-all-between-cursors	Editor/select-all-between-cursors	keys+menus
+select-all-in-loop-range	Editor/select-all-in-loop-range	keys+menus
+select-all-in-punch-range	Editor/select-all-in-punch-range	keys+menus
+select-all-objects	Editor/select-all-objects	keys+menus
+select-all-processors	Mixer/select-all-processors	keys
+select-all-tracks		menus
+select-all-visible-lanes	Common/select-all-visible-lanes	keys+menus
+select-all-within-cursors	Editor/select-all-within-cursors	keys+menus
+select-from-regions	Editor/select-from-regions	keys+menus
+select-loop-range		menus
+select-next	Notes/select-next	keys
+select-next-route	Editor/select-next-route	keys+menus
+select-next-stripable	Editor/select-next-stripable;Mixer/select-next-stripable	keys
+select-prev-route	Editor/select-prev-route	keys+menus
+select-prev-stripable	Editor/select-prev-stripable;Mixer/select-prev-stripable	keys
+select-previous	Notes/select-previous	keys
+select-punch-range		menus
+selectall		menus
+selected-marker-to-next-region-boundary	Editor/selected-marker-to-next-region-boundary	keys+menus
+selected-marker-to-previous-region-boundary	Editor/selected-marker-to-previous-region-boundary	keys+menus
+send_options		menus
+separate-from-loop		menus
+separate-from-punch		menus
+separate-under-region		menus
+sequence-regions		menus
+set-fade-in-length	Region/set-fade-in-length	keys+menus
+set-fade-out-length	Region/set-fade-out-length	keys+menus
+set-global-quantization-1-bar		menus
+set-global-quantization-eighth-note		menus
+set-global-quantization-onetwentyeighth-note		menus
+set-global-quantization-quarter-note		menus
+set-global-quantization-sixteenth-note		menus
+set-global-quantization-sixtyfourth-note		menus
+set-global-quantization-thirtysecond-note		menus
+set-loop-from-edit-range	Editor/set-loop-from-edit-range	keys+menus
+set-loop-from-region		menus
+set-mouse-mode-content	Editing/set-mouse-mode-content	keys
+set-mouse-mode-cut	Editing/set-mouse-mode-cut	keys
+set-mouse-mode-draw	Editing/set-mouse-mode-draw	keys
+set-mouse-mode-grid	Editing/set-mouse-mode-grid	keys
+set-mouse-mode-object	Editing/set-mouse-mode-object	keys
+set-mouse-mode-object-range	Editor/set-mouse-mode-object-range	keys+menus
+set-mouse-mode-range	Editing/set-mouse-mode-range	keys
+set-mouse-mode-timefx	Editing/set-mouse-mode-timefx	keys
+set-playhead	Editor/set-playhead	keys+menus
+set-punch-from-edit-range	Editor/set-punch-from-edit-range	keys+menus
+set-punch-from-region		menus
+set-region-sync-position	Region/set-region-sync-position	keys+menus
+set-selection-from-region		menus
+set-session-end-from-playhead		menus
+set-session-from-edit-range		menus
+set-session-start-from-playhead		menus
+set-tempo-from-edit-range	Editor/set-tempo-from-edit-range	keys+menus
+set-tempo-from-region	Region/set-tempo-from-region	keys+menus
+show-all-markers		menus
+show-all-ranges		menus
+show-cd-markers		menus
+show-cue-markers		menus
+show-editor	Common/show-editor	keys+menus
+show-editor-list	Editor/show-editor-list	keys+menus
+show-editor-mixer	Editor/show-editor-mixer	keys+menus
+show-editor-props	Editor/show-editor-props	keys+menus
+show-location-markers		menus
+show-loop-range		menus
+show-marker-lines		menus
+show-mixer	Common/show-mixer	keys+menus
+show-other-ranges		menus
+show-plist-selector	Editor/show-plist-selector	keys+menus
+show-preferences		menus
+show-punch-range		menus
+show-recorder	Common/show-recorder	keys+menus
+show-region-list-editor		menus
+show-rhythm-ferret	Region/show-rhythm-ferret	keys+menus
+show-scene-markers		menus
+show-session-range		menus
+show-touched-automation		menus
+show-trigger	Common/show-trigger	keys+menus
+shrink-tracks	Editor/shrink-tracks	keys+menus
+snap-regions-to-grid		menus
+solo	Mixer/solo	keys
+solo-selection	Transport/solo-selection	keys+menus
+solo-use-afl	Solo/solo-use-afl	keys
+solo-use-in-place	Solo/solo-use-in-place	keys
+solo-use-pfl	Solo/solo-use-pfl	keys
+spectral-analyze-region		menus
+split-multichannel-region		menus
+split-notes-grid	Notes/split-notes-grid	keys
+split-notes-less	Notes/split-notes-less	keys
+split-notes-more	Notes/split-notes-more	keys
+split-region	Editor/split-region	keys+menus
+split-region-at-transients		menus
+start-loop-range	Common/start-loop-range	keys
+start-punch-range	Common/start-punch-range	keys
+start-range	Common/start-range	keys+menus
+step-tracks-down	Editor/step-tracks-down	keys
+step-tracks-up	Editor/step-tracks-up	keys
+store-mixer-scene-1	Mixer/store-mixer-scene-1	keys
+store-mixer-scene-10	Mixer/store-mixer-scene-10	keys
+store-mixer-scene-11	Mixer/store-mixer-scene-11	keys
+store-mixer-scene-12	Mixer/store-mixer-scene-12	keys
+store-mixer-scene-2	Mixer/store-mixer-scene-2	keys
+store-mixer-scene-3	Mixer/store-mixer-scene-3	keys
+store-mixer-scene-4	Mixer/store-mixer-scene-4	keys
+store-mixer-scene-5	Mixer/store-mixer-scene-5	keys
+store-mixer-scene-6	Mixer/store-mixer-scene-6	keys
+store-mixer-scene-7	Mixer/store-mixer-scene-7	keys
+store-mixer-scene-8	Mixer/store-mixer-scene-8	keys
+store-mixer-scene-9	Mixer/store-mixer-scene-9	keys
+strip-region-silence		menus
+tab-to-transient-backwards	Editor/tab-to-transient-backwards	keys+menus
+tab-to-transient-forwards	Editor/tab-to-transient-forwards	keys+menus
+tag-last-capture		menus
+tag-selected-regions		menus
+temporal-zoom-in	Editing/temporal-zoom-in	keys+menus
+temporal-zoom-out	Editing/temporal-zoom-out	keys+menus
+toggle-about		menus
+toggle-audio-connection-manager	Window/toggle-audio-connection-manager	keys+menus
+toggle-audio-midi-setup		menus
+toggle-big-clock		menus
+toggle-big-transport		menus
+toggle-bundle-manager		menus
+toggle-chord	StepEditing/toggle-chord	keys
+toggle-disk-monitor	Mixer/toggle-disk-monitor	keys
+toggle-dotted	StepEditing/toggle-dotted	keys
+toggle-dsp-statistics		menus
+toggle-exclusive-solo	Solo/toggle-exclusive-solo	keys
+toggle-follow-playhead	EditorEditing/toggle-follow-playhead	keys
+toggle-input-monitor	Mixer/toggle-input-monitor	keys
+toggle-inspector		menus
+toggle-io-plugins		menus
+toggle-key-editor		menus
+toggle-library-downloader		menus
+toggle-location-at-playhead		menus
+toggle-locations	Window/toggle-locations	keys+menus
+toggle-log-window		menus
+toggle-luawindow		menus
+toggle-meterbridge	Common/toggle-meterbridge	keys+menus
+toggle-midi-connection-manager	Window/toggle-midi-connection-manager	keys+menus
+toggle-midi-input-active	Editor/toggle-midi-input-active;Mixer/toggle-midi-input-active	keys
+toggle-monitor-processor-box	Monitor/toggle-monitor-processor-box	keys
+toggle-mute-overrides-solo	Solo/toggle-mute-overrides-solo	keys
+toggle-opaque-region	Region/toggle-opaque-region	keys+menus
+toggle-plugin-dsp-load		menus
+toggle-plugin-manager		menus
+toggle-region-fade-in		menus
+toggle-region-fade-out		menus
+toggle-region-fades		menus
+toggle-region-gain-envelope-active		menus
+toggle-region-lock		menus
+toggle-region-mute	Region/toggle-region-mute	keys+menus
+toggle-region-polarity		menus
+toggle-region-video-lock		menus
+toggle-rtawindow	Window/toggle-rtawindow	keys+menus
+toggle-script-manager		menus
+toggle-session-options-editor	Window/toggle-session-options-editor	keys+menus
+toggle-stationary-playhead	EditorEditing/toggle-stationary-playhead	keys
+toggle-track-active		menus
+toggle-transport-masters		menus
+toggle-triplet	StepEditing/toggle-triplet	keys
+toggle-virtual-keyboard	Window/toggle-virtual-keyboard	keys+menus
+toggle-zoom	Editor/toggle-zoom	keys+menus
+track-height-large		menus
+track-height-larger		menus
+track-height-largest		menus
+track-height-normal		menus
+track-height-small		menus
+track-mute-toggle		menus
+track-record-enable-toggle	Editor/track-record-enable-toggle	keys+menus
+track-solo-toggle	Editor/track-solo-toggle	keys+menus
+tracker		menus
+transform-region		menus
+transpose-down-octave	Notes/transpose-down-octave	keys
+transpose-down-octave-smush	Notes/transpose-down-octave-smush	keys
+transpose-down-semitone	Notes/transpose-down-semitone	keys
+transpose-down-semitone-smush	Notes/transpose-down-semitone-smush	keys
+transpose-region		menus
+transpose-up-octave	Notes/transpose-up-octave	keys
+transpose-up-octave-smush	Notes/transpose-up-octave-smush	keys
+transpose-up-semitone	Notes/transpose-up-semitone	keys
+transpose-up-semitone-smush	Notes/transpose-up-semitone-smush	keys
+trigger-cue-0	Cues/trigger-cue-0	keys+menus
+trigger-cue-1	Cues/trigger-cue-1	keys+menus
+trigger-cue-2	Cues/trigger-cue-2	keys+menus
+trigger-cue-3	Cues/trigger-cue-3	keys+menus
+trigger-cue-4	Cues/trigger-cue-4	keys+menus
+trigger-cue-5	Cues/trigger-cue-5	keys+menus
+trigger-cue-6	Cues/trigger-cue-6	keys+menus
+trigger-cue-7	Cues/trigger-cue-7	keys+menus
+trim-back	Region/trim-back	keys+menus
+trim-front	Region/trim-front	keys+menus
+trim-region-to-loop		menus
+trim-region-to-punch		menus
+trim-to-next-region	Region/trim-to-next-region	keys+menus
+trim-to-previous-region	Region/trim-to-previous-region	keys+menus
+tutorial		menus
+uncombine-regions		menus
+undo	Editing/undo	keys
+undo-last-selection-op		menus
+ungroup-selected-regions	Editor/ungroup-selected-regions	keys+menus
+unity-gain	Mixer/unity-gain	keys
+website		menus
+website-dev		menus
+zoom-to-extents		menus
+zoom-to-selection	Editor/zoom-to-selection	keys+menus
+zoom-to-selection-horiz		menus
+zoom-to-session	Editor/zoom-to-session	keys+menus
