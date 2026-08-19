@@ -109,6 +109,24 @@ other DAWs are added (Ardour, others) — in every DAW this project targets. The
 implementation beneath it. A binding that is convenient in one backend but
 breaks the shared vocabulary is wrong even where it is convenient.
 
+**Third-party bindings rank below ours too.** The rule is not specific to a DAW's
+own defaults: an extension or add-on that binds a combo we bind loses it.
+ReaTooled is the live case — it keeps ~399 Main bindings in REAPER's section 16,
+which takes precedence over an imported section-0 keymap, so our build emits into
+section 16 when it detects ReaTooled and replaces the colliding bindings there.
+A key we bind means what our mapping says it means, whatever else is installed.
+
+Two things follow, and neither is a loophole:
+
+- **Non-colliding bindings survive.** Importing a key map overrides only the
+  combos the file names, so an extension keeps every shortcut we do not bind.
+  Keeping the parts of ReaTooled you like is the default outcome, not a
+  concession.
+- **A collision is a decision to record, not an accident.** Where a displaced
+  third-party binding is one worth keeping, the answer is to move *ours* to a
+  free combo deliberately and say why (Principle 3) -- never to leave the
+  collision undocumented and hope.
+
 **Why it ranks this high.** A 2D edit area built entirely from the keyboard is
 what makes a DAW nearly as fast to operate as a text editor. It is worth more
 than almost any other keyboard accelerator, so when it competes with one, it

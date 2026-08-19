@@ -18,6 +18,12 @@ binding to keep a `Shift+<nav>` combo is the intended trade, not a regression.
 It must also stay identical across macOS/Linux and across any DAW backend added
 later, so never break it for a host-specific convenience.
 
+Third-party bindings rank below ours as well. On a machine with ReaTooled the
+build auto-detects its section 16 and emits there, replacing the colliding
+bindings; everything ReaTooled binds that we do not is untouched. Installing or
+removing ReaTooled changes the target section, so run `just refresh` and
+re-import afterwards.
+
 ## Commit and push early (Constitution, Principle 4)
 
 - **Push a feature branch on its first commit, not its last.** Committed and
