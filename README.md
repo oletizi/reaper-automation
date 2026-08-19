@@ -43,7 +43,22 @@ A binding in the table is one of three kinds:
 
 ```sh
 just bootstrap     # or: pnpm install
+just setup         # preview everything this machine needs
+just setup apply   # perform it
 ```
+
+`just setup` is the one button: preferences (`ra prefs`), desktop key grabs
+(`ra wm`), and the keymap (`ra refresh`), in that order. Preview mode changes
+nothing — it reports the pending preference changes, the combos the desktop is
+swallowing, and `ra doctor`'s source → build → installed drift. Apply mode
+refuses to start if REAPER is running, since it rewrites `reaper.ini` on exit.
+
+Run it from a desktop-session terminal. `ra wm` needs `XDG_CURRENT_DESKTOP` to
+resolve schema defaults exactly; without it, it consults every installed profile
+and over-reports (see [docs/linux-key-grabs.md](docs/linux-key-grabs.md)).
+
+One manual step remains and no tool can remove it: REAPER reads `reaper-kb.ini`
+only at startup, so a changed keymap needs a one-time import.
 
 There's a `justfile` wrapping the CLI, so `just` alone lists every verb and
 `just refresh` / `just doctor` / `just check` do the obvious things. It's a thin

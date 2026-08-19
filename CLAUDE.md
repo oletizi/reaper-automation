@@ -36,6 +36,8 @@ re-import afterwards.
 ```sh
 just               # list the verbs
 just bootstrap     # first time (or if node_modules is missing)
+just setup         # the one button: prefs + desktop key grabs + keymap (preview)
+just setup apply   # ...and perform it (refuses while REAPER is running)
 just refresh       # build + install + verify, and say if a re-import is needed
 just doctor        # is what's running what I built?
 just check         # tests + typecheck + KEYBINDINGS.md drift check
