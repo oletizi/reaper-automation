@@ -55,3 +55,29 @@ describe('renderRazorExtendScript', () => {
     expect(t.indexOf('sel_start, sel_end = readSpan()')).toBeLessThan(t.indexOf('__saved = selectTargetItems()'))
   })
 })
+
+describe('renderRazorExtendScript paint scoping', () => {
+  const lua = renderRazorExtendScript({ label: 'LUNA: Extend Fwd', spec: 'luna.toml', move: 41042, moveName: 'fwd' })
+
+  it('falls back to all tracks when none are selected, so the area is never written nowhere', () => {
+    // Regression: paint() scoped strictly to CountSelectedTracks, so with zero
+    // selected tracks every track got "" -- the area was computed and then
+    // erased on write, and the gesture silently did nothing.
+    const paint = lua.slice(lua.indexOf('local function paint'), lua.indexOf('local function extend'))
+    expect(paint).toContain('CountSelectedTracks')
+    expect(paint).toContain('GetTrack')
+    expect(paint).toMatch(/if nsel > 0 then[\s\S]*else[\s\S]*CountTracks/)
+  })
+
+  it('agrees with the item-selection half, which already fell back to all tracks', () => {
+    // Both halves of a select_items script must scope the same way, or the
+    // script picks transients from every track and then paints onto none.
+    const withSel = renderRazorExtendScript({ label: 'LUNA: Ext', spec: 'luna.toml', move: 40375, moveName: 'transient', selectItems: true })
+    const select = withSel.slice(withSel.indexOf('local function selectTargetItems'), withSel.indexOf('local function restoreItems'))
+    const paint = withSel.slice(withSel.indexOf('local function paint'), withSel.indexOf('local function extend'))
+    for (const half of [select, paint]) {
+      expect(half).toMatch(/if nsel > 0 then[\s\S]*else[\s\S]*CountTracks/)
+    }
+  })
+})
+

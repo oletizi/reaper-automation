@@ -12,6 +12,11 @@ import { renderReloadScript } from '@/reload-template'
 import { renderDebugModule, renderStampModule, DEBUG_MODULE_FILE, STAMP_MODULE_FILE } from '@/debug-runtime'
 
 const SELECT_RAZOR_ITEMS_ACTION = 42957
+// Split items at the razor edges. Run before SELECT_RAZOR_ITEMS_ACTION so the
+// pieces lying inside the area become whole items and the op that follows acts
+// on the area's bounds rather than on whichever clips the area happened to
+// touch. See CONSTITUTION.md, Principle 1.
+const SPLIT_AT_RAZOR_ACTION = 40061
 
 const SCRIPT_DIR = 'luna'
 
@@ -176,6 +181,20 @@ export function buildKeymap(
       }
       command = '_' + mid
       desc = `${label}  [${trackActionName} > repaint area]`
+      stats.macro++
+    } else if (b.kind && 'razorSlice' in b.kind) {
+      const opId = String(b.kind.razorSlice)
+      const opName = actions.byId(opId)
+      if (opName === undefined) { errors.push(`${luna}: razor_slice references unknown action ${opId}`); continue }
+      const label = b.label ?? `LUNA: ${luna}`
+      let mid = seenMacros.get(label)
+      if (mid === undefined) {
+        mid = stableId(label)
+        seenMacros.set(label, mid)
+        actLines.push(`ACT 0 ${section} "${mid}" "Custom: ${label}" ${SPLIT_AT_RAZOR_ACTION} ${SELECT_RAZOR_ITEMS_ACTION} ${opId}`)
+      }
+      command = '_' + mid
+      desc = `${label}  [split at razor > select razor items > ${opName}]`
       stats.macro++
     } else if (b.kind && 'razor' in b.kind) {
       const opId = String(b.kind.razor)

@@ -75,8 +75,18 @@ local function readSpan()
 end
 
 local function paint(a, b)
+  -- Scope to the selected tracks, falling back to ALL tracks when none are
+  -- selected -- the same fallback selectTargetItems() uses. Without it the area
+  -- is computed correctly and then written nowhere: every track gets "", the
+  -- gesture silently accomplishes nothing, and the op keyed to it has no area
+  -- to act on. (CONSTITUTION.md, Principle 2.)
   local sel = {}
-  for i = 0, reaper.CountSelectedTracks(0) - 1 do sel[reaper.GetSelectedTrack(0, i)] = true end
+  local nsel = reaper.CountSelectedTracks(0)
+  if nsel > 0 then
+    for i = 0, nsel - 1 do sel[reaper.GetSelectedTrack(0, i)] = true end
+  else
+    for i = 0, reaper.CountTracks(0) - 1 do sel[reaper.GetTrack(0, i)] = true end
+  end
   local area = string.format('%.10f %.10f ""', a, b)
   for i = 0, reaper.CountTracks(0) - 1 do
     local tr = reaper.GetTrack(0, i)

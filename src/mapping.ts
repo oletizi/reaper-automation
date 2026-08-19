@@ -8,6 +8,7 @@ export type BindingKind =
   | { razorExtend: number; selectItems?: boolean }
   | { razorTrack: number }
   | { razor: number }
+  | { razorSlice: number }
   | { separate: true }
   | { tabTransient: 'next' | 'prev' }
 
@@ -82,7 +83,8 @@ function validateBinding(raw: unknown, i: number): Binding {
       'extend' in raw ||
       'razor_extend' in raw ||
       'razor_track' in raw ||
-      'razor' in raw
+      'razor' in raw ||
+      'razor_slice' in raw
     ) {
       throw new MappingError(`${where}: disable must not carry a kind key`)
     }
@@ -106,6 +108,7 @@ function validateBinding(raw: unknown, i: number): Binding {
   }
   if ('razor_track' in raw) kinds.push({ razorTrack: asInt(raw.razor_track, `${where}.razor_track`) })
   if ('razor' in raw) kinds.push({ razor: asInt(raw.razor, `${where}.razor`) })
+  if ('razor_slice' in raw) kinds.push({ razorSlice: asInt(raw.razor_slice, `${where}.razor_slice`) })
   if ('separate' in raw) {
     if (raw.separate !== true) throw new MappingError(`${where}.separate: expected true`)
     kinds.push({ separate: true })
@@ -119,7 +122,7 @@ function validateBinding(raw: unknown, i: number): Binding {
   }
   if (kinds.length !== 1) {
     throw new MappingError(
-      `${where}: expected exactly one of action/macro/extend/razor_extend/razor_track/razor/separate/tab_transient, got ${kinds.length}`,
+      `${where}: expected exactly one of action/macro/extend/razor_extend/razor_track/razor/razor_slice/separate/tab_transient, got ${kinds.length}`,
     )
   }
   return { luna, key, label, status, kind: kinds[0] }

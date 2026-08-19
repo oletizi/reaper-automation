@@ -36,6 +36,8 @@ A binding in the table is one of three kinds:
 | `action = 40044` | a plain `KEY` line pointing at a native REAPER action |
 | `macro = [40296, 41325]` | an `ACT` custom action running those steps in order |
 | `extend = 41042` | a generated ReaScript (`SCR`) — see Extend Selection below |
+| `razor = 40548` | an `ACT` that selects the area's items, then acts — whole-clip |
+| `razor_slice = 40175` | an `ACT` that **splits at the area edges first**, then acts — area-scoped |
 
 ## Setup
 
@@ -190,6 +192,23 @@ This is the record for diagnosing "I pressed the key and nothing happened": it
 shows which script fired, at which version, what state it saw, and what it did.
 The log self-trims to its last ~1MB, and logging is pcall-guarded so it can never
 break the action it observes.
+
+### `razor` vs. `razor_slice`
+
+Both wrap an operation that isn't natively razor-aware, and the difference is
+what happens when the area covers only *part* of a clip:
+
+- `razor_slice = <id>` → `40061 42957 <id>` — split at the area edges, select
+  the pieces that lie inside, then act. The operation is bound by the area, not
+  by the clip. This is the default choice; see
+  [CONSTITUTION.md](CONSTITUTION.md), Principle 1.
+- `razor = <id>` → `42957 <id>` — select the area's items and act on them
+  whole. Correct only for operations that are inherently whole-clip, where
+  splitting first would be meaningless: Heal Separation, Consolidate, the
+  cursor-relative fades and trims.
+
+Delete (`40006`) and Cut (`40699`) need neither wrapper — they act on the razor
+area natively, verified on REAPER 7.78.
 
 ## Extend Selection
 

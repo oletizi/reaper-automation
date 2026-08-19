@@ -276,7 +276,7 @@ comment = "Cut is razor-aware: acts directly on the razor edit area."
 [[binding]]
 luna = "Copy"
 key = "Cmd+C"
-razor = 40057
+razor_slice = 40057
 comment = """Changed from 41383 to 40057 -- tower testing could not get a definitive \
 paste-based confirmation either way (headless tower has no X display; item paste \
 triggers GDK clipboard/window-context calls that fail there for every copy \
@@ -291,7 +291,7 @@ matching the razor= materialize-then-act pattern used everywhere else in this fi
 [[binding]]
 luna = "Copy (Commands Focus)"
 key = "C"
-razor = 40057
+razor_slice = 40057
 comment = """Changed from 41383 to 40057 -- see the Copy (Cmd+C) binding's comment \
 for the full rationale."""
 
@@ -326,7 +326,7 @@ comment = "Delete is razor-aware: acts directly on the razor edit area."
 [[binding]]
 luna = "Duplicate selection"
 key = "Cmd+D"
-razor = 41295
+razor_slice = 41295
 
 [[binding]]
 luna = "Shift Clear (ripple delete)"
@@ -340,7 +340,7 @@ razor area's vertical (track) scope."""
 [[binding]]
 luna = "Mute Selection"
 key = "Cmd+M"
-razor = 40175
+razor_slice = 40175
 
 [[binding]]
 luna = "Create Fades"
