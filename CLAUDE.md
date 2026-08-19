@@ -41,8 +41,10 @@ On a new Linux machine, run `just wm --apply` once: GNOME grabs `Alt+Tab` and
 tab-to-transient. Freeing them is Principle 5 applied to the desktop — and it
 costs nothing, since GNOME already binds `Super+Tab` to the same action.
 `just wm --revert --apply` puts GNOME's defaults back. If the desktop still
-swallows a freed combo, its grab is stale: on X11 restart the shell with Alt+F2
-then `r`; on Wayland log out.
+swallows a freed combo, work through the checklist in
+[docs/linux-key-grabs.md](docs/linux-key-grabs.md) -- and verify config changes
+with `dconf read`, never `gsettings get`, which can report a write that GNOME
+never saw.
 
 `mappings/luna.toml` is the thing you edit; everything else in `build/` is
 generated. `KEYBINDINGS.md` is generated too (`just docs`) — never hand-edit it.
