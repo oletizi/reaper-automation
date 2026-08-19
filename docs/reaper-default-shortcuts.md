@@ -133,7 +133,10 @@ checked against what it would displace without guessing.
 
 Point-in-time snapshot of the last column above against `mappings/luna.toml`,
 taken 2026-08-19. Displacing a default is usually the point of this project --
-but it should be a decision rather than a surprise. Importing a key map
+but it should be a decision rather than a surprise. For a `Shift+<nav>` combo it
+is settled policy rather than a judgement call: the 2D selection vocabulary
+outranks native defaults (CONSTITUTION.md, Principle 5), so `Shift+Tab` taking
+the slot REAPER gives *Toggle folder track* is the intended trade. Importing a key map
 overrides only the combos it names; every other REAPER default stays put, and
 Key map -> Reset to factory defaults backs it all out.
 

@@ -10,6 +10,14 @@ span across a set of tracks — behave like a first-class concept in REAPER. An
 operation acts on the data within the area's bounds; **clip boundaries are
 irrelevant to that**, and an area covering part of a clip is the normal case.
 
+## Shift is the selection modifier (Constitution, Principle 5)
+
+`Shift` + any navigation key grows the 2D area; a bare navigation key collapses
+it. This vocabulary outranks the host DAW's native defaults — displacing a native
+binding to keep a `Shift+<nav>` combo is the intended trade, not a regression.
+It must also stay identical across macOS/Linux and across any DAW backend added
+later, so never break it for a host-specific convenience.
+
 ## Commit and push early (Constitution, Principle 4)
 
 - **Push a feature branch on its first commit, not its last.** Committed and
@@ -34,7 +42,9 @@ generated. `KEYBINDINGS.md` is generated too (`just docs`) — never hand-edit i
 
 1. Check what it would displace: [docs/reaper-default-shortcuts.md](docs/reaper-default-shortcuts.md).
    That file is third-party and partial, so treat absence as unknown, not free —
-   REAPER's own action list is authoritative.
+   REAPER's own action list is authoritative. Note that displacing a default is
+   *expected* for a `Shift+<nav>` combo (Principle 5); the check is to make it a
+   decision, not to avoid the collision.
 2. Check LUNA's own layout in `data/luna-shortcuts-macos-raw.tsv`. A combo LUNA
    uses elsewhere is not free even if we don't bind it yet.
 3. Pick the right mechanism. `razor_slice` splits at the area edges first and is

@@ -33,6 +33,8 @@ An area covering only part of a clip is the **normal case**, not an edge case.
 An operation that widens its scope to the whole clip because the area touched
 it is a bug, however convenient the underlying REAPER action makes it.
 
+The keyboard vocabulary for building the area is stated in Principle 5.
+
 ### What this requires of an implementation
 
 - An operation whose REAPER action is not area-aware must **split at the area
@@ -85,3 +87,29 @@ Corollaries:
   savepoint. Reviewability comes from the branch and the PR, not from withholding
   commits.
 
+## Principle 5 — Shift builds the area, and that outranks native defaults
+
+**Shift is this project's reserved modifier for 2D selection.** `Shift` plus any
+navigation key grows the edit area along that axis: `Shift+[` / `Shift+]` and the
+Shift-variants of the clip-edge, transient and marker keys grow it horizontally;
+`Shift+P` / `Shift+;` grow it vertically. A bare navigation key collapses the
+area and moves the cursor. Shift means *select* here, always, with no exceptions
+for a key the host DAW happens to want.
+
+**This convention takes priority over any native default.** When a host DAW binds
+something else to a `Shift+<nav>` combo, the combo goes to the selection gesture
+and the native binding is displaced. That is not a regrettable side effect to be
+minimized — it is the trade the project exists to make. `Shift+Tab` displacing
+REAPER's *Toggle folder track* is the intended outcome, not an oversight.
+
+**It also takes priority over consistency with the host in general.** The same
+gesture must mean the same thing on macOS and on Linux, and — as backends for
+other DAWs are added (Ardour, others) — in every DAW this project targets. The
+2D selection vocabulary is the portable core; per-DAW action IDs and scripts are
+implementation beneath it. A binding that is convenient in one backend but
+breaks the shared vocabulary is wrong even where it is convenient.
+
+**Why it ranks this high.** A 2D edit area built entirely from the keyboard is
+what makes a DAW nearly as fast to operate as a text editor. It is worth more
+than almost any other keyboard accelerator, so when it competes with one, it
+wins.
