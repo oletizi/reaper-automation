@@ -312,6 +312,11 @@ action intact — freeing `Alt+Tab` leaves `Super+Tab` switching applications, s
 in practice you lose nothing. It reports any action it would leave with no
 shortcut at all rather than silently stranding it. On macOS it is a clean no-op.
 
+Mutter is supposed to pick the change up live, but an existing X11 grab can
+outlive it. If the desktop still swallows the combo afterwards, restart the
+shell: on X11 press **Alt+F2**, type `r`, Enter (in place, windows survive); on
+Wayland log out and back in, since no in-place restart exists.
+
 ## Keybindings reference
 
 [KEYBINDINGS.md](KEYBINDINGS.md) lists every combo this project binds, with both

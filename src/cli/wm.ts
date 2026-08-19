@@ -102,6 +102,11 @@ export function cmdWm(argv: string[]): number {
     gsettings(['set', GNOME_WM_SCHEMA, k, formatGsettingsList(keep)])
   }
   console.log('')
-  console.log(`freed ${plan.shadows.length} combo(s). REAPER sees them from the next keypress; no restart needed.`)
+  console.log(`freed ${plan.shadows.length} combo(s).`)
+  // Mutter is supposed to rebind live, but an existing X11 grab can outlive the
+  // setting change. Say so rather than promising it already works.
+  console.log('If the desktop still swallows the combo, its grab is stale -- restart the shell:')
+  console.log('  X11:     Alt+F2, type `r`, Enter (restarts gnome-shell in place; windows survive)')
+  console.log('  Wayland: log out and back in (no in-place restart exists)')
   return 0
 }

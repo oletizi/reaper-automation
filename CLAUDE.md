@@ -40,7 +40,9 @@ On a new Linux machine, run `just wm --apply` once: GNOME grabs `Alt+Tab` and
 `Shift+Alt+Tab` before any application sees them, which shadows LUNA's reverse
 tab-to-transient. Freeing them is Principle 5 applied to the desktop — and it
 costs nothing, since GNOME already binds `Super+Tab` to the same action.
-`just wm --revert --apply` puts GNOME's defaults back.
+`just wm --revert --apply` puts GNOME's defaults back. If the desktop still
+swallows a freed combo, its grab is stale: on X11 restart the shell with Alt+F2
+then `r`; on Wayland log out.
 
 `mappings/luna.toml` is the thing you edit; everything else in `build/` is
 generated. `KEYBINDINGS.md` is generated too (`just docs`) — never hand-edit it.
