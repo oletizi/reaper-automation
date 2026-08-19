@@ -27,6 +27,7 @@ ACT 0 0 "6b27fe7dd8206bc0fe6c161404dd59b5" "Custom: LUNA: Copy" 40061 42957 4005
 ACT 0 0 "055592d700e3e8b287b4536ba8e6ef8d" "Custom: LUNA: Copy (Commands Focus)" 40061 42957 40057
 ACT 0 0 "d8a995cfdc416363657ed58f0806ba69" "Custom: LUNA: Duplicate selection" 40061 42957 41295
 ACT 0 0 "c809d6de90d9ee4cf90bc18b5d5deff1" "Custom: LUNA: Mute Selection" 40061 42957 40175
+ACT 0 0 "1d3f1b77dd48cadf61e2712609a857e9" "Custom: LUNA: Normalize Selection" 40061 42957 40254
 ACT 0 0 "cc5e58fc075614c190a9ddf3e1025896" "Custom: LUNA: Fade To Clip Start (Fade In)" 42957 40509
 ACT 0 0 "223a383e7518b913c9ea65d40347e047" "Custom: LUNA: Fade To Clip Stop (Fade Out)" 42957 40510
 ACT 0 0 "9ea8804237d136d63a5f80b7e65642a0" "Custom: LUNA: Trim From Clip Start" 42957 41305
@@ -96,6 +97,7 @@ KEY 1 8 40006 0	# Backspace : Clear -> Item: Remove items
 KEY 9 68 _d8a995cfdc416363657ed58f0806ba69 0	# Cmd+D : Duplicate selection -> LUNA: Duplicate selection  [split at razor > select razor items > Item: Duplicate items]
 KEY 5 8 40201 0	# Shift+Backspace : Shift Clear (ripple delete) -> Time selection: Remove contents of time selection (moving later items)
 KEY 9 77 _c809d6de90d9ee4cf90bc18b5d5deff1 0	# Cmd+M : Mute Selection -> LUNA: Mute Selection  [split at razor > select razor items > Item properties: Toggle mute]
+KEY 1 78 _1d3f1b77dd48cadf61e2712609a857e9 0	# N : Normalize Selection -> LUNA: Normalize Selection  [split at razor > select razor items > Item properties: Normalize items (to loudest item) to +0dB peak]
 KEY 9 70 40916 0	# Cmd+F : Create Fades -> Item: Crossfade items within time selection
 KEY 1 68 _cc5e58fc075614c190a9ddf3e1025896 0	# D : Fade To Clip Start (Fade In) -> LUNA: Fade To Clip Start (Fade In)  [select razor items > Item: Fade items in to cursor]
 KEY 1 71 _223a383e7518b913c9ea65d40347e047 0	# G : Fade To Clip Stop (Fade Out) -> LUNA: Fade To Clip Stop (Fade Out)  [select razor items > Item: Fade items out from cursor]

@@ -294,6 +294,20 @@ reference for these bindings — the byte-for-byte TS build fixture
 (`tests/fixtures/luna-macos.tsbuild.ReaperKeyMap`) is the regression baseline
 going forward.
 
+## Keybindings reference
+
+[KEYBINDINGS.md](KEYBINDINGS.md) lists every combo this project binds, with both
+platform labels and the real action names each one resolves to. It is
+**generated** from `mappings/luna.toml`:
+
+```sh
+pnpm ra docs            # regenerate
+pnpm ra docs --check    # fail if it has drifted (part of `just check`)
+```
+
+Don't hand-edit it — a second hand-maintained copy of the mapping table is the
+one artifact here that could silently stop describing the keymap.
+
 ## Looking up actions
 
 ```sh

@@ -31,6 +31,10 @@ refresh *flags: _deps
 doctor *flags: _deps
     pnpm ra doctor {{ flags }}
 
+# Regenerate KEYBINDINGS.md from the mapping table.
+docs *flags: _deps
+    pnpm ra docs {{ flags }}
+
 # Search REAPER's action list, e.g. `just find zoom horizontal`.
 find +terms: _deps
     pnpm ra find-action {{ terms }}
@@ -47,8 +51,12 @@ test *flags: _deps
 typecheck: _deps
     pnpm typecheck
 
+# Fail if KEYBINDINGS.md has drifted from mappings/luna.toml.
+docs-check: _deps
+    pnpm ra docs --check
+
 # Everything CI would run.
-check: test typecheck
+check: test typecheck docs-check
 
 # Remove the generated staging dir (gitignored; `just build` regenerates it).
 clean:

@@ -343,6 +343,17 @@ key = "Cmd+M"
 razor_slice = 40175
 
 [[binding]]
+luna = "Normalize Selection"
+key = "N"
+razor_slice = 40254
+comment = """Not a LUNA shortcut -- LUNA defines no Normalize key, so this is a \
+deliberate addition in the Commands Focus family (CONSTITUTION.md, Principle 3). \
+Bare N is free in LUNA, which uses N only as Opt+Cmd+N (New Window) and \
+Shift+Cmd+N (New Tracks). Normalize to the LOUDEST item rather than each item \
+separately (40108): an area spanning several tracks must keep its relative \
+balance, and per-item normalization would flatten it."""
+
+[[binding]]
 luna = "Create Fades"
 key = "Cmd+F"
 action = 40916
