@@ -13,6 +13,15 @@ reason this repo exists. Conforming REAPER's keyboard shortcuts to LUNA's layout
 is the visible goal; making the 2D edit area behave like a first-class concept
 is the actual one.
 
+## The shape this takes
+
+The end state is **one command that configures every DAW we support the way the
+operator wants it**, with no clicking through preference dialogs and no
+per-machine fussing: key bindings, desktop key grabs, and application
+preferences alike. Everything here is a step toward that, which is why the
+capabilities live in a CLI with dry-run and verify semantics rather than in a
+document telling someone what to click.
+
 ## Principle 1 — The edit area is the unit of work
 
 **Operations act on the audio and MIDI data within, and only within, the bounds
@@ -131,3 +140,26 @@ Two things follow, and neither is a loophole:
 what makes a DAW nearly as fast to operate as a text editor. It is worth more
 than almost any other keyboard accelerator, so when it competes with one, it
 wins.
+
+## Principle 6 — Configuration is captured, not reverse-engineered
+
+**A setting's value comes from the application that owns it.** REAPER's
+`reaper.ini` is thousands of undocumented keys wide and many are bitfields with
+no published encoding; a plausible-looking guess writes a number into a file the
+operator depends on, and a wrong guess corrupts a preference nobody was even
+changing. So the workflow is snapshot → change it in the DAW's own UI → capture
+the delta. What gets declared is a value the DAW itself produced.
+
+This is also what makes the goal reachable across DAWs. Every DAW stores
+preferences differently and none of them document it; capture is the only
+acquisition method that does not require reverse-engineering each one.
+
+Corollaries:
+
+- **Never write a file the owning application has open.** REAPER rewrites
+  `reaper.ini` wholesale on exit, so an edit made while it is running is
+  discarded silently -- the same class of failure as writing GSettings through a
+  backend the desktop does not read. Refuse, rather than appear to succeed.
+- **Edit the line, not the file.** Parse-and-regenerate would drop everything we
+  failed to model. Rewrite the exact key and leave every other byte alone.
+- **Back up before writing, and verify by re-reading afterwards** (Principle 2).

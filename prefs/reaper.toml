@@ -1,0 +1,20 @@
+# Declared REAPER preferences.
+#
+# Applied by `ra prefs --apply`; reported by `ra prefs`. The goal is one
+# command to bring a fresh machine to the configuration you actually want,
+# with no clicking through preference dialogs.
+#
+# Every value here is CAPTURED, never reverse-engineered. Most REAPER ini keys
+# are undocumented bitfields, and guessing at one means writing a number into a
+# file you depend on. To add a setting:
+#
+#   1. ra prefs --snapshot     # record the current reaper.ini
+#   2. change the setting in REAPER's own Preferences, then QUIT REAPER
+#   3. ra prefs --changed      # prints the delta as a [[pref]] block to paste
+#
+# What lands here is then a value REAPER itself produced.
+
+[meta]
+daw = "reaper"
+
+# --- captured settings go below ------------------------------------------

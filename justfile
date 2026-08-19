@@ -31,6 +31,10 @@ refresh *flags: _deps
 doctor *flags: _deps
     pnpm ra doctor {{ flags }}
 
+# Apply declared DAW preferences (dry run without --apply).
+prefs *flags: _deps
+    pnpm ra prefs {{ flags }}
+
 # Free the combos the Linux desktop grabs before REAPER sees them (dry run).
 wm *flags: _deps
     pnpm ra wm {{ flags }}

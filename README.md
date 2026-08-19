@@ -321,6 +321,29 @@ outlive it. If the desktop still swallows the combo afterwards, restart the
 shell: on X11 press **Alt+F2**, type `r`, Enter (in place, windows survive); on
 Wayland log out and back in, since no in-place restart exists.
 
+## Preferences (`ra prefs`)
+
+Bring a machine's REAPER preferences to the set declared in
+`prefs/reaper.toml`:
+
+```sh
+pnpm ra prefs             # report: what matches, what differs (dry run)
+pnpm ra prefs --apply     # write them (refuses while REAPER is running)
+```
+
+Values are **captured, never reverse-engineered** — most REAPER ini keys are
+undocumented bitfields (see [CONSTITUTION.md](CONSTITUTION.md), Principle 6). To
+add a setting:
+
+```sh
+pnpm ra prefs --snapshot   # 1. record the current reaper.ini
+                           # 2. change it in REAPER's Preferences, then QUIT REAPER
+pnpm ra prefs --changed    # 3. prints the delta as a [[pref]] block to paste
+```
+
+Editing is line-precise (every other byte of `reaper.ini` is untouched), takes a
+`.ra-backup` first, and verifies by re-reading the file afterwards.
+
 ## Keybindings reference
 
 [KEYBINDINGS.md](KEYBINDINGS.md) lists every combo this project binds, with both

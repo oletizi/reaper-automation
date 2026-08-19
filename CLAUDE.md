@@ -40,6 +40,7 @@ just refresh       # build + install + verify, and say if a re-import is needed
 just doctor        # is what's running what I built?
 just check         # tests + typecheck + KEYBINDINGS.md drift check
 just wm            # what the Linux desktop grabs before REAPER sees it
+just prefs         # declared REAPER preferences vs this machine's
 ```
 
 On a new Linux machine, run `just wm --apply` once: GNOME grabs `Alt+Tab` and
