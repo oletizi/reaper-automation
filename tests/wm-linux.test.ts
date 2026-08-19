@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import {
+  dconfPathFor,
   chooseSessionType,
   restartAdvice,
   parseGsettingsList,
@@ -132,6 +133,17 @@ describe('restartAdvice', () => {
     const u = restartAdvice('unknown').join(' ')
     expect(u).toContain('Alt+F2')
     expect(u).toContain('log out')
+  })
+})
+
+describe('dconfPathFor', () => {
+  it('converts a schema key to the dconf path GNOME actually reads', () => {
+    expect(dconfPathFor('org.gnome.desktop.wm.keybindings', 'switch-applications'))
+      .toBe('/org/gnome/desktop/wm/keybindings/switch-applications')
+  })
+  it('keeps hyphenated keys intact', () => {
+    expect(dconfPathFor('org.gnome.desktop.wm.keybindings', 'switch-applications-backward'))
+      .toBe('/org/gnome/desktop/wm/keybindings/switch-applications-backward')
   })
 })
 

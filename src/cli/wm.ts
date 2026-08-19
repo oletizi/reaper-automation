@@ -10,6 +10,7 @@ import {
   parseGsettingsList,
   planFreeing,
   formatGsettingsList,
+  dconfPathFor,
   chooseSessionType,
   restartAdvice,
   type SessionType,
@@ -17,6 +18,40 @@ import {
 
 function gsettings(args: string[]): string {
   return execFileSync('gsettings', args, { encoding: 'utf8' }).trim()
+}
+
+function dconf(args: string[]): string {
+  return execFileSync('dconf', args, { encoding: 'utf8' }).trim()
+}
+
+/**
+ * The effective value: dconf's if the key is set there, otherwise the schema
+ * default via gsettings. Reading dconf first matters for the same reason
+ * writing through it does -- gsettings may be bound to a backend GNOME ignores.
+ */
+function readAccels(key: string): string[] {
+  try {
+    const raw = dconf(['read', dconfPathFor(GNOME_WM_SCHEMA, key)])
+    if (raw) return parseGsettingsList(raw)
+  } catch {
+    // dconf absent: fall through to gsettings
+  }
+  return parseGsettingsList(gsettings(['get', GNOME_WM_SCHEMA, key]))
+}
+
+/** Write, then read back through dconf and refuse to claim success on a mismatch. */
+function writeAccelsVerified(key: string, accels: string[]): void {
+  const path = dconfPathFor(GNOME_WM_SCHEMA, key)
+  const want = formatGsettingsList(accels)
+  dconf(['write', path, want])
+  const got = parseGsettingsList(dconf(['read', path]))
+  const same = got.length === accels.length && got.every((a, i) => a === accels[i])
+  if (!same) {
+    throw new Error(
+      `wm: wrote ${key} = ${want} but dconf reads back ${formatGsettingsList(got)} -- ` +
+        'the change did not take, so nothing was freed',
+    )
+  }
 }
 
 /**
@@ -67,7 +102,7 @@ export function cmdWm(argv: string[]): number {
   const keys = gsettings(['list-keys', GNOME_WM_SCHEMA]).split('\n').map((s) => s.trim()).filter(Boolean).sort()
   const current = new Map<string, string[]>()
   for (const k of keys) {
-    const accels = parseGsettingsList(gsettings(['get', GNOME_WM_SCHEMA, k]))
+    const accels = readAccels(k)
     if (accels.length) current.set(k, accels)
   }
 
@@ -76,7 +111,7 @@ export function cmdWm(argv: string[]): number {
     // knows its own defaults, and a stale backup file would be worse than none.
     const touched = [...current.keys()]
     for (const k of touched) {
-      if (a.apply) gsettings(['reset', GNOME_WM_SCHEMA, k])
+      if (a.apply) dconf(['reset', dconfPathFor(GNOME_WM_SCHEMA, k)])
     }
     console.log(
       a.apply
@@ -122,7 +157,7 @@ export function cmdWm(argv: string[]): number {
     return 0
   }
   for (const [k, keep] of plan.updates) {
-    gsettings(['set', GNOME_WM_SCHEMA, k, formatGsettingsList(keep)])
+    writeAccelsVerified(k, keep)
   }
   console.log('')
   console.log(`freed ${plan.shadows.length} combo(s).`)

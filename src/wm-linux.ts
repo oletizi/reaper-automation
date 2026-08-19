@@ -186,3 +186,16 @@ export function restartAdvice(t: SessionType): string[] {
   ]
 }
 
+/**
+ * dconf path for a GSettings schema key: org.gnome.a.b + key -> /org/gnome/a/b/key
+ *
+ * We write through dconf rather than `gsettings set` because gsettings can bind
+ * to a non-dconf backend (a sandboxed or service-less environment falls back to
+ * one), where writes are reported as succeeding, read back correctly through
+ * gsettings, and are never seen by GNOME Shell -- which reads dconf. A silent
+ * no-op is the worst possible failure for this verb.
+ */
+export function dconfPathFor(schema: string, key: string): string {
+  return '/' + schema.split('.').join('/') + '/' + key
+}
+
