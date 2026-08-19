@@ -12,3 +12,12 @@ export function superWarning(flags: number, target: Target, label: string): stri
   if ((flags & FLAG_CONTROL) === 0) return null
   return `warning: ${label} uses mac Control -> Linux Super; GNOME may intercept it`
 }
+
+/**
+ * The build target implied by the machine we're running on. Non-darwin maps to
+ * 'linux' rather than throwing: only macos/linux are real targets, and the
+ * resource-dir resolver is where an unsupported platform gets rejected.
+ */
+export function hostTarget(platform: NodeJS.Platform = process.platform): Target {
+  return platform === 'darwin' ? 'macos' : 'linux'
+}

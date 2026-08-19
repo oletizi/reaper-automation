@@ -4,6 +4,7 @@ import { parseDoctor } from '@/cli/args'
 import { repoRoot, readInstalledStamp } from '@/build-run'
 import { readGitStamp, formatStamp } from '@/stamp'
 import { resolveResourceDir } from '@/reaper-paths'
+import { hostTarget } from '@/translate'
 
 // Report the source -> build -> installed -> last-fired version chain so any
 // drift (edited-but-not-rebuilt, built-but-not-installed, or a stale version
@@ -12,7 +13,7 @@ import { resolveResourceDir } from '@/reaper-paths'
 export function cmdDoctor(argv: string[]): number {
   const a = parseDoctor(argv)
   const root = repoRoot()
-  const target = process.platform === 'darwin' ? 'macos' : 'linux'
+  const target = hostTarget()
   const out = a.out ?? join(root, 'build', `luna-${target}.ReaperKeyMap`)
   const resourceDir = resolveResourceDir({ override: a.resourceDir })
 

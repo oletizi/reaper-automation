@@ -4,6 +4,7 @@ import { parseRefresh } from '@/cli/args'
 import { runBuild, repoRoot } from '@/build-run'
 import { installArtifacts } from '@/install'
 import { resolveResourceDir } from '@/reaper-paths'
+import { hostTarget } from '@/translate'
 
 // One-shot: build -> install -> verify installed == built. This is what the
 // in-REAPER reload button runs. It prints a machine-readable `BINDINGS:
@@ -12,7 +13,7 @@ import { resolveResourceDir } from '@/reaper-paths'
 export function cmdRefresh(argv: string[]): number {
   const a = parseRefresh(argv)
   const root = repoRoot()
-  const target = a.target ?? (process.platform === 'darwin' ? 'macos' : 'linux')
+  const target = a.target ?? hostTarget()
   const mapping = a.mapping ?? join(root, 'mappings', 'luna.toml')
   const out = a.out ?? join(root, 'build', `luna-${target}.ReaperKeyMap`)
   const resourceDir = resolveResourceDir({ override: a.resourceDir })

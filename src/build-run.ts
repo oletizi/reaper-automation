@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 import { parseMapping } from '@/mapping'
 import { loadActions, ActionIndex } from '@/actions'
 import { buildKeymap, type BuildResult } from '@/build-keymap'
-import { parseTarget, type Target } from '@/translate'
+import { parseTarget, hostTarget, type Target } from '@/translate'
 import { resolveResourceDir } from '@/reaper-paths'
 import { detectReaTooledSection } from '@/reatooled'
 import { readGitStamp, formatStamp } from '@/stamp'
@@ -57,7 +57,7 @@ export interface RunBuildOutput {
  */
 export function runBuild(opts: RunBuildOptions): RunBuildOutput {
   const root = repoRoot()
-  const target: Target = opts.target ? parseTarget(opts.target) : (process.platform === 'darwin' ? 'macos' : 'linux')
+  const target: Target = opts.target ? parseTarget(opts.target) : hostTarget()
   const mapping = parseMapping(readFileSync(opts.mapping, 'utf8'))
   const idx = new ActionIndex(loadActions())
 
