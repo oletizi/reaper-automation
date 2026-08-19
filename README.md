@@ -3,6 +3,12 @@
 Making REAPER's keyboard shortcuts conform to Universal Audio's LUNA — which in
 turn inherits most of its key layout from Pro Tools.
 
+The visible goal is the key layout. The actual one is making Pro Tools' **2D
+edit area** — a time span across a set of tracks, acted on as a unit regardless
+of where clips happen to begin and end — behave like a first-class concept in a
+DAW that doesn't have one. See [CONSTITUTION.md](CONSTITUTION.md); it governs
+every design decision here.
+
 The mapping lives in a plain TOML table. A generator turns it into a
 `.ReaperKeyMap` file, validating every command ID against an action list dumped
 out of REAPER itself. Edit the table, rebuild, re-import, iterate.
