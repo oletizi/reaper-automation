@@ -18,3 +18,9 @@ dependency chain:
 For an edit that has no verb yet (e.g. moving a `part-of` / `depends-on` edge):
 edit this file directly, then run `stackctl roadmap order` to revalidate the
 graph (it fails loud on a cycle / dangling ref / duplicate id).
+
+## design:feature/ardour-backend
+- status: in-flight
+- design: docs/superpowers/specs/2026-08-19-ardour-backend-design.md
+- ref: docs/ardour-backend-investigation.md
+Second DAW backend: generate Ardour bindings from the LUNA mapping

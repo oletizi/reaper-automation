@@ -48,9 +48,14 @@ platforms:
 Alt/Option (`Secondary-equal` = `Editor/expand-tracks`).
 
 Consequence: **the whole `--target macos|linux` translation axis disappears on
-the Ardour side.** `describe()`'s per-platform labelling and `superWarning()`'s
-Control→Super hazard are REAPER-specific problems that Ardour solves upstream.
-One generated bindings file serves both platforms.
+the Ardour side.** One generated bindings file serves both platforms, and
+`describe()`'s per-platform labelling is REAPER-specific bookkeeping Ardour does
+upstream.
+
+**[verified]** What does *not* disappear is `superWarning()`'s hazard. `Level4`
+resolves to Mod4/Super on Linux, so LUNA's `Control+<key>` combos remain
+interceptable by the desktop environment exactly as they are under REAPER. Only
+the *translation* is handled upstream; the warning is still warranted.
 
 ### Keysyms, and two traps
 
