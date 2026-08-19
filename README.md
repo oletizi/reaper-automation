@@ -294,6 +294,24 @@ reference for these bindings — the byte-for-byte TS build fixture
 (`tests/fixtures/luna-macos.tsbuild.ReaperKeyMap`) is the regression baseline
 going forward.
 
+## Linux: freeing the combos GNOME takes first
+
+GNOME grabs some combos before any application sees them — `Alt+Tab` and
+`Shift+Alt+Tab` most consequentially, which are LUNA's reverse tab-to-transient
+keys. Per [CONSTITUTION.md](CONSTITUTION.md) Principle 5 the combo goes to the
+selection vocabulary, so:
+
+```sh
+pnpm ra wm                  # report what the desktop is swallowing (dry run)
+pnpm ra wm --apply          # free exactly those combos
+pnpm ra wm --revert --apply # restore GNOME's defaults
+```
+
+It removes **only** the colliding accel and leaves every other shortcut on that
+action intact — freeing `Alt+Tab` leaves `Super+Tab` switching applications, so
+in practice you lose nothing. It reports any action it would leave with no
+shortcut at all rather than silently stranding it. On macOS it is a clean no-op.
+
 ## Keybindings reference
 
 [KEYBINDINGS.md](KEYBINDINGS.md) lists every combo this project binds, with both
