@@ -83,3 +83,12 @@ export function parseDocs(argv: string[]) {
   return { mapping: positionals[0], out: values.out, check: values.check ?? false }
 }
 
+export function parseWm(argv: string[]) {
+  const { values, positionals } = parseArgs({
+    args: argv,
+    allowPositionals: true,
+    options: { apply: { type: 'boolean' }, revert: { type: 'boolean' } },
+  })
+  return { mapping: positionals[0], apply: values.apply ?? false, revert: values.revert ?? false }
+}
+

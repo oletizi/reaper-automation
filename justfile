@@ -31,6 +31,10 @@ refresh *flags: _deps
 doctor *flags: _deps
     pnpm ra doctor {{ flags }}
 
+# Free the combos the Linux desktop grabs before REAPER sees them (dry run).
+wm *flags: _deps
+    pnpm ra wm {{ flags }}
+
 # Regenerate KEYBINDINGS.md from the mapping table.
 docs *flags: _deps
     pnpm ra docs {{ flags }}

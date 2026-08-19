@@ -33,7 +33,22 @@ just bootstrap     # first time (or if node_modules is missing)
 just refresh       # build + install + verify, and say if a re-import is needed
 just doctor        # is what's running what I built?
 just check         # tests + typecheck + KEYBINDINGS.md drift check
+just wm            # what the Linux desktop grabs before REAPER sees it
 ```
+
+On a new Linux machine, run `just wm --apply` once: GNOME grabs `Alt+Tab` and
+`Shift+Alt+Tab` before any application sees them, which shadows LUNA's reverse
+tab-to-transient. Freeing them is Principle 5 applied to the desktop — and it
+costs nothing, since GNOME already binds `Super+Tab` to the same action.
+`just wm --revert --apply` puts GNOME's defaults back. If the desktop still
+swallows a freed combo, work through the checklist in
+[docs/linux-key-grabs.md](docs/linux-key-grabs.md) -- and verify config changes
+with `dconf read`, never `gsettings get`, which can report a write that GNOME
+never saw. And remember a GSettings default can differ per desktop profile: read
+defaults as
+`GSETTINGS_BACKEND=memory XDG_CURRENT_DESKTOP=<profile> gsettings get ...`,
+since an agent shell usually has no `XDG_CURRENT_DESKTOP` and will resolve a
+different value than GNOME does.
 
 `mappings/luna.toml` is the thing you edit; everything else in `build/` is
 generated. `KEYBINDINGS.md` is generated too (`just docs`) — never hand-edit it.
