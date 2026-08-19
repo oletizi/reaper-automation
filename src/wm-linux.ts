@@ -146,3 +146,43 @@ export function planFreeing(
 export function formatGsettingsList(accels: string[]): string {
   return '[' + accels.map((a) => `'${a.replace(/'/g, "\\'")}'`).join(', ') + ']'
 }
+
+export type SessionType = 'wayland' | 'x11' | 'unknown'
+
+/**
+ * Pick the graphical session's type out of `loginctl show-session` results.
+ *
+ * DISPLAY and the presence of mutter-x11-frames are NOT evidence of an X11
+ * session: an X11 client under XWayland sees both. Getting this wrong matters,
+ * because the two sessions have different remedies and only one of them exists
+ * on Wayland.
+ */
+export function chooseSessionType(sessions: { type: string; active: boolean; seat: string }[]): SessionType {
+  const graphical = sessions.filter((s) => s.type === 'wayland' || s.type === 'x11')
+  const seated = graphical.filter((s) => s.seat && s.seat !== '-')
+  const pick = seated.find((s) => s.active) ?? seated[0] ?? graphical.find((s) => s.active) ?? graphical[0]
+  if (!pick) return 'unknown'
+  return pick.type === 'wayland' ? 'wayland' : 'x11'
+}
+
+/** How to make a stale compositor grab go away, for this session type. */
+export function restartAdvice(t: SessionType): string[] {
+  if (t === 'wayland') {
+    return [
+      'This is a Wayland session: there is no in-place restart of GNOME Shell.',
+      'If the desktop still swallows the combo, log out and back in.',
+    ]
+  }
+  if (t === 'x11') {
+    return [
+      'This is an X11 session: if the desktop still swallows the combo, its grab',
+      'is stale -- press Alt+F2, type `r`, Enter to restart GNOME Shell in place',
+      '(windows survive).',
+    ]
+  }
+  return [
+    'Could not determine the session type. If the desktop still swallows the',
+    'combo: on X11 press Alt+F2 then `r`; on Wayland log out and back in.',
+  ]
+}
+

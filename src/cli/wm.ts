@@ -10,10 +10,33 @@ import {
   parseGsettingsList,
   planFreeing,
   formatGsettingsList,
+  chooseSessionType,
+  restartAdvice,
+  type SessionType,
 } from '@/wm-linux'
 
 function gsettings(args: string[]): string {
   return execFileSync('gsettings', args, { encoding: 'utf8' }).trim()
+}
+
+/**
+ * Ask logind, not the environment: DISPLAY is set and mutter-x11-frames runs
+ * under XWayland too, so neither distinguishes an X11 session from a Wayland
+ * one -- and the remedy for a stale grab differs between them.
+ */
+function detectSessionType(): SessionType {
+  try {
+    const ids = execFileSync('loginctl', ['list-sessions', '--no-legend'], { encoding: 'utf8' })
+      .split('\n').map((l) => l.trim().split(/\s+/)[0]).filter(Boolean)
+    const sessions = ids.map((id) => {
+      const out = execFileSync('loginctl', ['show-session', id, '-p', 'Type', '-p', 'Active', '-p', 'Seat'], { encoding: 'utf8' })
+      const get = (k: string) => (new RegExp(`^${k}=(.*)$`, 'm').exec(out)?.[1] ?? '').trim()
+      return { type: get('Type'), active: get('Active') === 'yes', seat: get('Seat') }
+    })
+    return chooseSessionType(sessions)
+  } catch {
+    return 'unknown'
+  }
 }
 
 function haveGsettings(): boolean {
@@ -103,10 +126,8 @@ export function cmdWm(argv: string[]): number {
   }
   console.log('')
   console.log(`freed ${plan.shadows.length} combo(s).`)
-  // Mutter is supposed to rebind live, but an existing X11 grab can outlive the
+  // Mutter is supposed to rebind live, but an existing grab can outlive the
   // setting change. Say so rather than promising it already works.
-  console.log('If the desktop still swallows the combo, its grab is stale -- restart the shell:')
-  console.log('  X11:     Alt+F2, type `r`, Enter (restarts gnome-shell in place; windows survive)')
-  console.log('  Wayland: log out and back in (no in-place restart exists)')
+  for (const line of restartAdvice(detectSessionType())) console.log(line)
   return 0
 }

@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
+  chooseSessionType,
+  restartAdvice,
   parseGsettingsList,
   parseGnomeAccel,
   parseOurLinuxLabel,
@@ -97,3 +99,39 @@ describe('formatGsettingsList', () => {
     expect(formatGsettingsList([])).toBe('[]')
   })
 })
+
+describe('chooseSessionType', () => {
+  it('picks the seated graphical session, not a tty one', () => {
+    // The real case that misled a human: a tty session and a wayland session
+    // coexist, and DISPLAY is set because REAPER runs under XWayland.
+    expect(chooseSessionType([
+      { type: 'tty', active: true, seat: '' },
+      { type: 'wayland', active: true, seat: 'seat0' },
+      { type: 'unspecified', active: true, seat: '' },
+    ])).toBe('wayland')
+  })
+  it('reports x11 when that is what is seated', () => {
+    expect(chooseSessionType([{ type: 'x11', active: true, seat: 'seat0' }])).toBe('x11')
+  })
+  it('admits it does not know rather than assuming x11', () => {
+    expect(chooseSessionType([{ type: 'tty', active: true, seat: '' }])).toBe('unknown')
+    expect(chooseSessionType([])).toBe('unknown')
+  })
+})
+
+describe('restartAdvice', () => {
+  it('never offers Alt+F2 on Wayland, where it does not exist', () => {
+    const w = restartAdvice('wayland').join(' ')
+    expect(w).not.toContain('Alt+F2')
+    expect(w).toContain('log out')
+  })
+  it('offers the in-place restart on X11', () => {
+    expect(restartAdvice('x11').join(' ')).toContain('Alt+F2')
+  })
+  it('gives both when the session type is unknown', () => {
+    const u = restartAdvice('unknown').join(' ')
+    expect(u).toContain('Alt+F2')
+    expect(u).toContain('log out')
+  })
+})
+
