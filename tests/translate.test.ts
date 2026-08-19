@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { parseTarget, superWarning } from '@/translate'
+import { parseTarget, hostTarget, superWarning } from '@/translate'
 import { FLAG_VIRTKEY, FLAG_CONTROL, FLAG_CMD } from '@/keyspec'
 
 describe('parseTarget', () => {
@@ -22,5 +22,20 @@ describe('superWarning', () => {
   it('is silent for bit-32 on macos and for non-bit-32 on linux', () => {
     expect(superWarning(FLAG_VIRTKEY | FLAG_CONTROL, 'macos', 'x')).toBeNull()
     expect(superWarning(FLAG_VIRTKEY | FLAG_CMD, 'linux', 'x')).toBeNull()
+  })
+})
+
+describe('hostTarget', () => {
+  it('maps darwin to macos and linux to linux', () => {
+    expect(hostTarget('darwin')).toBe('macos')
+    expect(hostTarget('linux')).toBe('linux')
+  })
+  it('maps any other platform to linux rather than throwing', () => {
+    // resolveResourceDir is where an unsupported host gets rejected.
+    expect(hostTarget('win32')).toBe('linux')
+    expect(hostTarget('freebsd')).toBe('linux')
+  })
+  it('defaults to the running platform', () => {
+    expect(hostTarget()).toBe(process.platform === 'darwin' ? 'macos' : 'linux')
   })
 })

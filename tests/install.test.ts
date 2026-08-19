@@ -3,6 +3,9 @@ import { mkdtempSync, mkdirSync, writeFileSync, readdirSync, existsSync, rmSync 
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { installArtifacts } from '@/install'
+import { defaultKeymapPath } from '@/cli/install'
+import { repoRoot } from '@/build-run'
+import { hostTarget } from '@/translate'
 
 let work: string
 beforeEach(() => { work = mkdtempSync(join(tmpdir(), 'ra-install-')) })
@@ -65,5 +68,18 @@ describe('installArtifacts', () => {
     writeFileSync(join(src, 'luna.ReaperKeyMap'), 'KEY 1 32 40044 0\nKEY 1 66 41383 0\n')
     const third = installArtifacts({ keymapPath: join(src, 'luna.ReaperKeyMap'), resourceDir: res })
     expect(third.keymapChanged).toBe(true) // bindings differ now
+  })
+})
+
+describe('defaultKeymapPath', () => {
+  it('picks the artifact built for the host, not a hardcoded macos one', () => {
+    expect(defaultKeymapPath('darwin').endsWith('build/luna-macos.ReaperKeyMap')).toBe(true)
+    expect(defaultKeymapPath('linux').endsWith('build/luna-linux.ReaperKeyMap')).toBe(true)
+  })
+  it('agrees with what build/refresh/doctor name for the same host', () => {
+    // The four verbs must not disagree about which file is "the" artifact.
+    for (const p of ['darwin', 'linux'] as const) {
+      expect(defaultKeymapPath(p)).toBe(join(repoRoot(), 'build', `luna-${hostTarget(p)}.ReaperKeyMap`))
+    }
   })
 })
