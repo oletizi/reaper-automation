@@ -117,8 +117,12 @@ export function cmdPrefs(argv: string[]): number {
   return 0
 }
 
-/** Keys REAPER rewrites constantly; they would drown a --changed report. */
-const NOISY = /^(lastproj|lastprojuiref|recentfx|reccfg|lastcursorpos|lastentered|.*_wnd_?vis|.*wndsize|.*wndpos)/i
+/**
+ * Keys REAPER rewrites as a side effect of being used -- last-opened paths,
+ * window geometry, which Preferences page you were last on. They are not
+ * settings, and they would drown a --changed report in noise.
+ */
+const NOISY = /^(lastproj|lastprojuiref|prefspage|recentfx|reccfg|lastcursorpos|lastentered|.*_wnd_?vis|.*wndsize|.*wndpos)/i
 
 function reaperRunning(): boolean {
   try {

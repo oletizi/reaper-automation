@@ -18,3 +18,14 @@
 daw = "reaper"
 
 # --- captured settings go below ------------------------------------------
+
+[[pref]]
+section = "REAPER"
+key = "loadlastproj"
+value = "16"
+why = """Reopen the last project on startup, which is REAPER's own default. \
+ReaTooled ships with it off -- Pro Tools starts empty and PT refugees may want \
+that, but it costs a file-open every session. Captured, not derived: the value \
+went 18 -> 16, i.e. REAPER CLEARED bit 1. Setting bit 0 (18 -> 19), the obvious \
+guess, would have left the feature off and flipped an unrelated bit."""
+
