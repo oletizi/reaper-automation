@@ -1,4 +1,4 @@
-import { parse as parseKey, describe } from '@/keyspec'
+import { parseCombo, describeCombo } from '@/keys'
 import type { ActionIndex } from '@/actions'
 import type { Binding, Mapping } from '@/mapping'
 
@@ -50,9 +50,9 @@ function isAreaBinding(b: Binding): boolean {
 }
 
 function row(b: Binding, actions: ActionIndex): string {
-  const { flags, keycode } = parseKey(b.key as string)
-  const mac = describe(flags, keycode, 'macos')
-  const linux = describe(flags, keycode, 'linux')
+  const combo = parseCombo(b.key as string)
+  const mac = describeCombo(combo, 'macos')
+  const linux = describeCombo(combo, 'linux')
   const cell = (s: string) => s.replace(/\|/g, '\\|')
   return `| \`${cell(mac)}\` | \`${cell(linux)}\` | ${cell(b.luna)} | ${cell(mechanism(b, actions))} |`
 }

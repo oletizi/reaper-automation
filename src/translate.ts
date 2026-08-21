@@ -1,4 +1,4 @@
-import { FLAG_CONTROL } from '@/keyspec'
+import type { KeyCombo } from '@/keys'
 
 export type Target = 'macos' | 'linux'
 
@@ -7,9 +7,9 @@ export function parseTarget(s: string): Target {
   throw new Error(`unsupported --target ${JSON.stringify(s)} (expected "macos" or "linux")`)
 }
 
-export function superWarning(flags: number, target: Target, label: string): string | null {
+export function superWarning(combo: KeyCombo, target: Target, label: string): string | null {
   if (target !== 'linux') return null
-  if ((flags & FLAG_CONTROL) === 0) return null
+  if (!combo.control) return null
   return `warning: ${label} uses mac Control -> Linux Super; GNOME may intercept it`
 }
 

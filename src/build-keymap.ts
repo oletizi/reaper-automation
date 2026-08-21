@@ -1,4 +1,5 @@
-import { parse as parseKey, describe as describeKey } from '@/keyspec'
+import { parseCombo, describeCombo, comboIdentity } from '@/keys'
+import { encodeCombo } from '@/reaper-keycodes'
 import { superWarning, type Target } from '@/translate'
 import { stableId, slugify } from '@/ids'
 import type { ActionIndex } from '@/actions'
@@ -99,23 +100,25 @@ export function buildKeymap(
     }
     let flags: number
     let code: number
+    let keyCombo
     try {
-      const p = parseKey(b.key)
-      flags = p.flags; code = p.keycode
+      keyCombo = parseCombo(b.key)
+      const enc = encodeCombo(keyCombo)
+      flags = enc.flags; code = enc.keycode
     } catch (e) {
       errors.push(`${luna}: ${e instanceof Error ? e.message : String(e)}`)
       continue
     }
 
-    const combo = describeKey(flags, code, target)
-    const comboKey = `${flags},${code}`
+    const combo = describeCombo(keyCombo, target)
+    const comboKey = comboIdentity(keyCombo)
     if (seenKeys.has(comboKey)) {
       errors.push(`${luna}: key ${combo} already bound to ${JSON.stringify(seenKeys.get(comboKey))}`)
       continue
     }
     seenKeys.set(comboKey, luna)
 
-    const w = superWarning(flags, target, luna)
+    const w = superWarning(keyCombo, target, luna)
     if (w) warnings.push(w)
 
     let command: string

@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import { parseWm } from '@/cli/args'
 import { repoRoot } from '@/build-run'
 import { parseMapping } from '@/mapping'
-import { parse as parseKey, describe } from '@/keyspec'
+import { parseCombo, describeCombo } from '@/keys'
 import {
   GNOME_WM_SCHEMA,
   parseGsettingsList,
@@ -174,8 +174,7 @@ export function cmdWm(argv: string[]): number {
   const ours: { label: string; binding: string }[] = []
   for (const b of mapping.bindings) {
     if (b.status !== 'ok' || !b.key) continue
-    const { flags, keycode } = parseKey(b.key)
-    ours.push({ label: describe(flags, keycode, 'linux'), binding: b.luna })
+    ours.push({ label: describeCombo(parseCombo(b.key), 'linux'), binding: b.luna })
   }
 
   const plan = planFreeing(current, ours)

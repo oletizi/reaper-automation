@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { parseTarget, hostTarget, superWarning } from '@/translate'
-import { FLAG_VIRTKEY, FLAG_CONTROL, FLAG_CMD } from '@/keyspec'
+import { parseCombo } from '@/keys'
 
 describe('parseTarget', () => {
   it('accepts macos and linux', () => {
@@ -14,14 +14,14 @@ describe('parseTarget', () => {
 })
 
 describe('superWarning', () => {
-  it('warns for a bit-32 binding on linux', () => {
-    const w = superWarning(FLAG_VIRTKEY | FLAG_CONTROL, 'linux', 'Loop Playback')
+  it('warns for a mac-Control binding on linux', () => {
+    const w = superWarning(parseCombo('Control+L'), 'linux', 'Loop Playback')
     expect(w).toContain('Super')
     expect(w).toContain('Loop Playback')
   })
-  it('is silent for bit-32 on macos and for non-bit-32 on linux', () => {
-    expect(superWarning(FLAG_VIRTKEY | FLAG_CONTROL, 'macos', 'x')).toBeNull()
-    expect(superWarning(FLAG_VIRTKEY | FLAG_CMD, 'linux', 'x')).toBeNull()
+  it('is silent for mac-Control on macos and for non-Control on linux', () => {
+    expect(superWarning(parseCombo('Control+L'), 'macos', 'x')).toBeNull()
+    expect(superWarning(parseCombo('Cmd+L'), 'linux', 'x')).toBeNull()
   })
 })
 
