@@ -59,6 +59,28 @@ defaults as
 since an agent shell usually has no `XDG_CURRENT_DESKTOP` and will resolve a
 different value than GNOME does.
 
+## The source layout (Constitution, Principle 7)
+
+`src/core` is portable; `src/adapters/<host>` is not. Dependencies run inward
+only -- an adapter may import core, never a sibling adapter and never the CLI --
+and `tests/layering.test.ts` fails the build when that stops being true. The core
+also names no host vocabulary, so a REAPER action ID, a Lua string or an ini key
+appearing under `src/core` is a defect whatever imports it.
+
+- `src/core` -- the key-combo grammar (`keys.ts`), the platform target, the build
+  stamp, the repo root. Small on purpose: almost everything written so far is
+  REAPER, and moving host code across the line to fatten the core destroys the
+  only property the line has.
+- `src/adapters/reaper` -- action index, mapping parser, keymap emitter, the Lua
+  templates, ini handling, resource paths, ReaTooled detection. Also `ids.ts`,
+  which looks generic but salts every custom action ID with the repo name.
+- `src/adapters/desktop` -- the Linux/GNOME key grabs.
+- `src/cli` -- the verbs; may reach into both layers.
+
+New portable material -- track roles, plugin descriptors, canonical controller
+maps -- belongs in `core`; the REAPER-specific way to *apply* it belongs in the
+adapter.
+
 `mappings/luna.toml` is the thing you edit; everything else in `build/` is
 generated. `KEYBINDINGS.md` is generated too (`just docs`) — never hand-edit it.
 
