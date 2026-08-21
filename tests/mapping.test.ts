@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { parseMapping, MappingError } from '@/mapping'
+import { parseMapping, MappingError } from '@/adapters/reaper/mapping'
 
 const mini = readFileSync(fileURLToPath(new URL('./fixtures/mini.toml', import.meta.url)), 'utf8')
 

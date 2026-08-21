@@ -1,6 +1,6 @@
-import { parseCombo, describeCombo } from '@/keys'
-import type { ActionIndex } from '@/actions'
-import type { Binding, Mapping } from '@/mapping'
+import { parseCombo, describeCombo } from '@/core/keys'
+import type { ActionIndex } from '@/adapters/reaper/actions'
+import type { Binding, Mapping } from '@/adapters/reaper/mapping'
 
 /**
  * KEYBINDINGS.md is generated from mappings/luna.toml, not hand-maintained: a

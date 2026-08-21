@@ -1,4 +1,4 @@
-import { debugHook } from '@/debug-runtime'
+import { debugHook } from '@/adapters/reaper/debug-runtime'
 
 export function renderSeparateScript(opts: { label: string; spec: string }): string {
   const { label, spec } = opts

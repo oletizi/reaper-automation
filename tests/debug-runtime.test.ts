@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { renderStampModule, renderDebugModule, debugHook, DEBUG_MODULE_FILE, STAMP_MODULE_FILE } from '@/debug-runtime'
+import { renderStampModule, renderDebugModule, debugHook, DEBUG_MODULE_FILE, STAMP_MODULE_FILE } from '@/adapters/reaper/debug-runtime'
 
 describe('renderStampModule', () => {
   it('returns the stamp string as a Lua literal', () => {

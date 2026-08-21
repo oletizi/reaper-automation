@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { loadActions, ActionIndex } from '@/actions'
+import { loadActions, ActionIndex } from '@/adapters/reaper/actions'
 
 const rows = loadActions()
 const idx = new ActionIndex(rows)

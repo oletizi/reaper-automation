@@ -5,10 +5,10 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { renderDebugModule, renderStampModule, debugHook } from '@/debug-runtime'
-import { parseMapping } from '@/mapping'
-import { loadActions, ActionIndex } from '@/actions'
-import { buildKeymap } from '@/build-keymap'
+import { renderDebugModule, renderStampModule, debugHook } from '@/adapters/reaper/debug-runtime'
+import { parseMapping } from '@/adapters/reaper/mapping'
+import { loadActions, ActionIndex } from '@/adapters/reaper/actions'
+import { buildKeymap } from '@/adapters/reaper/build-keymap'
 
 // Parse Lua with luac -p when available. REAPER's own Lua is not runnable
 // standalone, so this is our only pre-flight guard against a syntax error that

@@ -1,5 +1,6 @@
+import { join } from 'node:path'
+import { repoRoot } from '@/core/repo'
 import { readFileSync } from 'node:fs'
-import { fileURLToPath } from 'node:url'
 
 export interface ActionRow {
   section: string
@@ -9,9 +10,7 @@ export interface ActionRow {
   actionName: string
 }
 
-export const DEFAULT_ACTIONS_TSV = fileURLToPath(
-  new URL('../data/reaper-actions-7.78.tsv', import.meta.url),
-)
+export const DEFAULT_ACTIONS_TSV = join(repoRoot(), 'data', 'reaper-actions-7.78.tsv')
 
 export function loadActions(tsvPath: string = DEFAULT_ACTIONS_TSV): ActionRow[] {
   const text = readFileSync(tsvPath, 'utf8')

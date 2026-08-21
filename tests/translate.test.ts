@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { parseTarget, hostTarget, superWarning } from '@/translate'
-import { parseCombo } from '@/keys'
+import { parseTarget, hostTarget, superWarning } from '@/core/target'
+import { parseCombo } from '@/core/keys'
 
 describe('parseTarget', () => {
   it('accepts macos and linux', () => {

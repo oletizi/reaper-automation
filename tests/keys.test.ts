@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { parseCombo, describeCombo, comboIdentity, KeySpecError } from '@/keys'
+import { parseCombo, describeCombo, comboIdentity, KeySpecError } from '@/core/keys'
 
 const bare = { shift: false, cmd: false, opt: false, control: false }
 

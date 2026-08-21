@@ -1,10 +1,10 @@
 import { join } from 'node:path'
 import { readFileSync } from 'node:fs'
 import { parseRefresh } from '@/cli/args'
-import { runBuild, repoRoot } from '@/build-run'
-import { installArtifacts } from '@/install'
-import { resolveResourceDir } from '@/reaper-paths'
-import { hostTarget } from '@/translate'
+import { runBuild, repoRoot } from '@/adapters/reaper/build-run'
+import { installArtifacts } from '@/adapters/reaper/install'
+import { resolveResourceDir } from '@/adapters/reaper/paths'
+import { hostTarget } from '@/core/target'
 
 // One-shot: build -> install -> verify installed == built. This is what the
 // in-REAPER reload button runs. It prints a machine-readable `BINDINGS:

@@ -2,10 +2,10 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { mkdtempSync, mkdirSync, writeFileSync, readdirSync, existsSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { installArtifacts } from '@/install'
+import { installArtifacts } from '@/adapters/reaper/install'
 import { defaultKeymapPath } from '@/cli/install'
-import { repoRoot } from '@/build-run'
-import { hostTarget } from '@/translate'
+import { repoRoot } from '@/adapters/reaper/build-run'
+import { hostTarget } from '@/core/target'
 
 let work: string
 beforeEach(() => { work = mkdtempSync(join(tmpdir(), 'ra-install-')) })

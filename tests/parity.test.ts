@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import { readFileSync, existsSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { parseMapping } from '@/mapping'
-import { loadActions, ActionIndex } from '@/actions'
-import { buildKeymap } from '@/build-keymap'
+import { parseMapping } from '@/adapters/reaper/mapping'
+import { loadActions, ActionIndex } from '@/adapters/reaper/actions'
+import { buildKeymap } from '@/adapters/reaper/build-keymap'
 
 const luna = parseMapping(readFileSync(fileURLToPath(new URL('../mappings/luna.toml', import.meta.url)), 'utf8'))
 const built = buildKeymap(luna, new ActionIndex(loadActions()), 'macos')

@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { parseMapping } from '@/mapping'
-import { loadActions, ActionIndex } from '@/actions'
-import { renderKeybindingsDoc } from '@/keybindings-doc'
+import { parseMapping } from '@/adapters/reaper/mapping'
+import { loadActions, ActionIndex } from '@/adapters/reaper/actions'
+import { renderKeybindingsDoc } from '@/adapters/reaper/keybindings-doc'
 
 const idx = new ActionIndex(loadActions())
 const luna = parseMapping(readFileSync(fileURLToPath(new URL('../mappings/luna.toml', import.meta.url)), 'utf8'))

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { stableId, slugify } from '@/ids'
+import { stableId, slugify } from '@/adapters/reaper/ids'
 
 describe('stableId (migration contract — must match Python exactly)', () => {
   it('matches the committed custom-action id', () => {

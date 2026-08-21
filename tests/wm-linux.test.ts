@@ -11,7 +11,7 @@ import {
   sameAccel,
   planFreeing,
   formatGsettingsList,
-} from '@/wm-linux'
+} from '@/adapters/desktop/gnome'
 
 describe('parseGsettingsList', () => {
   it('reads the empty form gsettings prints', () => {

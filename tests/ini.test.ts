@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { parseIni, readValue, writeValue, diffIni } from '@/ini'
+import { parseIni, readValue, writeValue, diffIni } from '@/adapters/reaper/ini'
 
 const SAMPLE = ['[REAPER]', 'loadlastproj=18', 'zoom=3', '', '[audioconfig]', 'device=alsa', ''].join('\n')
 

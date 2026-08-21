@@ -1,4 +1,4 @@
-import { debugHook } from '@/debug-runtime'
+import { debugHook } from '@/adapters/reaper/debug-runtime'
 
 export function renderRazorExtendScript(opts: { label: string; spec: string; move: number; moveName: string; selectItems?: boolean }): string {
   const { label, spec, move, moveName, selectItems } = opts

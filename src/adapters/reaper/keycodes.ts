@@ -2,7 +2,7 @@
 // reaper-kb.ini carries. This is host vocabulary and belongs to the REAPER
 // adapter -- `keys.ts` holds the portable combo and knows none of it.
 
-import { type KeyCombo, KeySpecError } from '@/keys'
+import { type KeyCombo, KeySpecError } from '@/core/keys'
 
 export const FLAG_VIRTKEY = 1
 export const FLAG_SHIFT = 4

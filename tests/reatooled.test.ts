@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { parseKb, observeAgainstReatooled, detectReaTooledSection } from '@/reatooled'
+import { parseKb, observeAgainstReatooled, detectReaTooledSection } from '@/adapters/reaper/reatooled'
 
 const slice = readFileSync(fileURLToPath(new URL('./fixtures/reatooled-slice.ini', import.meta.url)), 'utf8')
 

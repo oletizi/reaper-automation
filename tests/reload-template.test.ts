@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process'
 import { mkdtempSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { renderReloadScript } from '@/reload-template'
+import { renderReloadScript } from '@/adapters/reaper/templates/reload'
 
 function luacAvailable(): boolean {
   try { execFileSync('luac', ['-v'], { stdio: 'ignore' }); return true } catch { return false }

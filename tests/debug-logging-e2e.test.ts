@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process'
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { renderDebugModule, renderStampModule } from '@/debug-runtime'
+import { renderDebugModule, renderStampModule } from '@/adapters/reaper/debug-runtime'
 
 // Exercise the REAL luna_debug.lua in a Lua interpreter (its logging path uses
 // only stdlib io/os, no reaper.* calls), proving it actually writes a stamped,

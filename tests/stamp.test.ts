@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { formatStamp } from '@/stamp'
+import { formatStamp } from '@/core/stamp'
 
 describe('formatStamp', () => {
   it('renders a clean commit as the short sha alone', () => {

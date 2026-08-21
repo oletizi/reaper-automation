@@ -2,10 +2,10 @@ import { execFileSync } from 'node:child_process'
 import { readFileSync, writeFileSync, existsSync, copyFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { parsePrefsCmd } from '@/cli/args'
-import { repoRoot } from '@/build-run'
-import { resolveResourceDir } from '@/reaper-paths'
-import { parseIni, writeValue, diffIni } from '@/ini'
-import { parsePrefs, statusOf, toPrefBlock } from '@/prefs'
+import { repoRoot } from '@/adapters/reaper/build-run'
+import { resolveResourceDir } from '@/adapters/reaper/paths'
+import { parseIni, writeValue, diffIni } from '@/adapters/reaper/ini'
+import { parsePrefs, statusOf, toPrefBlock } from '@/adapters/reaper/prefs'
 
 /**
  * `ra prefs` -- bring this machine's REAPER preferences to the declared set.

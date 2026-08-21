@@ -1,4 +1,4 @@
-import { debugHook } from '@/debug-runtime'
+import { debugHook } from '@/adapters/reaper/debug-runtime'
 
 // LUNA reload button. A generated ReaScript, bound to a key (or dropped on a
 // toolbar), that rebuilds + reinstalls the whole keymap in one press from inside

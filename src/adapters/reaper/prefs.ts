@@ -1,6 +1,6 @@
 import { parse as parseToml } from 'smol-toml'
-import type { IniEntry } from '@/ini'
-import { readValue } from '@/ini'
+import type { IniEntry } from '@/adapters/reaper/ini'
+import { readValue } from '@/adapters/reaper/ini'
 
 /**
  * Declared DAW preferences: the settings this project asserts, so a fresh

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { renderRazorExtendScript } from '@/razor-extend-template'
+import { renderRazorExtendScript } from '@/adapters/reaper/templates/razor-extend'
 
 describe('renderRazorExtendScript', () => {
   const lua = renderRazorExtendScript({ label: 'LUNA: Extend Fwd', spec: 'luna.toml', move: 41042, moveName: 'fwd' })

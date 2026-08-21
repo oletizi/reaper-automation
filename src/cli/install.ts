@@ -1,8 +1,8 @@
 import { join, dirname } from 'node:path'
-import { installArtifacts } from '@/install'
-import { resolveResourceDir } from '@/reaper-paths'
+import { installArtifacts } from '@/adapters/reaper/install'
+import { resolveResourceDir } from '@/adapters/reaper/paths'
 import { parseInstall } from '@/cli/args'
-import { hostTarget } from '@/translate'
+import { hostTarget } from '@/core/target'
 import { fileURLToPath } from 'node:url'
 
 /**

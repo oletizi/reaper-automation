@@ -1,4 +1,4 @@
-import { loadActions, ActionIndex } from '@/actions'
+import { loadActions, ActionIndex } from '@/adapters/reaper/actions'
 import { parseFindAction } from '@/cli/args'
 
 export function cmdFindAction(argv: string[]): number {

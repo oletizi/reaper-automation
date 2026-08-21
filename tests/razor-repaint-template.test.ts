@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { renderRazorRepaintScript } from '@/razor-repaint-template'
+import { renderRazorRepaintScript } from '@/adapters/reaper/templates/razor-repaint'
 
 describe('renderRazorRepaintScript', () => {
   const lua = renderRazorRepaintScript({ label: 'LUNA: Repaint Area', spec: 'luna.toml' })

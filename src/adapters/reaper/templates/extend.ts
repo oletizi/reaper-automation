@@ -1,4 +1,4 @@
-import { debugHook } from '@/debug-runtime'
+import { debugHook } from '@/adapters/reaper/debug-runtime'
 
 export function renderExtendScript(opts: { label: string; spec: string; move: number; moveName: string }): string {
   const { label, spec, move, moveName } = opts

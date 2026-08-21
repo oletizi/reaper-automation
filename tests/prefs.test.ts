@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { parseIni } from '@/ini'
-import { parsePrefs, statusOf, toPrefBlock, PrefsError } from '@/prefs'
+import { parseIni } from '@/adapters/reaper/ini'
+import { parsePrefs, statusOf, toPrefBlock, PrefsError } from '@/adapters/reaper/prefs'
 
 const DOC = ['[meta]', 'daw = "reaper"', '', '[[pref]]', 'section = "REAPER"', 'key = "loadlastproj"', 'value = "19"', 'why = "reopen the last project"'].join('\n')
 

@@ -1,7 +1,7 @@
 import { join } from 'node:path'
 import { parseBuild } from '@/cli/args'
-import { runBuild, repoRoot } from '@/build-run'
-import { hostTarget, parseTarget } from '@/translate'
+import { runBuild, repoRoot } from '@/adapters/reaper/build-run'
+import { hostTarget, parseTarget } from '@/core/target'
 
 export function cmdBuild(argv: string[]): number {
   const a = parseBuild(argv)

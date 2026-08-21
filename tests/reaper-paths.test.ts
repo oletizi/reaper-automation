@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { resolveResourceDir } from '@/reaper-paths'
+import { resolveResourceDir } from '@/adapters/reaper/paths'
 
 describe('resolveResourceDir', () => {
   it('macOS path', () => {

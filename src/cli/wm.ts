@@ -2,9 +2,9 @@ import { execFileSync } from 'node:child_process'
 import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { parseWm } from '@/cli/args'
-import { repoRoot } from '@/build-run'
-import { parseMapping } from '@/mapping'
-import { parseCombo, describeCombo } from '@/keys'
+import { repoRoot } from '@/adapters/reaper/build-run'
+import { parseMapping } from '@/adapters/reaper/mapping'
+import { parseCombo, describeCombo } from '@/core/keys'
 import {
   GNOME_WM_SCHEMA,
   parseGsettingsList,
@@ -16,7 +16,7 @@ import {
   chooseSessionType,
   restartAdvice,
   type SessionType,
-} from '@/wm-linux'
+} from '@/adapters/desktop/gnome'
 
 function gsettings(args: string[]): string {
   return execFileSync('gsettings', args, { encoding: 'utf8' }).trim()

@@ -1,19 +1,16 @@
 import { mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync, rmSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
 import { dirname, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
-import { parseMapping } from '@/mapping'
-import { loadActions, ActionIndex } from '@/actions'
-import { buildKeymap, type BuildResult } from '@/build-keymap'
-import { parseTarget, hostTarget, type Target } from '@/translate'
-import { resolveResourceDir } from '@/reaper-paths'
-import { detectReaTooledSection } from '@/reatooled'
-import { readGitStamp, formatStamp } from '@/stamp'
+import { repoRoot } from '@/core/repo'
+import { parseMapping } from '@/adapters/reaper/mapping'
+import { loadActions, ActionIndex } from '@/adapters/reaper/actions'
+import { buildKeymap, type BuildResult } from '@/adapters/reaper/build-keymap'
+import { parseTarget, hostTarget, type Target } from '@/core/target'
+import { resolveResourceDir } from '@/adapters/reaper/paths'
+import { detectReaTooledSection } from '@/adapters/reaper/reatooled'
+import { readGitStamp, formatStamp } from '@/core/stamp'
 
-/** Absolute repo root, derived from this module's location (src/build-run.ts). */
-export function repoRoot(): string {
-  return fileURLToPath(new URL('..', import.meta.url))
-}
+export { repoRoot } from '@/core/repo'
 
 /**
  * PATH prefix (colon-separated bin dirs) to bake into the reload button so it

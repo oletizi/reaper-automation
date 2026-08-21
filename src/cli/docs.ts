@@ -1,10 +1,10 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { parseDocs } from '@/cli/args'
-import { repoRoot } from '@/build-run'
-import { parseMapping } from '@/mapping'
-import { loadActions, ActionIndex } from '@/actions'
-import { renderKeybindingsDoc } from '@/keybindings-doc'
+import { repoRoot } from '@/adapters/reaper/build-run'
+import { parseMapping } from '@/adapters/reaper/mapping'
+import { loadActions, ActionIndex } from '@/adapters/reaper/actions'
+import { renderKeybindingsDoc } from '@/adapters/reaper/keybindings-doc'
 
 // Generate KEYBINDINGS.md from the mapping table. --check regenerates in memory
 // and fails when the committed file has drifted, so the doc can't quietly stop

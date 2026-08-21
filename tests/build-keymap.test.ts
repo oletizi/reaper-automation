@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { parseMapping } from '@/mapping'
-import { loadActions, ActionIndex } from '@/actions'
-import { buildKeymap } from '@/build-keymap'
+import { parseMapping } from '@/adapters/reaper/mapping'
+import { loadActions, ActionIndex } from '@/adapters/reaper/actions'
+import { buildKeymap } from '@/adapters/reaper/build-keymap'
 
 const idx = new ActionIndex(loadActions())
 const mini = parseMapping(readFileSync(fileURLToPath(new URL('./fixtures/mini.toml', import.meta.url)), 'utf8'))

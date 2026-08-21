@@ -1,4 +1,4 @@
-import type { KeyCombo } from '@/keys'
+import type { KeyCombo } from '@/core/keys'
 
 export type Target = 'macos' | 'linux'
 

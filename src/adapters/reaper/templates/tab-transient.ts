@@ -1,4 +1,4 @@
-import { debugHook } from '@/debug-runtime'
+import { debugHook } from '@/adapters/reaper/debug-runtime'
 
 // LUNA Tab-to-Transient: move the edit cursor to the next/previous audio
 // transient. REAPER's transient-navigation actions (40375/40376) only act on

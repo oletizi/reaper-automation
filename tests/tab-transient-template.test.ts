@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { renderTabTransientScript } from '@/tab-transient-template'
+import { renderTabTransientScript } from '@/adapters/reaper/templates/tab-transient'
 
 describe('renderTabTransientScript', () => {
   const next = renderTabTransientScript({ label: 'LUNA: Tab next', spec: 'luna.toml', forward: true })

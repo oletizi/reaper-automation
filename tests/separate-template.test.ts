@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { renderSeparateScript } from '@/separate-template'
+import { renderSeparateScript } from '@/adapters/reaper/templates/separate'
 
 describe('renderSeparateScript', () => {
   const lua = renderSeparateScript({ label: 'LUNA: Separate', spec: 'luna.toml' })

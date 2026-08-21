@@ -1,10 +1,10 @@
 import { join, dirname } from 'node:path'
 import { existsSync, readFileSync } from 'node:fs'
 import { parseDoctor } from '@/cli/args'
-import { repoRoot, readInstalledStamp } from '@/build-run'
-import { readGitStamp, formatStamp } from '@/stamp'
-import { resolveResourceDir } from '@/reaper-paths'
-import { hostTarget } from '@/translate'
+import { repoRoot, readInstalledStamp } from '@/adapters/reaper/build-run'
+import { readGitStamp, formatStamp } from '@/core/stamp'
+import { resolveResourceDir } from '@/adapters/reaper/paths'
+import { hostTarget } from '@/core/target'
 
 // Report the source -> build -> installed -> last-fired version chain so any
 // drift (edited-but-not-rebuilt, built-but-not-installed, or a stale version

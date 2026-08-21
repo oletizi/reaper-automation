@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { parseCombo, KeySpecError } from '@/keys'
-import { encodeCombo, FLAG_VIRTKEY, FLAG_SHIFT, FLAG_CMD, FLAG_OPT, FLAG_CONTROL } from '@/reaper-keycodes'
+import { parseCombo, KeySpecError } from '@/core/keys'
+import { encodeCombo, FLAG_VIRTKEY, FLAG_SHIFT, FLAG_CMD, FLAG_OPT, FLAG_CONTROL } from '@/adapters/reaper/keycodes'
 
 const enc = (s: string) => encodeCombo(parseCombo(s))
 
