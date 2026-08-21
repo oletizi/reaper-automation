@@ -163,3 +163,34 @@ Corollaries:
 - **Edit the line, not the file.** Parse-and-regenerate would drop everything we
   failed to model. Rewrite the exact key and leave every other byte alone.
 - **Back up before writing, and verify by re-reading afterwards** (Principle 2).
+
+## Principle 7 — The portable layer and the host adapter are separate, and dependencies point inward
+
+**What is portable and what is host-specific live in separate layers, and the
+dependency runs one way only: from the adapter to the core, never the reverse
+and never sideways between adapters.**
+
+Principle 5 already requires that the selection vocabulary mean the same thing on
+macOS and Linux and in every DAW this project targets. A layer boundary is how
+that survives contact with a convenient shortcut; good intentions are not a
+mechanism. The core states what an operation *is*; an adapter states what a
+particular host must be told to perform it.
+
+- **The core holds no host identifiers.** No action IDs, no Lua, no knowledge of
+  any configuration file's format. A host's vocabulary appears only beneath that
+  host's adapter.
+- **The build enforces the boundary, not the reviewer.** A rule that can be
+  broken silently is not a rule (Principle 2). The dependency direction is
+  checked mechanically, and a violation fails the build.
+- **Do not inflate the core.** The boundary is honest only when the core contains
+  what is genuinely portable. Today that is small — key-combo parsing, platform
+  translation, stable identifiers — and the adapter is large, because almost
+  everything written so far is REAPER. Moving host-specific code across the line
+  to make the core look substantial destroys the only property the line has.
+- **A boundary between two programs is a data format, not a shared library.**
+  Where this project meets another — plugin parameter descriptors emitted by
+  `acfx`, canonical controller maps, anything a sibling tool produces — the
+  contract is a versioned, diffable file that both sides read, never a package
+  one imports from the other. A data contract crosses a language boundary, can be
+  captured from the program that owns the values (Principle 6), and costs no
+  release coordination.
